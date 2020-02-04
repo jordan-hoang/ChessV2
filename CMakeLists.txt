@@ -2,5 +2,16 @@ cmake_minimum_required(VERSION 3.15)
 project(ChessV2)
 
 set(CMAKE_CXX_STANDARD 17)
+set(chessPiece "chessPiece")
 
-add_executable(ChessV2 main.cpp Piece.cpp Piece.h)
+
+add_subdirectory(Pieces)
+
+
+
+add_executable(ChessV2 main.cpp)
+
+
+target_link_libraries(ChessV2
+        ${chessPiece}
+        )

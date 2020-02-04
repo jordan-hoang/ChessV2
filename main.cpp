@@ -1,11 +1,12 @@
 #include <iostream>
 #include <memory>
 
-#include "Piece.h"
+#include "Pieces/include/Piece.h"
+#include "Pieces/include/Bishop.h"
 
 int main() {
 
-    Piece * b = new Bishop(true, 'b');
+    Bishop * b = new Bishop(true, 'b');
 
     b->print();
 
