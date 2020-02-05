@@ -8,7 +8,7 @@ Queen::Queen(Color color, char16_t symbol) : Piece{color, symbol}{
 
 }
 
-bool Queen::isValidMove() {
+bool Queen::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }
 

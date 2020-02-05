@@ -7,7 +7,7 @@
 King::King(Color color, char16_t symbol) :
         Piece{color, symbol}, can_castle{true} {};
 
-bool King::isValidMove(){
+bool King::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }
 

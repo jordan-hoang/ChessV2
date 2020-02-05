@@ -9,6 +9,9 @@
 #include <cwctype>
 #include <iostream>
 
+
+
+
 enum class Color {
     WHITE, BLACK, NO_COLOR
 };
@@ -70,11 +73,10 @@ class Piece {
 private:
     char16_t chara_;
     Color  chessColor;
-
 protected:
     Piece(Color color, char16_t symbol);
 public:
-    virtual bool isValidMove() = 0;
+    virtual bool movePiece(ChessCoordinate a, ChessCoordinate b) = 0;
     virtual void print() = 0;
     wchar_t getSymbol();
     Color getColor();
@@ -85,6 +87,7 @@ public:
 #include "Bishop.h"
 #include "Pawn.h"
 #include "King.h"
+#include "Knight.h"
 #include "Queen.h"
 #include "Pawn.h"
 #include "Rook.h"

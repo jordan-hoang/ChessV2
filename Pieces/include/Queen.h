@@ -8,9 +8,10 @@
 #include "Piece.h"
 
 class Queen : public Piece{
+public:
     Queen(Color color, char16_t symbol);
     void print() override;
-    bool isValidMove() override ;
+    bool movePiece(ChessCoordinate a, ChessCoordinate b) override ;
 };
 
 

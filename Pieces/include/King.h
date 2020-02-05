@@ -15,7 +15,7 @@ public:
     bool canCastle();
     King(Color color, char16_t symbol);
 
-    bool isValidMove() override ;
+    bool movePiece(ChessCoordinate a, ChessCoordinate b) override ;
     void print() override ;
 
 

@@ -7,7 +7,7 @@
 
 Rook::Rook(Color color, char16_t symbol) : Piece{color, symbol} { }
 
-bool Rook::isValidMove() {
+bool Rook::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }
 void Rook::print() {

@@ -8,7 +8,7 @@ Bishop::Bishop(Color color, char16_t symbol) :
         Piece{color, symbol} {};
 
 
-bool Bishop::isValidMove() {
+bool Bishop::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }
 

@@ -11,7 +11,7 @@ class Rook : public Piece{
 public:
     Rook(Color color, char16_t symbol);
     void print() override;
-    bool isValidMove() override;
+    bool movePiece(ChessCoordinate a, ChessCoordinate b) override;
 
 
 

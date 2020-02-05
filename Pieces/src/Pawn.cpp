@@ -13,6 +13,6 @@ void Pawn::print() {
     std::cout << "I am a pawn\n";
 }
 
-bool Pawn::isValidMove() {
+bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }

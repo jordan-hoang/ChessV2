@@ -8,7 +8,7 @@ Knight::Knight(Color color, char16_t symbol) : Piece{color, symbol}{
 
 }
 
-bool Knight::isValidMove() {
+bool Knight::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return true;
 }
 

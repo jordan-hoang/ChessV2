@@ -12,6 +12,6 @@ NullPiece::NullPiece(Color color, char16_t symbol) : Piece{color, symbol}{
 void NullPiece::print() {
     std::cout << "I'm a nullpiece";
 }
-bool NullPiece::isValidMove() {
+bool NullPiece::movePiece(ChessCoordinate a, ChessCoordinate b) {
     return false;
 }

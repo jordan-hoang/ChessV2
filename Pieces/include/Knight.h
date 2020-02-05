@@ -9,9 +9,10 @@
 
 //Overload its move
 class Knight : public Piece {
-    Knight(Color color, char16_t symbol);
-    bool isValidMove() override;
 
+public:
+    Knight(Color color, char16_t symbol);
+    bool movePiece(ChessCoordinate a, ChessCoordinate b) override;
     void print() override;
 };
 
