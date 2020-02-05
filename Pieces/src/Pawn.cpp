@@ -13,6 +13,6 @@ void Pawn::print() {
     std::cout << "I am a pawn\n";
 }
 
-bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b) {
+bool Pawn::movePiece(ChessCoordinate from_spot, ChessCoordinate to_spot, const ChessBoard &chess_board_) {
     return true;
 }

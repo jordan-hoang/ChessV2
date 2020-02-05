@@ -12,7 +12,7 @@ class Bishop : public Piece {
 
 public:
     Bishop(Color color, char16_t symbol);
-    bool movePiece(ChessCoordinate a, ChessCoordinate b) override;
+    bool movePiece(ChessCoordinate from_spot, ChessCoordinate to_spot, const ChessBoard &chess_board_) override;
     void print() override;
 };
 
