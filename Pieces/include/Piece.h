@@ -8,9 +8,9 @@
 
 #include <cwctype>
 #include <iostream>
+
+class ChessBoard;
 #include "../ChessBoard.h"
-
-
 
 enum class Color {
     WHITE, BLACK, NO_COLOR
@@ -76,21 +76,17 @@ private:
 protected:
     Piece(Color color, char16_t symbol);
 public:
-    virtual bool movePiece(ChessCoordinate from_spot, ChessCoordinate to_spot, const ChessBoard &chess_board_) = 0;
+    virtual bool movePiece(ChessCoordinate a, ChessCoordinate b, const ChessBoard &chess_board_) = 0;
     virtual void print() = 0;
     wchar_t getSymbol();
     Color getColor();
 };
 
 
-///Include subclasses here
-#include "Bishop.h"
-#include "Pawn.h"
-#include "King.h"
-#include "Knight.h"
-#include "Queen.h"
-#include "Pawn.h"
-#include "Rook.h"
-#include "NullPiece.h"
+
+// Why down here???
+
+
+
 
 #endif //CHESSV2_PIECE_H

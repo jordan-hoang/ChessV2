@@ -13,6 +13,20 @@ void Pawn::print() {
     std::cout << "I am a pawn\n";
 }
 
-bool Pawn::movePiece(ChessCoordinate from_spot, ChessCoordinate to_spot, const ChessBoard &chess_board_) {
-    return true;
+bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, const ChessBoard &chess_board_) {
+    //First we gotta grab the color.
+
+    auto &board = chess_board_.getChessboard();
+
+    int dirTravel = (this->getColor() == Color::WHITE) ? 1 : -1;
+    ChessCoordinate c = b - a;
+
+    if(c.row == dirTravel && c.col == 0 ){
+        return true; //As long as there isn't an enemy there.
+    }
+
+
+
+    return false;
 }
+

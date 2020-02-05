@@ -5,6 +5,15 @@
 #include "Piece.h"
 
 #include "ChessBoard.h"
+#include "Bishop.h"
+#include "Pawn.h"
+#include "King.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "Pawn.h"
+#include "Rook.h"
+#include "NullPiece.h"
+
 
 
 smartRow ChessBoard::genBackRank(Color c) {
@@ -60,4 +69,20 @@ void ChessBoard::printChessBoard() const {
         }
         std::cout << "\n";
     }
+}
+
+const std::vector<smartRow> &ChessBoard::getChessboard() const {
+    return chessboard_;
+}
+
+const Piece *ChessBoard::getWhiteKing() const {
+    return whiteKing;
+}
+
+const Piece *ChessBoard::getBlackKing() const {
+    return blackKing;
+}
+
+bool ChessBoard::isWhiteTurn1() const {
+    return isWhiteTurn;
 }
