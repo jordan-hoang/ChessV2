@@ -13,7 +13,7 @@ private:
     bool can_castle;
 public:
     bool canCastle();
-    King(bool isWhite, wchar_t symbol);
+    King(Color color, char16_t symbol);
 
     bool isValidMove() override ;
     void print() override ;

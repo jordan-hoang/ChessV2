@@ -1,0 +1,17 @@
+//
+// Created by jordan on 2/4/20.
+//
+
+#include "NullPiece.h"
+
+
+NullPiece::NullPiece(Color color, char16_t symbol) : Piece{color, symbol}{
+}
+
+
+void NullPiece::print() {
+    std::cout << "I'm a nullpiece";
+}
+bool NullPiece::isValidMove() {
+    return false;
+}

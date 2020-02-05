@@ -11,7 +11,7 @@
 class Bishop : public Piece {
 
 public:
-    Bishop(bool isWhite, wchar_t symbol);
+    Bishop(Color color, char16_t symbol);
     bool isValidMove() override;
     void print() override;
 };

@@ -2,7 +2,13 @@ add_library(chessPiece
         src/Bishop.cpp
         src/King.cpp
         src/Piece.cpp
-        )
+        src/Pawn.cpp
+        src/Knight.cpp
+        src/Rook.cpp
+        src/Queen.cpp
+        src/NullPiece.cpp
+        ChessBoard.cpp
+        ChessBoard.h)
 
 target_include_directories(${chessPiece}
         PUBLIC

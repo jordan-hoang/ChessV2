@@ -4,8 +4,8 @@
 
 #include "Bishop.h"
 
-Bishop::Bishop(bool isWhite, wchar_t symbol) :
-        Piece{isWhite, symbol} {};
+Bishop::Bishop(Color color, char16_t symbol) :
+        Piece{color, symbol} {};
 
 
 bool Bishop::isValidMove() {

@@ -1,16 +1,14 @@
 #include <iostream>
 #include <memory>
+#include <string.h>
 
-#include "Pieces/include/Piece.h"
-#include "Pieces/include/Bishop.h"
+#include "Pieces/ChessBoard.h"
 
 int main() {
 
-    Bishop * b = new Bishop(true, 'b');
+    ChessBoard a;
+    a.printChessBoard();
 
-    b->print();
-
-    std::unique_ptr<Bishop> piece_king(new Bishop(true, 'b') );
 
 
 

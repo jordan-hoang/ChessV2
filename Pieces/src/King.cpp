@@ -4,8 +4,8 @@
 
 #include "King.h"
 
-King::King(bool isWhite, wchar_t symbol) :
-        Piece{isWhite, symbol}, can_castle{true} {};
+King::King(Color color, char16_t symbol) :
+        Piece{color, symbol}, can_castle{true} {};
 
 bool King::isValidMove(){
     return true;
@@ -13,7 +13,7 @@ bool King::isValidMove(){
 
 
 bool King::canCastle() {
-    return canCastle();
+    return can_castle;
 }
 
 void King::print() {

@@ -14,10 +14,10 @@ void Piece::print(){
     std::cout << "I am a piece!\n";
 }
 
-Piece::Piece(bool isWhite, wchar_t symbol) : is_white{isWhite} {
+Piece::Piece(Color color, char16_t symbol) : chessColor{color}, chara_{symbol} {
 }
 
-bool Piece::isWhite() {
-    return is_white;
+Color Piece::getColor() {
+    return chessColor;
 }
 
