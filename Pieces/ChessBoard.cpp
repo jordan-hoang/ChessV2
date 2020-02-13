@@ -2,9 +2,9 @@
 // Created by jordan on 2/4/20.
 //
 
+#include "ChessBoard.h"
 #include "Piece.h"
 
-#include "ChessBoard.h"
 #include "Bishop.h"
 #include "Pawn.h"
 #include "King.h"
@@ -13,6 +13,7 @@
 #include "Pawn.h"
 #include "Rook.h"
 #include "NullPiece.h"
+
 
 
 
@@ -30,7 +31,7 @@ smartRow ChessBoard::genBackRank(Color c) {
     return std::move(myRow);
 }
 
-ChessBoard::ChessBoard() : isWhiteTurn{true} {
+ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
 
     chessboard_.push_back( genBackRank(Color::BLACK) );
     smartRow myRow;
@@ -75,14 +76,18 @@ const std::vector<smartRow> &ChessBoard::getChessboard() const {
     return chessboard_;
 }
 
-const Piece *ChessBoard::getWhiteKing() const {
-    return whiteKing;
+
+
+bool ChessBoard::isGameEnded() const {
+    return gameEnded;
 }
 
-const Piece *ChessBoard::getBlackKing() const {
-    return blackKing;
+bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
+
+
+    return false;
 }
 
-bool ChessBoard::isWhiteTurn1() const {
-    return isWhiteTurn;
-}
+
+
+

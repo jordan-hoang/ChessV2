@@ -8,7 +8,7 @@ add_library(chessPiece
         src/Queen.cpp
         src/NullPiece.cpp
         ChessBoard.cpp
-        ChessBoard.h)
+        ChessBoard.h include/ChessCoordinate.cpp include/ChessCoordinate.h)
 
 target_include_directories(${chessPiece}
         PUBLIC

@@ -16,7 +16,5 @@ int main() {
     a.printChessBoard();
 
 
-
-
     return 0;
 }
