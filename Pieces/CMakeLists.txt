@@ -1,4 +1,4 @@
-add_library(chessPiece
+add_library(${chessPiece}
         src/Bishop.cpp
         src/King.cpp
         src/Piece.cpp
@@ -7,8 +7,10 @@ add_library(chessPiece
         src/Rook.cpp
         src/Queen.cpp
         src/NullPiece.cpp
+        src/ChessCoordinate.cpp
         ChessBoard.cpp
-        ChessBoard.h include/ChessCoordinate.cpp include/ChessCoordinate.h)
+        ChessBoard.h
+        )
 
 target_include_directories(${chessPiece}
         PUBLIC

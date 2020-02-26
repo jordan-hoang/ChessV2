@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "Pieces/ChessBoard.h"
-
+#include "ChessController.h"
 
 
 
@@ -12,8 +12,7 @@ typedef std::unique_ptr<int> smartInt;
 
 int main() {
 
-    ChessBoard a;
-    a.printChessBoard();
+
 
 
     return 0;
