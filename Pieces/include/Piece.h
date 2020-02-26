@@ -28,7 +28,7 @@ private:
 protected:
     Piece(Color color, char16_t symbol);
 public:
-    virtual bool movePiece(ChessCoordinate a, ChessCoordinate b, const ChessBoard &chess_board_) = 0;
+    virtual bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) = 0;
     virtual void print() = 0;
     wchar_t getSymbol();
     Color getColor();

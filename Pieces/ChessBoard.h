@@ -10,11 +10,10 @@
 #include <memory>
 #include <vector>
 
-class Piece; // Not sure why I need this here, since it is already in Piece.h but okay....
+class Piece; //
 enum class Color;
 #include <Piece.h>
 #include <ChessCoordinate.h>
-
 
 
 typedef std::unique_ptr<Piece> smart_piece;
@@ -31,13 +30,19 @@ private:
 
     smartRow genBackRank(Color c);
 
+
+
 public:
     ChessBoard();
     void printChessBoard() const;
     bool isGameEnded() const;
-
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
 
+
+    void swapPiece(ChessCoordinate from, ChessCoordinate to);
+
+    Piece *const getPiece(int row, int col);
+    Piece *const getPiece(ChessCoordinate a);
 
 
     const std::vector<smartRow> &getChessboard() const;

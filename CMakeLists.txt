@@ -9,7 +9,7 @@ add_subdirectory(Pieces)
 
 
 
-add_executable(ChessV2 main.cpp ChessController.cpp ChessController.h test/testA.cpp)
+add_executable(ChessV2 main.cpp ChessController.cpp ChessController.h)
 
 
 target_link_libraries(ChessV2
