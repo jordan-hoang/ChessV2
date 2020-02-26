@@ -3,7 +3,7 @@
 //
 
 #include "Piece.h"
-
+#include <memory>
 
 
 wchar_t Piece::getSymbol(){
@@ -20,4 +20,5 @@ Piece::Piece(Color color, char16_t symbol) : chessColor{color}, chara_{symbol} {
 Color Piece::getColor() {
     return chessColor;
 }
+
 

@@ -6,13 +6,14 @@
 #define CHESSV2_CHESSBOARD_H
 
 
+
 #include <memory>
 #include <vector>
 
-class Piece; // Not sure why I need this here, since it is already in Piece.h but okay....
+class Piece; //
 enum class Color;
 #include <Piece.h>
-
+#include <ChessCoordinate.h>
 
 
 typedef std::unique_ptr<Piece> smart_piece;
@@ -24,19 +25,31 @@ private:
     const Piece * whiteKing;   // White king in this case refers to the king that would go first.
     const Piece * blackKing;   // Black king in this case refers to the king that would go second.
     bool isWhiteTurn;
-    smartRow genBackRank(Color c);
+    bool gameEnded;
+
+
+    smartRow genBackRank(Color c, bool upperCase);
+
+
 
 public:
     ChessBoard();
     void printChessBoard() const;
+    bool isGameEnded() const;
 
-    const Piece *getWhiteKing() const;
+    bool executeMove(ChessCoordinate from, ChessCoordinate to);
+    void movePiece(ChessCoordinate from, ChessCoordinate to);
 
-    const Piece *getBlackKing() const;
 
-    bool isWhiteTurn1() const;
 
+    Piece *const getPiece(int row, int col);
+    Piece *const getPiece(ChessCoordinate a);
     const std::vector<smartRow> &getChessboard() const;
+
+
+
+
+
 
 
 };
