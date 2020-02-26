@@ -16,7 +16,6 @@
 
 
 
-
 smartRow ChessBoard::genBackRank(Color c) {
     smartRow myRow;
     myRow.push_back( std::make_unique<Rook> (c,'R') );
@@ -77,12 +76,14 @@ const std::vector<smartRow> &ChessBoard::getChessboard() const {
 }
 
 
-
 bool ChessBoard::isGameEnded() const {
     return gameEnded;
 }
 
+
 bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
+
+
 
 
     return false;
