@@ -16,16 +16,29 @@
 
 
 
-smartRow ChessBoard::genBackRank(Color c) {
+smartRow ChessBoard::genBackRank(Color c, bool upper) {
     smartRow myRow;
-    myRow.push_back( std::make_unique<Rook> (c,'R') );
-    myRow.push_back( std::make_unique<Knight> (c,'N') );
-    myRow.push_back( std::make_unique<Bishop> (c,'B') );
-    myRow.push_back( std::make_unique<Queen> (c,'Q') );
-    myRow.push_back( std::make_unique<King> (c,'K') );
-    myRow.push_back( std::make_unique<Bishop> (c,'B') );
-    myRow.push_back( std::make_unique<Knight> (c,'N') );
-    myRow.push_back( std::make_unique<Rook> (c,'R') );
+
+    if(upper) {
+        myRow.push_back(std::make_unique<Rook>(c, 'R'));
+        myRow.push_back(std::make_unique<Knight>(c, 'N'));
+        myRow.push_back(std::make_unique<Bishop>(c, 'B'));
+        myRow.push_back(std::make_unique<Queen>(c, 'Q'));
+        myRow.push_back(std::make_unique<King>(c, 'K'));
+        myRow.push_back(std::make_unique<Bishop>(c, 'B'));
+        myRow.push_back(std::make_unique<Knight>(c, 'N'));
+        myRow.push_back(std::make_unique<Rook>(c, 'R'));
+    } else{
+        myRow.push_back(std::make_unique<Rook>(c, 'r'));
+        myRow.push_back(std::make_unique<Knight>(c, 'n'));
+        myRow.push_back(std::make_unique<Bishop>(c, 'b'));
+        myRow.push_back(std::make_unique<Queen>(c, 'q'));
+        myRow.push_back(std::make_unique<King>(c, 'k'));
+        myRow.push_back(std::make_unique<Bishop>(c, 'b'));
+        myRow.push_back(std::make_unique<Knight>(c, 'n'));
+        myRow.push_back(std::make_unique<Rook>(c, 'r'));
+
+    }
 
     return std::move(myRow);
 }
@@ -33,7 +46,7 @@ smartRow ChessBoard::genBackRank(Color c) {
 
 ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
 
-    chessboard_.push_back( genBackRank(Color::BLACK) );
+    chessboard_.push_back( genBackRank(Color::BLACK, true) );
     smartRow myRow;
     for(int i = 0; i < 8; i++) {
         myRow.push_back(std::make_unique<Pawn>(Color::BLACK,  'P'));
@@ -53,10 +66,10 @@ ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
     //Generate white side pieces
     myRow.clear();
     for(int i = 0; i < 8; i++) {
-        myRow.push_back(std::make_unique<Pawn>(Color::WHITE,  'P'));
+        myRow.push_back(std::make_unique<Pawn>(Color::WHITE,  'p'));
     }
     chessboard_.push_back(std::move(myRow));
-    chessboard_.push_back( genBackRank(Color::WHITE) );
+    chessboard_.push_back( genBackRank(Color::WHITE, false) );
 
     whiteKing = chessboard_[0][4].get();
     blackKing = chessboard_[7][4].get();
@@ -72,30 +85,28 @@ void ChessBoard::printChessBoard() const {
     }
 }
 
+
 const std::vector<smartRow> &ChessBoard::getChessboard() const {
     return chessboard_;
 }
-
 
 bool ChessBoard::isGameEnded() const {
     return gameEnded;
 }
 
-
-//
-Piece* getPiece(int row, int col){
-
-
-}
-
-
 bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
-    return this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    bool result = false;
+    if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
+        result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
+        result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    }
+
+    if(result){
+        isWhiteTurn = !isWhiteTurn;
+    }
+    return result;
 }
-
-
-
-
 
 
 
@@ -103,12 +114,19 @@ Piece *const ChessBoard::getPiece(int row, int col) {
     return chessboard_[row][col].get();
 }
 
+
 Piece *const ChessBoard::getPiece(ChessCoordinate a) {
     return chessboard_[a.row][a.col].get();
 }
 
-void ChessBoard::swapPiece(ChessCoordinate from, ChessCoordinate to) {
-    chessboard_[from.row][from.col].swap(chessboard_[to.row][to.col]);
+//Moves a piece from A to B, given 2 coordinates.
+void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
+
+    *chessboard_[to.row][to.col] = *chessboard_[from.row][from.col];
+    //This calls reset as said from here
+    // https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D
+    chessboard_[from.row][from.col] = std::make_unique<NullPiece>(Color::NO_COLOR,'-');
+
 }
 
 

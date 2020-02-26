@@ -28,7 +28,7 @@ private:
     bool gameEnded;
 
 
-    smartRow genBackRank(Color c);
+    smartRow genBackRank(Color c, bool upperCase);
 
 
 
@@ -36,16 +36,20 @@ public:
     ChessBoard();
     void printChessBoard() const;
     bool isGameEnded() const;
+
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
+    void movePiece(ChessCoordinate from, ChessCoordinate to);
 
 
-    void swapPiece(ChessCoordinate from, ChessCoordinate to);
 
     Piece *const getPiece(int row, int col);
     Piece *const getPiece(ChessCoordinate a);
-
-
     const std::vector<smartRow> &getChessboard() const;
+
+
+
+
+
 
 
 };

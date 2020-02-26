@@ -32,6 +32,7 @@ public:
     virtual void print() = 0;
     wchar_t getSymbol();
     Color getColor();
+
 };
 
 

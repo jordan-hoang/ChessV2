@@ -55,6 +55,12 @@ struct ChessCoordinate {
             os << "{"  << coordinate.row << ", " << coordinate.col << "}";
             return os;
         }
+        ChessCoordinate set(int row, int col){
+            this->row = row;
+            this->col = col;
+            return *this;
+        }
+
         ChessCoordinate() : row(-1), col(-1){}
         ChessCoordinate(int enteredRow, int enteredCol) : row(enteredRow), col(enteredCol) {}
 
