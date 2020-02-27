@@ -83,6 +83,7 @@ void ChessBoard::printChessBoard() const {
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
 }
 
 
@@ -102,9 +103,7 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
         result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
     }
 
-    if(result){
-        isWhiteTurn = !isWhiteTurn;
-    }
+    if(result) { isWhiteTurn = !isWhiteTurn; }
     return result;
 }
 
@@ -122,7 +121,7 @@ Piece *const ChessBoard::getPiece(ChessCoordinate a) {
 //Moves a piece from A to B, given 2 coordinates.
 void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
 
-    *chessboard_[to.row][to.col] = *chessboard_[from.row][from.col];
+    chessboard_[to.row][to.col].swap(chessboard_[from.row][from.col]);
     //This calls reset as said from here
     // https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D
     chessboard_[from.row][from.col] = std::make_unique<NullPiece>(Color::NO_COLOR,'-');

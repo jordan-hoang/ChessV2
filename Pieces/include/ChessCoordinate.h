@@ -40,29 +40,25 @@ struct ChessCoordinate {
             }
             return rst;
         }
+        
         ChessCoordinate& operator=(const ChessCoordinate &copy){
             row = copy.row;
             col = copy.col;
             return *this;
         }
-        bool isValid() const{
-            if(row < 0 || row >= 8){
-                return false;
-            }
-            return !(col < 0 || col >= 8 );
-        }
+
+
+        bool isValid() const;
+
         friend std::ostream &operator<<(std::ostream &os, const ChessCoordinate &coordinate) {
             os << "{"  << coordinate.row << ", " << coordinate.col << "}";
             return os;
         }
-        ChessCoordinate set(int row, int col){
-            this->row = row;
-            this->col = col;
-            return *this;
-        }
 
+        ChessCoordinate set(int row, int col);
         ChessCoordinate() : row(-1), col(-1){}
         ChessCoordinate(int enteredRow, int enteredCol) : row(enteredRow), col(enteredCol) {}
+
 
 };
 
