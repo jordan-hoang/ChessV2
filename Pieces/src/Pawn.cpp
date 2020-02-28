@@ -52,8 +52,6 @@ bool Pawn::movePiece(ChessCoordinate start, ChessCoordinate finish, ChessBoard &
     // Code for double jump.
     if(target == Color::NO_COLOR){
         if (start.row + directionTravel == finish.row && ( difX == 0 || difY == 0 ) ) {
-
-
             result =  true; // generic code for both.
         } else if (start.row == 1 && directionTravel == 1 &&
                     (start.row + directionTravel * 2) == finish.row) {

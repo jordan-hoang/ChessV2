@@ -71,14 +71,15 @@ ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
     chessboard_.push_back(std::move(myRow));
     chessboard_.push_back( genBackRank(Color::WHITE, false) );
 
-    whiteKing = chessboard_[0][4].get();
-    blackKing = chessboard_[7][4].get();
-
+    whiteKing = {0,4};
+    blackKing = {7,4};
 }
 
+
+
 void ChessBoard::printChessBoard() const {
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
+    for(int i = 0; i < chessboard_.size(); i++){
+        for(int j = 0; j < chessboard_[i].size(); j++){
             std::cout << static_cast<char>( chessboard_[i][j]->getSymbol() ) << " ";
         }
         std::cout << "\n";
@@ -108,11 +109,9 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
 }
 
 
-
 Piece *const ChessBoard::getPiece(int row, int col) {
     return chessboard_[row][col].get();
 }
-
 
 Piece *const ChessBoard::getPiece(ChessCoordinate a) {
     return chessboard_[a.row][a.col].get();
@@ -125,6 +124,11 @@ void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
     //This calls reset as said from here
     // https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D
     chessboard_[from.row][from.col] = std::make_unique<NullPiece>(Color::NO_COLOR,'-');
+
+}
+
+ChessBoard::ChessBoard( std::vector<smartRow> chessboard) :
+chessboard_(std::move(chessboard)), isWhiteTurn{true}, gameEnded{false} {
 
 }
 

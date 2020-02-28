@@ -9,17 +9,14 @@
 
 
 bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b){
-
     bool val = board.executeMove(a,b);
     Piece *const mo = board.getPiece(a);
     Piece *f = dynamic_cast<NullPiece*>(mo);  //For testing purposes.
 
-
-
-
-
+    if(f == nullptr){
+        val = false;
+    }
     return val;
-
 }
 
 
@@ -59,10 +56,7 @@ TEST(BoardTest, pawnForward){
     val = pieceMoved(board,a,b); //Checks to see if the piece moved
     EXPECT_EQ(val, true) << "Error when moving pawn up 1 square";
 
-
-    board.printChessBoard();
-
-
+    //board.printChessBoard();
 }
 
 
@@ -74,13 +68,10 @@ TEST(BoardTest, pawn){
     bool val = pieceMoved(board,a,b); //Checks to see if the piece moved
     EXPECT_EQ(val, true) << "Error when moving pawn up 1 square";
 
-
     a.set(1,1);
     b.set(3,1);
     val = pieceMoved(board,a,b); //Checks to see if the piece moved
     EXPECT_EQ(val, true) << "Error when executing double jump!";
-
-    //board.printChessBoard();
 
 
     //White Move
@@ -89,13 +80,10 @@ TEST(BoardTest, pawn){
     val = pieceMoved(board,a,b); //Checks to see if the piece moved
     EXPECT_EQ(val, true) << "Error when executing double jump!";
 
-    //board.printChessBoard();
-
 
     //Black move
     a.set(4,1);
     b.set(5,1);
-
     val = pieceMoved(board,a,b);
     EXPECT_EQ(val, false);
 

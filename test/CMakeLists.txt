@@ -2,6 +2,7 @@ add_subdirectory(lib)
 
 add_executable(runAllTests
         testA.cpp
+        testKnight.cpp
         )
 
 target_link_libraries(runAllTests
