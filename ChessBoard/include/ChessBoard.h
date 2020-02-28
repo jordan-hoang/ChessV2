@@ -39,8 +39,8 @@ public:
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
     void movePiece(ChessCoordinate from, ChessCoordinate to);
 
-    Piece *const getPiece(int row, int col);
-    Piece *const getPiece(ChessCoordinate a);
+    Piece *const getPiece(int row, int col) const;
+    Piece *const getPiece(ChessCoordinate a) const;
     const std::vector<smartRow> &getChessboard() const;
 
 

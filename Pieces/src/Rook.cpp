@@ -8,6 +8,13 @@
 Rook::Rook(Color color, char16_t symbol) : Piece{color, symbol} { }
 
 bool Rook::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+
+
+
+
+
+
+
     return true;
 }
 void Rook::print() {

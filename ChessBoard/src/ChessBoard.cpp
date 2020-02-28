@@ -109,11 +109,11 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
 }
 
 
-Piece *const ChessBoard::getPiece(int row, int col) {
+Piece *const ChessBoard::getPiece(int row, int col) const {
     return chessboard_[row][col].get();
 }
 
-Piece *const ChessBoard::getPiece(ChessCoordinate a) {
+Piece *const ChessBoard::getPiece(ChessCoordinate a) const {
     return chessboard_[a.row][a.col].get();
 }
 
