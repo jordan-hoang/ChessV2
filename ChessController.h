@@ -6,7 +6,7 @@
 #define CHESSV2_CHESSCONTROLLER_H
 
 
-#include "Pieces/ChessBoard.h"
+#include "ChessBoard/include/ChessBoard.h"
 
 /* Takes input from the user and passes it to the board. */
 class ChessController {

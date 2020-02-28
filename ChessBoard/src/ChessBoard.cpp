@@ -2,7 +2,7 @@
 // Created by jordan on 2/4/20.
 //
 
-#include "ChessBoard.h"
+#include "../include/ChessBoard.h"
 #include "Piece.h"
 
 #include "Bishop.h"
@@ -71,18 +71,20 @@ ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
     chessboard_.push_back(std::move(myRow));
     chessboard_.push_back( genBackRank(Color::WHITE, false) );
 
-    whiteKing = chessboard_[0][4].get();
-    blackKing = chessboard_[7][4].get();
-
+    whiteKing = {0,4};
+    blackKing = {7,4};
 }
 
+
+
 void ChessBoard::printChessBoard() const {
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
+    for(int i = 0; i < chessboard_.size(); i++){
+        for(int j = 0; j < chessboard_[i].size(); j++){
             std::cout << static_cast<char>( chessboard_[i][j]->getSymbol() ) << " ";
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
 }
 
 
@@ -102,18 +104,14 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
         result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
     }
 
-    if(result){
-        isWhiteTurn = !isWhiteTurn;
-    }
+    if(result) { isWhiteTurn = !isWhiteTurn; }
     return result;
 }
-
 
 
 Piece *const ChessBoard::getPiece(int row, int col) {
     return chessboard_[row][col].get();
 }
-
 
 Piece *const ChessBoard::getPiece(ChessCoordinate a) {
     return chessboard_[a.row][a.col].get();
@@ -122,10 +120,15 @@ Piece *const ChessBoard::getPiece(ChessCoordinate a) {
 //Moves a piece from A to B, given 2 coordinates.
 void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
 
-    *chessboard_[to.row][to.col] = *chessboard_[from.row][from.col];
+    chessboard_[to.row][to.col].swap(chessboard_[from.row][from.col]);
     //This calls reset as said from here
     // https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D
     chessboard_[from.row][from.col] = std::make_unique<NullPiece>(Color::NO_COLOR,'-');
+
+}
+
+ChessBoard::ChessBoard( std::vector<smartRow> chessboard) :
+chessboard_(std::move(chessboard)), isWhiteTurn{true}, gameEnded{false} {
 
 }
 

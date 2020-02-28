@@ -22,34 +22,26 @@ typedef std::vector<std::unique_ptr<Piece>> smartRow;
 class ChessBoard {
 private:
     std::vector<smartRow> chessboard_;
-    const Piece * whiteKing;   // White king in this case refers to the king that would go first.
-    const Piece * blackKing;   // Black king in this case refers to the king that would go second.
+    ChessCoordinate whiteKing;   // White king in this case refers to the king that would go first.
+    ChessCoordinate blackKing;   // Black king in this case refers to the king that would go second.
     bool isWhiteTurn;
     bool gameEnded;
 
-
     smartRow genBackRank(Color c, bool upperCase);
-
-
 
 public:
     ChessBoard();
+    ChessBoard(std::vector<smartRow> chessboard);
+
     void printChessBoard() const;
     bool isGameEnded() const;
 
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
     void movePiece(ChessCoordinate from, ChessCoordinate to);
 
-
-
     Piece *const getPiece(int row, int col);
     Piece *const getPiece(ChessCoordinate a);
     const std::vector<smartRow> &getChessboard() const;
-
-
-
-
-
 
 
 };

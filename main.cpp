@@ -2,7 +2,7 @@
 #include <memory>
 #include <string.h>
 
-#include "Pieces/ChessBoard.h"
+#include "ChessBoard/include/ChessBoard.h"
 #include "ChessController.h"
 
 

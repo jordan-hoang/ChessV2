@@ -10,6 +10,10 @@
 class Pawn : public Piece{
 private:
     bool canDoubleJump;
+
+    bool diagonalMove(ChessCoordinate start, ChessCoordinate finish, ChessBoard &chess_board_);
+
+
 public:
     Pawn(Color color, char16_t symbol);
     void print() override ;

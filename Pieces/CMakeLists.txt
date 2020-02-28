@@ -8,8 +8,8 @@ add_library(${chessPiece}
         src/Queen.cpp
         src/NullPiece.cpp
         src/ChessCoordinate.cpp
-        ChessBoard.cpp
-        ChessBoard.h
+        #../ChessBoard/ChessBoard.cpp
+        #../ChessBoard/ChessBoard.h
         )
 
 target_include_directories(${chessPiece}
