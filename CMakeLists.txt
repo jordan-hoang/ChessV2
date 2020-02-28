@@ -7,10 +7,7 @@ set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 
 
-
-
 add_executable(ChessV2 main.cpp ChessController.cpp ChessController.h)
-
 
 target_link_libraries(ChessV2
         ${chessPiece}
