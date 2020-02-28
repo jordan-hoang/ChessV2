@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <NullPiece.h>
 #include "gmock/gmock.h"
-#include "../Pieces/ChessBoard.h"
+#include "../ChessBoard/include/ChessBoard.h"
 
 
 bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b){

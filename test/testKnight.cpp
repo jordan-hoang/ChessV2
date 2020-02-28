@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <NullPiece.h>
 #include <Knight.h>
-#include "../Pieces/ChessBoard.h"
+#include "../ChessBoard/include/ChessBoard.h"
 #include "ChessCoordinate.h"
 
 
@@ -90,7 +90,7 @@ TEST(TestKnight, testEightMoves){
     ChessCoordinate start{4,3};
 
 
-    
+
 
 
 

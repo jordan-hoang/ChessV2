@@ -1,0 +1,16 @@
+add_library(${chessBoard}
+        src/ChessBoard.cpp
+        )
+
+target_link_libraries(${chessBoard}
+        ${chessPiece}
+        )
+
+
+target_include_directories(${chessBoard}
+        PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        )

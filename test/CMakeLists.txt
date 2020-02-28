@@ -10,6 +10,7 @@ target_link_libraries(runAllTests
         gtest
         gtest_main
         ${chessPiece}
+        ${chessBoard}
 )
 
 add_test(NAME AllTests COMMAND runAllTests)

@@ -11,7 +11,7 @@
 
 
 class ChessBoard;
-#include "../ChessBoard.h"
+#include "../../ChessBoard/include/ChessBoard.h"
 #include "ChessCoordinate.h"
 
 enum class Color {
