@@ -72,3 +72,27 @@ bool ChessCollision::isDiagonalPathClear(ChessCoordinate start, ChessCoordinate 
     return true;
 
 }
+
+bool ChessCollision::isPathClear(ChessCoordinate start, ChessCoordinate finish, const ChessBoard &b){
+
+
+    int diffRow = abs( finish.row - start.row);
+    int diffCol = abs( finish.col - start.col);
+
+    // You are moving horizontally
+    if( start.row == finish.row && start.col != finish.col ){
+        return isHorizontalPathClear(start, finish, b);
+    }
+
+    // You are moving vertical
+    else if( start.row != finish.row && start.col == finish.col ) {
+        return isVerticalPathClear(start, finish, b);
+    }
+
+    //For diagonal points we need to calculate the slope so...
+    else if( diffRow == diffCol ){
+        return isDiagonalPathClear(start, finish, b);
+    }
+
+    return false;
+}

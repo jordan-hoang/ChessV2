@@ -19,3 +19,8 @@ target_include_directories(${chessPiece}
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
+
+
+target_link_libraries(${chessPiece}
+        ${chessBoard}
+        )
