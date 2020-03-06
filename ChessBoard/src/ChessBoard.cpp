@@ -102,15 +102,16 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
     
     this->chessboard_[from.row][from.col]->movePiece(from,to, *this);
 
-    // if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
-    //     result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-    // } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
-    //     result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-    // }
+     if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
+         result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+     } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
+         result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+     }
 
-    // if(result) {
-    //      isWhiteTurn = !isWhiteTurn;
-    // }
+     if(result) {
+          isWhiteTurn = !isWhiteTurn;
+          movePiece(from, to);
+     }
     
     return result;
 }
