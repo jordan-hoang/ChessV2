@@ -35,35 +35,31 @@ bool Pawn::diagonalMove(ChessCoordinate start, ChessCoordinate finish, ChessBoar
 }
 
 
-bool Pawn::movePiece(ChessCoordinate start, ChessCoordinate finish, ChessBoard &chess_board_) {
+bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
     //First we gotta grab the color.
     //+ means goes up -1 means goes down the chess board
 
     int directionTravel = (this->getColor() == Color::BLACK) ? 1 : -1;
-    int difY = finish.row - start.row;
-    int difX = finish.col - start.col;
+    int difY = b.row - a.row;
+    int difX = b.col - a.col;
 
 
-    Color target = chess_board_.getPiece(finish)->getColor();
+    Color target = chess_board_.getPiece(b)->getColor();
 
     //A pawn can travel at most 1 unit diagonally therefore there xPos,yPos must have changed by 1.
-    bool result = diagonalMove(start,finish,chess_board_);
+    bool result = diagonalMove(a, b, chess_board_);
 
     // Code for double jump.
     if(target == Color::NO_COLOR){
-        if (start.row + directionTravel == finish.row && ( difX == 0 || difY == 0 ) ) {
+        if (a.row + directionTravel == b.row && (difX == 0 || difY == 0 ) ) {
             result =  true; // generic code for both.
-        } else if (start.row == 1 && directionTravel == 1 &&
-                    (start.row + directionTravel * 2) == finish.row) {
+        } else if (a.row == 1 && directionTravel == 1 &&
+                   (a.row + directionTravel * 2) == b.row) {
             result = true;
-        } else if (start.row == 6 && directionTravel == -1 &&
-                    (start.row + directionTravel * 2) == finish.row) {
+        } else if (a.row == 6 && directionTravel == -1 &&
+                   (a.row + directionTravel * 2) == b.row) {
             result = true;
         }
-    }
-
-    if(result) {
-        chess_board_.executeMove(start,finish);
     }
 
     return result;
