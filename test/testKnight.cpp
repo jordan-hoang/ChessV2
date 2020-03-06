@@ -7,12 +7,7 @@
 #include <gtest/gtest.h>
 #include <NullPiece.h>
 #include <Knight.h>
-#include "../ChessBoard/include/ChessBoard.h"
 #include "ChessCoordinate.h"
-
-
-
-
 
 bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b);
 
@@ -84,7 +79,6 @@ TEST(TestKnight, testEightMoves){
     int moves = 0;
     auto a = initOneKnight();
     ChessBoard myBoard(std::move(a));
-    myBoard.printChessBoard();
 
     int count = 0;
     ChessCoordinate start{4,3};

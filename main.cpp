@@ -1,17 +1,16 @@
 #include <iostream>
 #include <memory>
 #include <string.h>
-
-#include "ChessBoard/include/ChessBoard.h"
-#include "ChessController.h"
-
-
-
+#include <ChessController.h>
 
 
 int main() {
 
+    ChessController a;
 
+    std::string input = "a1,a2";
+
+    a.validChessStringInput(input);
 
 
 

@@ -2,8 +2,8 @@
 // Created by jordan on 2/12/20.
 //
 
-#include "ChessController.h"
-#include "Pieces/include/ChessCoordinate.h"
+#include "../include/ChessController.h"
+#include "ChessCoordinate.h"
 
 
 

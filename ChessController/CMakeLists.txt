@@ -1,13 +1,13 @@
-add_library(${chessBoard}
-        src/ChessBoard.cpp
-        src/ChessCollision.cpp
+add_library(${chessController}
+        src/ChessController.cpp
         )
 
-target_link_libraries(${chessBoard}
-        ${chessPiece}
+target_link_libraries(${chessController}
+        ${chessBoard}
         )
 
-target_include_directories(${chessBoard}
+
+target_include_directories(${chessController}
         PUBLIC
             $<INSTALL_INTERFACE:include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

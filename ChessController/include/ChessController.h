@@ -8,6 +8,7 @@
 
 #include <ChessCoordinate.h>
 #include <ChessBoard.h>
+#include <utility>
 
 /* Takes input from the user and passes it to the board. */
 class ChessController {
@@ -17,7 +18,6 @@ public:
     void playGame();
     bool validChessStringInput(std::string &input); //Returns true if input was valid.
     std::pair<ChessCoordinate, ChessCoordinate> convertChessCoordinate(std::string input, bool &valid);
-
 private:
     ChessBoard chessBoard;
 
