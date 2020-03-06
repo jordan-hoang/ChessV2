@@ -12,58 +12,67 @@
 
 
 //Checks to see if the string is valid in this program.
-bool ChessController::validateInput(std::string &input)  {
-    if(input.size() < 5 || input.size() != 5){
+bool ChessController::validChessStringInput(std::string &input)  {
+    if(input.size() != 5){
         return false;
     }
-    return input[2] == ',';
+    return (input[2] == ',');
 }
 
 
-bool isValidChar(char a){
+inline bool isValidChar(char a){
     return (a < 'z' && a > 'a');
 }
 
-bool isValidNum(char a){
+inline bool isValidNum(char a){
     return (a <= '9' && a >= '0');
 }
 
-
-
 // Converting to chess coordinates here.
-bool ChessController::convertChessCoordinate(ChessCoordinate &a, ChessCoordinate &b, std::string input) {
-    if(isValidChar(input[0]) || isValidChar(input[3]) ||isValidNum(input[1]) ||isValidNum(input[4])) {
-        a.col = input[0] - 'a';
-        a.row = input[1] - '0';
+std::pair<ChessCoordinate, ChessCoordinate>
+ChessController::convertChessCoordinate(std::string input, bool &valid) {
 
-        b.col = input[3] - 'a';
-        b.row = input[4] - '0';
+    ChessCoordinate to;
+    ChessCoordinate from;
+    if(validChessStringInput(input)  )
+    {
+        to.col = input[0] - 'a';
+        to.row = input[1] - '0';
+
+        from.col = input[3] - 'a';
+        from.row = input[4] - '0';
 
 
-        if(a.isValid() && b.isValid()){
-            return true;
+        if(to.isValid() && from.isValid()){
+            valid = true;
+            return std::make_pair(to,from);
         }
     }
 
-    return false;
+    to.row = -1;
+    to.col = -1;
+    from.row = -1;
+    from.col = -1;
+    valid = false;
+    return std::make_pair(to,from);
 }
+
 
 
 
 void ChessController::playGame() {
 
     std::string input;
+    bool valid_input = false;
+    std::pair<ChessCoordinate, ChessCoordinate> moves;
 
-    ChessCoordinate a;
-    ChessCoordinate b;
-
-    while( !chessBoard.isGameEnded()  ){
+    while( !chessBoard.isGameOver()  ){
         std::cin >> input;
-
-        if(validateInput(input) && convertChessCoordinate(a,b, input)) {
-            chessBoard.executeMove(a,b);
+        convertChessCoordinate(input, valid_input);
+        if( valid_input ) {
+            chessBoard.executeMove(moves.first, moves.second);
         }
-        std::cout << input << "\n";
+
     }
 
 

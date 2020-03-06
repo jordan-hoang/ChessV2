@@ -7,10 +7,10 @@
 
 
 
-typedef std::vector<std::unique_ptr<int>> vec3;
-typedef std::unique_ptr<int> smartInt;
+
 
 int main() {
+
 
 
 

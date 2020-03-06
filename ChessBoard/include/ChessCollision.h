@@ -21,6 +21,7 @@ class ChessCollision final {
         static bool isDiagonalPathClear(ChessCoordinate start, ChessCoordinate finish, const ChessBoard &b);
     public:
         static bool isPathClear(ChessCoordinate start, ChessCoordinate finish, const ChessBoard &b);
+
         ChessCollision() = delete;
         ChessCollision(const ChessCollision&) = delete;
         ChessCollision& operator=(const ChessCollision&) = delete;

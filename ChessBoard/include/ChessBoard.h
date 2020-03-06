@@ -24,8 +24,8 @@ private:
     std::vector<smartRow> chessboard_;
     ChessCoordinate whiteKing;   // White king in this case refers to the king that would go first.
     ChessCoordinate blackKing;   // Black king in this case refers to the king that would go second.
-    bool isWhiteTurn;
-    bool gameEnded;
+    bool isWhiteTurn;            // Checks to see whose turn it is.
+    bool GameOver;              // Variable to determine if the game has ended yet.
 
     smartRow genBackRank(Color c, bool upperCase);
 
@@ -34,7 +34,7 @@ public:
     ChessBoard(std::vector<smartRow> chessboard);
 
     void printChessBoard() const;
-    bool isGameEnded() const;
+    bool isGameOver() const;
 
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
     void movePiece(ChessCoordinate from, ChessCoordinate to);
