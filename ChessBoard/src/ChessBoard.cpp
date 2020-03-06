@@ -96,15 +96,22 @@ bool ChessBoard::isGameOver() const {
     return GameOver;
 }
 
+
 bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
     bool result = false;
-    if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
-        result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-    } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
-        result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-    }
+    
+    this->chessboard_[from.row][from.col]->movePiece(from,to, *this);
 
-    if(result) { isWhiteTurn = !isWhiteTurn; }
+    // if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
+    //     result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    // } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
+    //     result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    // }
+
+    // if(result) {
+    //      isWhiteTurn = !isWhiteTurn;
+    // }
+    
     return result;
 }
 
@@ -117,7 +124,7 @@ Piece *const ChessBoard::getPiece(ChessCoordinate a) const {
     return chessboard_[a.row][a.col].get();
 }
 
-//Moves a piece from A to B, given 2 coordinates.
+//Moves a piece from A to B, given 2 coordinates, private function.
 void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
 
     chessboard_[to.row][to.col].swap(chessboard_[from.row][from.col]);

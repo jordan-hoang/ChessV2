@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.1)
 project(ChessV2)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
-
 
 
 add_executable(ChessV2 main.cpp)

@@ -67,10 +67,14 @@ void ChessController::playGame() {
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
     while( !chessBoard.isGameOver()  ){
+        chessBoard.printChessBoard();
+
         std::cin >> input;
         convertChessCoordinate(input, valid_input);
         if( valid_input ) {
             chessBoard.executeMove(moves.first, moves.second);
+        } else{
+            std::cout << "Invalid input!\n";
         }
 
     }

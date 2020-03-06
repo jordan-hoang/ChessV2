@@ -31,7 +31,7 @@ bool Knight::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_b
 
     auto rst = std::find(possibleMoves.begin(), possibleMoves.end(), b);
     if(rst != possibleMoves.end()){
-        chess_board_.movePiece(a,b);
+        chess_board_.executeMove(a,b);
         return true;
     }
     return false;

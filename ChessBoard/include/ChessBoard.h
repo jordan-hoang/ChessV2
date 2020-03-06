@@ -28,6 +28,7 @@ private:
     bool GameOver;              // Variable to determine if the game has ended yet.
 
     smartRow genBackRank(Color c, bool upperCase);
+    void movePiece(ChessCoordinate from, ChessCoordinate to);
 
 public:
     ChessBoard();
@@ -37,7 +38,6 @@ public:
     bool isGameOver() const;
 
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
-    void movePiece(ChessCoordinate from, ChessCoordinate to);
 
     Piece *const getPiece(int row, int col) const;
     Piece *const getPiece(ChessCoordinate a) const;

@@ -18,7 +18,7 @@ bool Bishop::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_b
 
     if( diffRow == diffCol ){
         if(ChessCollision::isPathClear(a,b,chess_board_) ){
-            chess_board_.movePiece(a,b);
+            chess_board_.executeMove(a,b);
             return true;
         }
     }

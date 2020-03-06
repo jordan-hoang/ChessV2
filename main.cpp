@@ -7,11 +7,7 @@
 int main() {
 
     ChessController a;
-
-    std::string input = "a1,a2";
-
-    a.validChessStringInput(input);
-
+    a.playGame();
 
 
     return 0;

@@ -62,9 +62,8 @@ bool Pawn::movePiece(ChessCoordinate start, ChessCoordinate finish, ChessBoard &
         }
     }
 
-
     if(result) {
-        chess_board_.movePiece(start,finish);
+        chess_board_.executeMove(start,finish);
     }
 
     return result;
