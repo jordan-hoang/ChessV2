@@ -8,8 +8,6 @@ add_library(${chessPiece}
         src/Queen.cpp
         src/NullPiece.cpp
         src/ChessCoordinate.cpp
-        #../ChessBoard/ChessBoard.cpp
-        #../ChessBoard/ChessBoard.h
         )
 
 target_include_directories(${chessPiece}
@@ -18,4 +16,9 @@ target_include_directories(${chessPiece}
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src
+        )
+
+
+target_link_libraries(${chessPiece}
+        ${chessBoard}
         )

@@ -6,7 +6,9 @@
 #define CHESSV2_CHESSCONTROLLER_H
 
 
-#include "ChessBoard/include/ChessBoard.h"
+#include <ChessCoordinate.h>
+#include <ChessBoard.h>
+#include <utility>
 
 /* Takes input from the user and passes it to the board. */
 class ChessController {
@@ -14,17 +16,10 @@ class ChessController {
 
 public:
     void playGame();
-
-
-
+    bool validChessStringInput(std::string &input); //Returns true if input was valid.
+    std::pair<ChessCoordinate, ChessCoordinate> convertChessCoordinate(std::string input, bool &valid);
 private:
     ChessBoard chessBoard;
-
-
-    bool validateInput(std::string &input); //Returns true if input was valid.
-    bool convertChessCoordinate(ChessCoordinate &a, ChessCoordinate &b, std::string input);
-
-
 
 };
 

@@ -1,17 +1,16 @@
 #include <iostream>
 #include <memory>
 #include <string.h>
+#include <ChessController.h>
 
-#include "ChessBoard/include/ChessBoard.h"
-#include "ChessController.h"
-
-
-
-typedef std::vector<std::unique_ptr<int>> vec3;
-typedef std::unique_ptr<int> smartInt;
 
 int main() {
 
+    ChessController a;
+
+    std::string input = "a1,a2";
+
+    a.validChessStringInput(input);
 
 
 

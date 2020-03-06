@@ -44,7 +44,7 @@ smartRow ChessBoard::genBackRank(Color c, bool upper) {
 }
 
 
-ChessBoard::ChessBoard() : isWhiteTurn{true}, gameEnded{false} {
+ChessBoard::ChessBoard() : isWhiteTurn{true}, GameOver{false} {
 
     chessboard_.push_back( genBackRank(Color::BLACK, true) );
     smartRow myRow;
@@ -92,8 +92,8 @@ const std::vector<smartRow> &ChessBoard::getChessboard() const {
     return chessboard_;
 }
 
-bool ChessBoard::isGameEnded() const {
-    return gameEnded;
+bool ChessBoard::isGameOver() const {
+    return GameOver;
 }
 
 bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
@@ -109,11 +109,11 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
 }
 
 
-Piece *const ChessBoard::getPiece(int row, int col) {
+Piece *const ChessBoard::getPiece(int row, int col) const {
     return chessboard_[row][col].get();
 }
 
-Piece *const ChessBoard::getPiece(ChessCoordinate a) {
+Piece *const ChessBoard::getPiece(ChessCoordinate a) const {
     return chessboard_[a.row][a.col].get();
 }
 
@@ -128,7 +128,7 @@ void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
 }
 
 ChessBoard::ChessBoard( std::vector<smartRow> chessboard) :
-chessboard_(std::move(chessboard)), isWhiteTurn{true}, gameEnded{false} {
+        chessboard_(std::move(chessboard)), isWhiteTurn{true}, GameOver{false} {
 
 }
 
