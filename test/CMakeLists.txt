@@ -5,7 +5,7 @@ add_executable(runAllTests
         testKnight.cpp
         testInput.cpp
         testChessBoard.cpp
-        )
+        testRook.cpp)
 
 target_link_libraries(runAllTests
         gmock
