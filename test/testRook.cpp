@@ -5,16 +5,18 @@
 #include "ChessBoard.h"
 
 
-TEST(testRook, testCollision){
+TEST(testChessBoard, testBasic){
 
     ChessBoard my_board;
     //my_board.printChessBoard();
 
-    ChessCoordinate a{0,1};
-    ChessCoordinate b{0,3};
+    ChessCoordinate a{7,0};
+    ChessCoordinate b{5,0};
 
     bool is_valid = my_board.executeMove(a,b);
-    ASSERT_EQ(is_valid, false);
+    EXPECT_EQ(is_valid, false) << "Rook just went right through a pawn (No collision detection) \n";
+
+
 
 
 }
