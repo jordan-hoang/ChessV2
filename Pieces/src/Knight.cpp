@@ -11,7 +11,10 @@ Knight::Knight(Color color, char16_t symbol) : Piece{color, symbol}{
 
 bool Knight::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
-    if(chess_board_.getPiece(b)->getColor() != Color::NO_COLOR){
+    Color friendly_color = chess_board_.getPiece(a)->getColor();    
+    Color enemyColor = chess_board_.getPiece(b)->getColor();
+    // You are attaking yourself which is an illegal move
+    if(friendly_color == enemyColor){
         return false;
     }
 

@@ -11,23 +11,18 @@ Bishop::Bishop(Color color, char16_t symbol) :
 
 bool Bishop::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
+    auto friend_color = chess_board_.getPiece(a)->getColor();
+    auto enemy_colr = chess_board_.getPiece(b)->getColor();
+
+    if(friend_color == enemy_colr){
+        return false;
+    }
+
     //We need code to check if it is 'diagonal'
     int diffRow = abs( b.row - a.row);
     int diffCol = abs( b.col - a.col);
 
-
-    if( diffRow == diffCol ){
-        if(ChessCollision::isPathClear(a,b, chess_board_) ){
-            return true;
-        }
-    }
-
-
-
-
-
-
-    return false;
+    return ( diffRow == diffCol && ChessCollision::isPathClear(a,b,chess_board_) );    
 }
 
 void Bishop::print() {
