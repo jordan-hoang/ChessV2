@@ -12,7 +12,7 @@ struct ChessCoordinate {
         int row;
         int col;
 
-        bool operator==(const ChessCoordinate a) const {
+        bool operator==(const ChessCoordinate &a) const {
             return ( row == a.row  && col == a.col );
         }
         ChessCoordinate operator+(const ChessCoordinate &b) const {

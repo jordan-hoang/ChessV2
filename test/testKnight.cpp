@@ -36,7 +36,7 @@ TEST(TestKnight, testMovement){
 }
 
 
-
+//Feels irrelevant....
 std::vector<smartRow> initOneKnight(){
     std::vector<smartRow> myBoard;
     ////Generate Empty Squares.
@@ -75,27 +75,13 @@ std::vector<smartRow> initOneKnight(){
 
 
 TEST(TestKnight, testEightMoves){
+    ChessBoard board;
 
-    int moves = 0;
-    auto a = initOneKnight();
-    ChessBoard myBoard(std::move(a));
+    ChessCoordinate a{7,1};
+    ChessCoordinate b{5,0};
+    board.executeMove(a, b);
 
-    int count = 0;
-    ChessCoordinate start{4,3};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    board.printChessBoard();
 
 
 

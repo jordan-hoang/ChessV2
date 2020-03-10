@@ -5,7 +5,7 @@
 #ifndef CHESSV2_KING_H
 #define CHESSV2_KING_H
 
-
+#include <algorithm>
 #include "Piece.h"
 
 class King : public Piece {
