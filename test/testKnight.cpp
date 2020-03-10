@@ -79,10 +79,27 @@ TEST(TestKnight, testEightMoves){
 
     ChessCoordinate a{7,1};
     ChessCoordinate b{5,0};
-    board.executeMove(a, b);
+    EXPECT_EQ(board.executeMove(a, b), true);
 
-    board.printChessBoard();
+    a.set(0,1);
+    b.set(2,2);
 
+    EXPECT_EQ(board.executeMove(a, b), true);
 
+    a.set(5,0);
+    b.set(4,2);
+
+    EXPECT_EQ(board.executeMove(a, b), true);
+
+    a.set(2,2);
+    b.set(0,4);
+
+    //Try to eat itself..
+    EXPECT_EQ(board.executeMove(a,b), false);
+
+    a.set(0,6);
+    b.set(2,5);
+
+    EXPECT_EQ(board.executeMove(a,b), true);
 
 }
