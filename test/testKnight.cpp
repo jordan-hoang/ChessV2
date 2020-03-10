@@ -32,7 +32,6 @@ TEST(TestKnight, testMovement){
     passed = pieceMoved(board,a,b);
     EXPECT_EQ(passed,false);
 
-
 }
 
 
@@ -71,7 +70,6 @@ std::vector<smartRow> initOneKnight(){
 
     return std::move(myBoard);
 }
-
 
 
 TEST(TestKnight, testEightMoves){
