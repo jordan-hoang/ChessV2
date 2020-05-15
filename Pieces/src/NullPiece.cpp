@@ -14,6 +14,6 @@ void NullPiece::print() {
     std::cout << "I'm a nullpiece";
 }
 bool NullPiece::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
-    std::cout << "Moving a empty SQUARE!";
+    std::cout << "MOVING EMPTY SQUARE!\n";
     return false;
 }

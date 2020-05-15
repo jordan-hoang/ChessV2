@@ -24,17 +24,70 @@ TEST(testChessBoard, testBasic){
     b.set(3,7);
     EXPECT_EQ(my_board.executeMove(a,b), true);
 
-
-
-    // a.set(7,0);
-    // b.set(7,4);
-    // EXPECT_EQ(my_board.executeMove(a,b), false) << "Check for vertial collision detection failed";
-
-
     a.set(7,0);
-    b.set(7,1);
+    b.set(6,0);
     EXPECT_EQ(my_board.executeMove(a,b), true);
 
+    a.set(0,7);
+    b.set(5,7);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+    a.set(0,7);
+    b.set(2,7);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
+
+
+    a.set(6,0);
+    b.set(4,0);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+    a.set(6,0);
+    b.set(3,0);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+
+    a.set(6,0);
+    b.set(5,0);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
+
+
+
+    a.set(2,7);
+    b.set(2,4);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
+
+    a.set(6,3);
+    b.set(5,3);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
+
+
+    a.set(2,4);
+    b.set(2,3);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
+
+
+
+    a.set(5,0);
+    b.set(5,7);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+
+    a.set(5,0);
+    b.set(5,6);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+
+    a.set(5,0);
+    b.set(5,4);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+    a.set(5,0);
+    b.set(5,3);
+    EXPECT_EQ(my_board.executeMove(a,b), false);
+
+    a.set(5,0);
+    b.set(5,2);
+    EXPECT_EQ(my_board.executeMove(a,b), true);
 
 
     my_board.printChessBoard();

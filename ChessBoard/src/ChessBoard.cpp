@@ -15,7 +15,6 @@
 #include "NullPiece.h"
 
 
-
 smartRow ChessBoard::genBackRank(Color c, bool upper) {
     smartRow myRow;
 
@@ -44,6 +43,9 @@ smartRow ChessBoard::genBackRank(Color c, bool upper) {
 }
 
 
+/**
+ * Intializes a chess game.
+ */
 ChessBoard::ChessBoard() : isWhiteTurn{true}, GameOver{false} {
 
     chessboard_.push_back( genBackRank(Color::BLACK, true) );
@@ -75,8 +77,6 @@ ChessBoard::ChessBoard() : isWhiteTurn{true}, GameOver{false} {
     blackKing = {7,4};
 }
 
-
-
 void ChessBoard::printChessBoard() const {
     for(int i = 0; i < chessboard_.size(); i++){
         for(int j = 0; j < chessboard_[i].size(); j++){
@@ -87,7 +87,6 @@ void ChessBoard::printChessBoard() const {
     std::cout << "\n";
 }
 
-
 const std::vector<smartRow> &ChessBoard::getChessboard() const {
     return chessboard_;
 }
@@ -95,7 +94,6 @@ const std::vector<smartRow> &ChessBoard::getChessboard() const {
 bool ChessBoard::isGameOver() const {
     return GameOver;
 }
-
 
 bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
     bool result = false;
@@ -112,7 +110,6 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
           isWhiteTurn = !isWhiteTurn;
           movePiece(from, to);
      }
-    
     return result;
 }
 
