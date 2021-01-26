@@ -1,7 +1,7 @@
 
 // Created by jordan on 2/26/20.
 
-#include "ChessCoordinate.h"
+#include "../ChessUtility/include/ChessCoordinate.h"
 #include <gtest/gtest.h>
 #include <NullPiece.h>
 #include "gmock/gmock.h"

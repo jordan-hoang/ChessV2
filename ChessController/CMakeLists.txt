@@ -1,11 +1,11 @@
-add_library(
-        ${chessController}
+# The game control class, which has functions to manipulate the board
+add_library( ${chessController}
         src/ChessController.cpp
         )
 
-target_link_libraries(
-        ${chessController}
+target_link_libraries( ${chessController}
         ${chessBoard}
+        ${chessUtility}
         )
 
 #Hello friends

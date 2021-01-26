@@ -12,6 +12,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
+set(chessUtility "chessUtility")
 
 add_executable(ChessV2 main.cpp)
 
@@ -21,13 +22,12 @@ add_executable(ChessV2 main.cpp)
 # Don't think it matters much for this project
 target_link_libraries(ChessV2
         PRIVATE
-            ${chessPiece}
-            ${chessBoard}
             ${chessController}
         )
 
 # Cmake then goes into these directories and executes their CMakeList files as well
 add_subdirectory(test)
-add_subdirectory(Pieces)
+add_subdirectory(ChessPiece)
 add_subdirectory(ChessBoard)
 add_subdirectory(ChessController)
+add_subdirectory(ChessUtility)

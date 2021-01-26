@@ -1,9 +1,7 @@
 //
 // Created by jordan on 2/12/20.
 //
-
-#include "../include/ChessController.h"
-#include "ChessCoordinate.h"
+#include "ChessController.h"
 #include <thread>
 
 

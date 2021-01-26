@@ -5,10 +5,8 @@
 #ifndef CHESSV2_CHESSCONTROLLER_H
 #define CHESSV2_CHESSCONTROLLER_H
 
-
-#include <ChessCoordinate.h>
-#include <ChessBoard.h>
-#include <utility>
+#include "ChessCoordinate.h"
+#include "ChessBoard.h"
 
 /* Takes input from the user and passes it to the board. */
 class ChessController {
