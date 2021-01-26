@@ -12,17 +12,21 @@ add_library(${chessPiece}
         src/ChessCoordinate.cpp
         )
 
-# This part is a bit confusing....
-# I blieve <INSTALL_INTERFACE is fo
+
+### Target properties are defined in one of two scopes: INTERFACE(Public)  and PRIVATE.
+#   Private properties are used internally to build the target, while interface properties are used externally by users of the target.
+#   In other words, interface properties model usage requirements,
+#   whereas private properties model build requirements of targets.
 target_include_directories(${chessPiece}
         PUBLIC
-            $<INSTALL_INTERFACE:include>                            # This only applies to make install I believe
+            $<INSTALL_INTERFACE:include>                            # This only applies to make install I believe?
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # Gives libraries outside of this folder access to include (Header files)
         PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/src     # Only chessPiece module has access to the src no one else can peek inside src
+            ${CMAKE_CURRENT_SOURCE_DIR}/src     # Only the chessPiece module has access to whatever is inside it's src folder
         )
 
 # Link the necessary libraries chessPiece module requires to run.
+# This can be both private or public.....
 target_link_libraries(${chessPiece}
         ${chessBoard}
         )

@@ -1,3 +1,7 @@
+# Read up on this if you forgotten the basics of cmake
+# https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
+
+# 3.1 >= Is the beginning of what is know as modern cmake
 cmake_minimum_required(VERSION 3.1)
 project(ChessV2)
 
@@ -9,15 +13,17 @@ set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
 
-
-
 add_executable(ChessV2 main.cpp)
 
 #Link the libraries (moudles) that ChessV2 requires in order to run)
+# See this answer: Very helpful
+# https://stackoverflow.com/questions/26037954/cmake-target-link-libraries-interface-dependencies
+# Don't think it matters much for this project
 target_link_libraries(ChessV2
-        ${chessPiece}
-        ${chessBoard}
-        ${chessController}
+        PRIVATE
+            ${chessPiece}
+            ${chessBoard}
+            ${chessController}
         )
 
 # Cmake then goes into these directories and executes their CMakeList files as well
