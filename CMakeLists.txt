@@ -11,17 +11,16 @@ set(chessController "chessController")
 
 
 
-
-
 add_executable(ChessV2 main.cpp)
 
+#Link the libraries (moudles) that ChessV2 requires in order to run)
 target_link_libraries(ChessV2
         ${chessPiece}
         ${chessBoard}
         ${chessController}
         )
 
-
+# Cmake then goes into these directories and executes their CMakeList files as well
 add_subdirectory(test)
 add_subdirectory(Pieces)
 add_subdirectory(ChessBoard)
