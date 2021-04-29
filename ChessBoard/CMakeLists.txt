@@ -5,6 +5,7 @@ add_library(${chessBoard}
 
 target_link_libraries(${chessBoard}
         ${chessPiece}
+        ${chessUtility}
         )
 
 target_include_directories(${chessBoard}

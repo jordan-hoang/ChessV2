@@ -9,7 +9,7 @@ add_library(${chessPiece}
         src/Rook.cpp
         src/Queen.cpp
         src/NullPiece.cpp
-        src/ChessCoordinate.cpp
+        ../ChessUtility/src/ChessCoordinate.cpp
         )
 
 
@@ -29,4 +29,5 @@ target_include_directories(${chessPiece}
 # This can be both private or public.....
 target_link_libraries(${chessPiece}
         ${chessBoard}
+        ${chessUtility}
         )

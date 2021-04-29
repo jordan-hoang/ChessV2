@@ -14,7 +14,7 @@ class Piece; //
 enum class Color;
 
 #include <Piece.h>
-#include <ChessCoordinate.h>
+#include "../../ChessUtility/include/ChessCoordinate.h"
 
 typedef std::unique_ptr<Piece> smart_piece;
 typedef std::vector<std::unique_ptr<Piece>> smartRow;

@@ -8,11 +8,10 @@
 
 #include "ChessCoordinate.h"
 #include "ChessBoard.h"
-#include "Piece.h"
 
 /** A helper class that checks to see if the paths are clear.
  *  Doesn't necessary need to be a helper class, putting this in as a static class that
- *  belongs to Piece is all you really need since only Chess Pieces will really need this class.
+ *  belongs to Piece is all you really need since only Chess ChessPiece will really need this class.
  */
 class ChessCollision final {
     private:
@@ -23,8 +22,8 @@ class ChessCollision final {
         static bool isPathClear(ChessCoordinate start, ChessCoordinate finish, const ChessBoard &b);
 
         ChessCollision() = delete;
-        ChessCollision(const ChessCollision&) = delete;
-        ChessCollision& operator=(const ChessCollision&) = delete;
+        ChessCollision(const ChessCollision&) = delete;            // Copy constructor not allowed
+        ChessCollision& operator=(const ChessCollision&) = delete; // Assignment constructor not allowed
 };
 
 

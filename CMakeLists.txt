@@ -8,12 +8,17 @@ project(ChessV2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
-# Libraries
+# Libraries, maybe not necessary
 set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
+set(chessUtility "chessUtility")
+set(Network "Network")
 
 add_executable(ChessV2 main.cpp)
+
+find_package (Threads)
+
 
 #Link the libraries (moudles) that ChessV2 requires in order to run)
 # See this answer: Very helpful
@@ -21,13 +26,15 @@ add_executable(ChessV2 main.cpp)
 # Don't think it matters much for this project
 target_link_libraries(ChessV2
         PRIVATE
-            ${chessPiece}
-            ${chessBoard}
             ${chessController}
+            ${Network}
+            Threads::Threads
         )
 
 # Cmake then goes into these directories and executes their CMakeList files as well
 add_subdirectory(test)
-add_subdirectory(Pieces)
+add_subdirectory(ChessPiece)
 add_subdirectory(ChessBoard)
 add_subdirectory(ChessController)
+add_subdirectory(ChessUtility)
+add_subdirectory(Network)

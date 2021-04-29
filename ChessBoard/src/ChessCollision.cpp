@@ -3,8 +3,10 @@
 //
 
 #include <algorithm>
-#include <assert.h>
 #include "ChessCollision.h"
+
+#include "Piece.h"
+
 
 /**
  * Scans through the 2 coordinates and checks if there is anything in-between these 2 values.
