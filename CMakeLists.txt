@@ -16,6 +16,9 @@ set(chessUtility "chessUtility")
 
 add_executable(ChessV2 main.cpp)
 
+find_package (Threads)
+
+
 #Link the libraries (moudles) that ChessV2 requires in order to run)
 # See this answer: Very helpful
 # https://stackoverflow.com/questions/26037954/cmake-target-link-libraries-interface-dependencies
@@ -23,6 +26,7 @@ add_executable(ChessV2 main.cpp)
 target_link_libraries(ChessV2
         PRIVATE
             ${chessController}
+            Threads::Threads
         )
 
 # Cmake then goes into these directories and executes their CMakeList files as well
