@@ -67,7 +67,10 @@ void ChessController::playGame() {
     while( !chessBoard.isGameOver()  ){
 
         chessBoard.printChessBoard();
+
+
         std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
+
 
         moves = convertChessCoordinate(input, valid_input);
 

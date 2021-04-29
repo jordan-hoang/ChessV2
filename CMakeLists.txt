@@ -8,11 +8,12 @@ project(ChessV2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
-# Libraries
+# Libraries, maybe not necessary
 set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
 set(chessUtility "chessUtility")
+set(Network "Network")
 
 add_executable(ChessV2 main.cpp)
 
@@ -26,6 +27,7 @@ find_package (Threads)
 target_link_libraries(ChessV2
         PRIVATE
             ${chessController}
+            ${Network}
             Threads::Threads
         )
 
@@ -35,3 +37,4 @@ add_subdirectory(ChessPiece)
 add_subdirectory(ChessBoard)
 add_subdirectory(ChessController)
 add_subdirectory(ChessUtility)
+add_subdirectory(Network)
