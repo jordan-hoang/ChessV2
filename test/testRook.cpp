@@ -66,7 +66,6 @@ TEST(testChessBoard, testBasic){
     EXPECT_EQ(my_board.executeMove(a,b), true);
 
 
-
     a.set(5,0);
     b.set(5,7);
     EXPECT_EQ(my_board.executeMove(a,b), false);
@@ -90,7 +89,7 @@ TEST(testChessBoard, testBasic){
     EXPECT_EQ(my_board.executeMove(a,b), true);
 
 
-    my_board.printChessBoard();
+    //my_board.printChessBoard();
 
 
 }

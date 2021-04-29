@@ -12,7 +12,7 @@
 
 class ChessBoard;
 #include "../../ChessBoard/include/ChessBoard.h"
-#include "ChessCoordinate.h"
+#include "../../ChessUtility/include/ChessCoordinate.h"
 
 enum class Color {
     WHITE, BLACK, NO_COLOR

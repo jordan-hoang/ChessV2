@@ -1,9 +1,7 @@
 //
 // Created by jordan on 2/12/20.
 //
-
-#include "../include/ChessController.h"
-#include "ChessCoordinate.h"
+#include "ChessController.h"
 #include <thread>
 
 
@@ -39,6 +37,10 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
         from.row = input[4] - '0';
 
 
+        //std::cout << "from is, " << from << "  to is  " << to << "\n";
+
+
+
         if(to.isValid() && from.isValid()){
             valid = true;
             return std::make_pair(to,from);
@@ -54,8 +56,6 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
 }
 
 
-
-
 void ChessController::playGame() {
 
     std::string input;
@@ -65,30 +65,41 @@ void ChessController::playGame() {
 
 
     while( !chessBoard.isGameOver()  ){
+
         chessBoard.printChessBoard();
 
-        std::cin >> input;
+
+        std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
+
+
         moves = convertChessCoordinate(input, valid_input);
+
         if( valid_input ) {
             valid_move = chessBoard.executeMove(moves.first, moves.second);
-
-
-        }
-
-        if(!valid_input){
+        } else{
             std::cout << "Invalid input\n";
         }
+
         if(!valid_move){
             std::cout << "Invalid move\n";
         }
 
-
-        std::this_thread::__sleep_for(std::chrono::seconds(0), std::chrono::milliseconds(15));
+        std::this_thread::__sleep_for(std::chrono::seconds(0), std::chrono::milliseconds(500));
     }
 
+}
 
+void ChessController::threadMain() {
 
+    while(this->runningThread){
+        this->playGame();
+    }
 
+}
 
-
+ChessController::~ChessController() {
+    runningThread = false;
+    if(_chessThread.joinable()) {
+        _chessThread.join();
+    }
 }

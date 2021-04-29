@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <NullPiece.h>
 #include <Knight.h>
-#include "ChessCoordinate.h"
+#include "../ChessUtility/include/ChessCoordinate.h"
 
 bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b);
 

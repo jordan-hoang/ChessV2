@@ -2,7 +2,7 @@
 // Created by jordan on 3/6/20.
 //
 
-#include "ChessCoordinate.h"
+#include "../ChessUtility/include/ChessCoordinate.h"
 #include <gtest/gtest.h>
 #include <ChessController.h>
 
