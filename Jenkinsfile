@@ -5,29 +5,27 @@ pipeline {
         
         stage("build"){
             steps{
+              
+                cmakeBuild(
+                  installation: 'InSearchPath'
+                )
+                sh "ls -l"
                 echo "building the application..."
-                ls;
-                mkdir cmake-build-debug;
-                cd cmake-build-debug;
-                cmake ../;
-                make;
-                
+                sh "cmake ./"
+                sh "make"
             }
         }
         
         stage("test"){
             steps{
                 echo "testing the application..."
-
-
-
+                sh "ls -l"
+                sh "./test/runAllTests"
             }
         }
-
-
         stage("deploy"){
             steps{
-                echo "Deploying the application... (There is no deploy but this is here just for testing...)"
+                echo "deploying the application..."
             }
         }
     
