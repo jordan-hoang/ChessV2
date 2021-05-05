@@ -1,16 +1,84 @@
 # ChessV2
-A better designed version of chess
 
-Work in progresss....
+A Chess game I made for fun, currently working on making a React frontend for this particular application.
 
-------------------------------------------------------------
+<br />
 
-If on windows get the linux subsystem and install cmake through it.
-Should compile fine on linux based systems.
+## Building with CMake
+
+1. Clone the repository.
+
+        git clone https://csil-git1.cs.surrey.sfu.ca/373-19-1-faworki/adventure2019.git
+
+2. Create a new directory for building.
+
+        mkdir build
+
+3. Change into the new directory.
+
+        cd build
+
+4. Run CMake with the path to the source.
+
+        cmake ../
+
+5. Run make inside the build directory:
+
+        make
+
+This produces a "ChessV2" executable inside of the directory inside of build and it can be run to played a text-based version of chess where the commands are entered using Chess Algebraic Notation. In the future a React frontend will be created as a GUI instead of having a text based game. If you want to run unit tests they are shuold be inside of ChessV2/build/test/runAllTests executable.
+
+When running the application you should something that looks like this.....
+
+![image](https://user-images.githubusercontent.com/36338184/117098456-60893f00-ad23-11eb-9d73-97e0274c440b.png)
+
+The lower-case characthers such as 'p' means it is a "White Pawn" while "P" corresponds to a "Black Pawn"
 
 
-------------------------------------------------------------
 
-Requires:
-  CMake 3.10 or greater
-  C++17
+![image](https://user-images.githubusercontent.com/36338184/117097523-c1634800-ad20-11eb-890a-065a2ac8cc13.png)
+
+
+To make a move specify the initial position of the piece followed by a comma and then the ending position of the piece.
+So for example to move the left-most white pawn 2 squares forward we would type in.
+
+"a6,a4"   (In chess algebraic notation it is column first than row)
+
+In the future a React frontend would serve as the GUI and clicking will be included instead of having to type out manually the Chess Coordinates.
+
+
+# Setting up Jenkins and Docker to run locally 
+### (Assumes you are running on Linux distro Ubuntu)
+1. First install docker and jenkins through the terminal you can google it and find the commands relatively easily
+
+2. Next you need to compile a docker image for this particular application (You need to get jenkins/jenkins:lts which can be aquired by
+   docker pull jenkins/jenkins:lts. ) Copy and paste the following into a "Dockerfile". Note that there can only be one Dockerfile inside a directory.
+
+        FROM jenkins/jenkins:lts
+        USER root
+        RUN apt-get update && apt-get install -y \
+                    python3 \
+                    gcc \
+                    g++ \
+                    cmake 
+        USER jenkins
+        
+        
+3. Next you need to build the Docker Image. Assuming you are in the same directory as where the docker file is located run, feel free to rename 
+jenkins-gcc into something else, that is the image file name.
+
+        docker build -t jenkins-gcc .
+
+      
+4. Now run the command to launch a container at localhost:8080 (jenkins-gcc may be different if you chose to rename your file)
+
+        sudo docker run -p 8080:8080 -p 50000:50000 -d -v jenkins_home:/var/jenkins_home jenkins-gcc
+        
+5. Now you are done! Follow a guide online on how to use jenkins (if you are unfamilar), to run automated unit tests inside of jenkins.
+
+### Dependencies
+This project requires:
+
+1. C++17 or newer
+2. PythonInterp (For googletest)
+3. CMake >= 3.1
