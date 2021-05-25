@@ -62,10 +62,8 @@ TEST(TestInput, invalidCoordinate){
     ChessCoordinate my_coordinate{-1,-1};
     rst = my_controller.convertChessCoordinate(input, is_valid);
 
-    EXPECT_EQ(is_valid, true);
-    EXPECT_EQ(is_valid, true);
+    EXPECT_EQ(is_valid, false);
     EXPECT_EQ(rst.first, my_coordinate);
     EXPECT_EQ(rst.second, my_coordinate);
-
 
 }
