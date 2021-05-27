@@ -1,8 +1,10 @@
 //
 // Created by jordan on 2021-04-29.
-//
+// This code is here is C not C++
+
 #include <string.h> // For memset
 #include <unistd.h>   // for close()
+#include <cstdio>
 #include <thread>
 #include <iostream>
 #include <netdb.h>
@@ -12,18 +14,32 @@
 #define MSG_MAX_LEN 1024
 #define PORT 3000
 
+
 static struct sockaddr_in sin;
 static int socketDescriptor;
-
-
 
 static void parseClientMessage(char* msgFromClient, char* msgToClient,
                                struct sockaddr_in * sinRemote, unsigned int * sin_len) {
 
     printf("Msg from client is : %s\n", msgFromClient);
+
+    // Send some message back from the server.
     if( strncmp(msgFromClient, "help", strlen("help")) == 0 ){
-        printf( " Hello World!\n");
+        snprintf(msgToClient, 20, "Hello Help!" ); // This just for testing purposes.
+        return;
     }
+
+    if( strncmp(msgFromClient, "undo", strlen("undo")) == 0 ){
+        snprintf(msgToClient, 20, "undo_move" ); // This just for testing purposes.
+        return;
+    }
+
+
+
+
+    printf("Unknown message recieved");
+    snprintf(msgToClient, 20, "InvalidMsgRec" ); // This just for testing purposes.
+    return;
 
 }
 void Network::socketLoop(){

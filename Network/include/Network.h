@@ -12,7 +12,7 @@ class Network {
 public:
     /* Explicitly using the default constructor to
      * underline the fact that it does get called */
-    Network()= default;
+    Network() = default;
 
     ~Network(){
         continueRunning = false;
@@ -29,7 +29,6 @@ public:
     bool continueRunning = true; // Super simple thread stopping.
     void ThreadMain();
     void socketLoop();
-
 
 };
 
