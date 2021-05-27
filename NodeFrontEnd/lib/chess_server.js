@@ -17,32 +17,42 @@ exports.listen = function(server) {
 };
 
 
-// Handles set up for code
+// Handles set up for code. It recieves a message from the C++ server, and the sends it to the Chess.js
 function handleCommand(socket) {
 	console.log("Setting up socket handlers.");
 
-	// Send the string 'help' to the C++ app
+	// Sends a message on the 
 	socket.on('help', function(modeNumber){
-		console.log("Recieved help command");
-		relayToLocalPort(socket, 'help', "mode-reply");
+		let msg = "help23"
+		console.log("Recieved help message from chess.js. Sending to C++ server where message is 2nd parameter : " + msg);
+		relayToLocalPort(socket, msg, "help-reply"); // the third parameter is the socket you are sending it too!
 	});
 
-	// Send the string 'help' to the C++ app
+	// 'undo' corresponds to the undo from our C++ application
 	socket.on('undo', function(modeNumber){
-		console.log("Recieved undo command");
-		relayToLocalPort(socket, 'undo', "mode-reply");
+		console.log("Recieved undo command from server");
+		relayToLocalPort(socket, 'undo', "undo-reply");
+	});
+
+	socket.on('move', function(moveCoordinates){
+		
+		//modeNumber is the 'move' you are going to make so, chess_ui.js
+		//should send something like a7,a6!
+
+		console.log("Move command recieved!"); // Sending to C++ server....??
+		console.log("Mode_number is : " + moveCoordinates); // modeNumber is options from sendCommandToServer
+
+		relayToLocalPort(socket, 'move ' + moveCoordinates, "mode-movepiece");
 	});
 
 };
 
 
-
-
 /**
  * Sends a message to the C++ application
  * @param {*} socket 
- * @param {*} data - The data / string you are sending to the application
- * @param {*} replyCommandName - "Relays to localPort, so in this case it would be 'mode-reply', 'volume-reply' "
+ * @param {*} data - The data / string you are sending to server
+ * @param {*} replyCommandName - " The socket you are communicating to. Incorrect name will not send anything!
  */
 function relayToLocalPort(socket, data, replyCommandName) {
 	console.log(" relaying to local port command / C++ application: " + data);

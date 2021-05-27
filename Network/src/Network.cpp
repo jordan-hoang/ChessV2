@@ -1,11 +1,10 @@
 //
 // Created by jordan on 2021-04-29.
-// This code is here is C not C++
+// This code is here is C style
 
-#include <string.h> // For memset
+#include <cstring> // For memset
 #include <unistd.h>   // for close()
 #include <cstdio>
-#include <thread>
 #include <iostream>
 #include <netdb.h>
 
@@ -13,6 +12,10 @@
 
 #define MSG_MAX_LEN 1024
 #define PORT 3000
+
+#define COMMAND_MOVE "move"
+#define COMMAND_HELP "help"
+
 
 
 static struct sockaddr_in sin;
@@ -22,19 +25,25 @@ static void parseClientMessage(char* msgFromClient, char* msgToClient,
                                struct sockaddr_in * sinRemote, unsigned int * sin_len) {
 
     printf("Msg from client is : %s\n", msgFromClient);
-
     // Send some message back from the server.
-    if( strncmp(msgFromClient, "help", strlen("help")) == 0 ){
+    if( strncmp(msgFromClient, COMMAND_HELP, strlen(COMMAND_HELP)) == 0 ){
         snprintf(msgToClient, 20, "Hello Help!" ); // This just for testing purposes.
         return;
     }
 
     if( strncmp(msgFromClient, "undo", strlen("undo")) == 0 ){
-        snprintf(msgToClient, 20, "undo_move" ); // This just for testing purposes.
+        snprintf(msgToClient, 20, "undo_move" ); // This is for undoing moves
         return;
     }
 
+    if( strncmp(msgFromClient, COMMAND_MOVE, strlen(COMMAND_MOVE)) == 0 ){
 
+        // Execute the recieved move and then send back true if valid else return false if invalid
+        
+
+        snprintf(msgToClient, 20, "cat"); // This just for testing purposes.
+        return;
+    }
 
 
     printf("Unknown message recieved");
@@ -44,14 +53,15 @@ static void parseClientMessage(char* msgFromClient, char* msgToClient,
 }
 void Network::socketLoop(){
 
+    char messageRx[MSG_MAX_LEN];
+    char messageTx[MSG_MAX_LEN];
+
     while(continueRunning){
         // Get the data (blocking)
         // Will change sin (the address to be the address of the client)
         // Note: sin passes info in and out of the call!
         struct sockaddr_in sinRemote;              // Return address label
         unsigned int sin_len = sizeof(sinRemote);
-        char messageRx[MSG_MAX_LEN];
-
         // Message recieved
         int bytesRx = recvfrom(socketDescriptor,
                                messageRx, MSG_MAX_LEN, 0,
@@ -62,7 +72,6 @@ void Network::socketLoop(){
         messageRx[terminateIdx] = 0;
 
         //Rx is from client, Tx is message to send to client
-        char messageTx[MSG_MAX_LEN];
         snprintf(messageTx, 10, "fromC++" ); // This just for testing purposes.
 
         parseClientMessage(messageRx, messageTx, &sinRemote, &sin_len);
@@ -83,8 +92,6 @@ void Network::socketLoop(){
 void Network::ThreadMain() {
 
     printf("Server starting at PORT %d\n", PORT);
-    printf("Connect by typing... \n");
-    printf("192.168.7.1:%d into your browser\n", PORT);
 
     memset(&sin, 0, sizeof(sin));
 

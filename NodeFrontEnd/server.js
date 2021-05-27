@@ -52,12 +52,5 @@ server.listen(PORT_NUMBER, () => {
 });
 
 
-// Whats the difference between this and io.on()? Don't know
-// io.sockets.on('connection', (socket) => {
-// 	console.log("Hoo")
-// });
-
-//This doesn't seem to work at all!
-// Do I need to defer this or something?!
 var procServer = require('./lib/chess_server');
 procServer.listen(io);

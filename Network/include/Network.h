@@ -6,17 +6,18 @@
 #ifndef CHESSV2_NETWROK_H
 #define CHESSV2_NETWROK_H
 
-
-
 class Network {
 public:
     /* Explicitly using the default constructor to
      * underline the fact that it does get called */
     Network() = default;
 
+    // When the network class goes out of scope, it will stop the thread as well
     ~Network(){
         continueRunning = false;
-        if(the_thread.joinable()) the_thread.join();
+        if(the_thread.joinable()) {
+            the_thread.join();
+        }
     }
 
     void start(){
@@ -24,12 +25,10 @@ public:
         the_thread = std::thread(&Network::ThreadMain, this);
     }
 
-
     std::thread the_thread;
     bool continueRunning = true; // Super simple thread stopping.
     void ThreadMain();
     void socketLoop();
-
 };
 
 
