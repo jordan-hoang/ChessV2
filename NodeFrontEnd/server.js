@@ -8,38 +8,42 @@
 // 
 let PORT_NUMBER = 3000;
 
-const fs = require('fs');
-const express = require('express');
-const http = require('http');
+const fs         = require('fs');
+const express    = require('express');
+const http       = require('http');
+//const { Server } = require("socket.io"); // https://stackoverflow.com/questions/25187903/what-do-curly-braces-around-javascript-variable-name-mean
 
 const app = express();
 const server = http.createServer(app);
-const { Server } = require("socket.io"); // https://stackoverflow.com/questions/25187903/what-do-curly-braces-around-javascript-variable-name-mean
-const io = new Server(server); // Our server this doesn't work anymore.... you can also do const io = require("socket.io")(server)
 
-
-app.use(express.static(__dirname + '/public')); // Allows mime to serve and load js and css
-
-// Serves the webpage, to the user when the reach the root directory.
-app.get('/', (request, response) => {
-	
-  let path = __dirname + "/public/index.html";
-
-  fs.stat(path, (error, stats) => {
-	if (error) {
-	  console.log(error);
-	  send404(response);
-	}
-	else {	 
-		if(stats.isFile){
-			response.sendFile(__dirname + "/public/index.html");
-		} else {
-			send404(response);
-		}
+const io = require("socket.io")(server, {
+	cors: {
+	  origin: "*", //all
+	  methods: ["GET", "POST"]
 	}
   });
   
-});
+
+//app.use(express.static(__dirname + '/public')); // Allows mime to serve and load js and css
+// Serves the webpage, to the user when the reach the root directory.
+app.get('/', (request, response) => {
+	
+	response.send({ response: "I am alive!" }).status(200);
+//   let path = __dirname + "/public/index.html";
+//   fs.stat(path, (error, stats) => {
+// 	if (error) {
+// 	  console.log(error);
+// 	  send404(response);
+// 	}
+// 	else {	 
+// 		if(stats.isFile){
+// 			response.sendFile(__dirname + "/public/index.html");
+// 		} else {
+// 			send404(response);
+// 		}
+// 	}
+  });
+  
 
 function send404(response) {
 	response.writeHead(404, {'Content-Type': 'text/plain'});
@@ -52,5 +56,15 @@ server.listen(PORT_NUMBER, () => {
 });
 
 
-var procServer = require('./lib/chess_server');
+// Kill the server upon signal recieved
+process.on('SIGINT', function() {
+    console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+    // some other closing procedures go here
+    process.exit(1);
+});
+
+
+var procServer = require('./lib/chess_server'); 
 procServer.listen(io);
+
+

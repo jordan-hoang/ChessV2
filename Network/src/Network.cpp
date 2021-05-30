@@ -37,16 +37,13 @@ static void parseClientMessage(char* msgFromClient, char* msgToClient,
     }
 
     if( strncmp(msgFromClient, COMMAND_MOVE, strlen(COMMAND_MOVE)) == 0 ){
-
         // Execute the recieved move and then send back true if valid else return false if invalid
-        
-
         snprintf(msgToClient, 20, "cat"); // This just for testing purposes.
         return;
     }
 
 
-    printf("Unknown message recieved");
+    printf("Unknown message recieved\n");
     snprintf(msgToClient, 20, "InvalidMsgRec" ); // This just for testing purposes.
     return;
 

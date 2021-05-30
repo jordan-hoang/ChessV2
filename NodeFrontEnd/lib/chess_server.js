@@ -8,14 +8,14 @@ var io;
 var dgram    = require('dgram');
 
 
-// Exporting a function called listen, so it can be called from another file.
+// Exporting a function called listen, so it can be called from another file. a.k.a server.js
 exports.listen = function(server) {
 	io = server;
 	io.on('connection', (socket) => {
 		handleCommand(socket);
+        handleReactCommand(socket);
 	});
 };
-
 
 // Handles set up for code. It recieves a message from the C++ server, and the sends it to the Chess.js
 function handleCommand(socket) {
@@ -47,6 +47,19 @@ function handleCommand(socket) {
 
 };
 
+// Handles set up for code. It recieves a message from the React server, and the sends it to the Chess.js
+function handleReactCommand(socket) {
+
+    // On receiving a message from react....
+	socket.on('react_help', function(moveCoordinates){
+		
+		//modeNumber is the 'move' you are going to make so, chess_ui.js
+		//should send something like a7,a6!
+		relayToReact(socket, 'move ' + moveCoordinates, "react_move");
+	});
+
+};
+
 
 /**
  * Sends a message to the C++ application
@@ -58,7 +71,7 @@ function relayToLocalPort(socket, data, replyCommandName) {
 	console.log(" relaying to local port command / C++ application: " + data);
 	
 	// Info for connecting to the local process via UDP
-	var PORT = 3000;	// Port of local application
+	var PORT = 3000;	// Port of chess application
 	var HOST = '127.0.0.1';
 	var buffer = new Buffer(data);
 
@@ -76,7 +89,6 @@ function relayToLocalPort(socket, data, replyCommandName) {
 	//     var address = client.address();
 	//     console.log('UDP Client: listening on ' + address.address + ":" + address.port);
 	// });
-
 	/**
 	 * 
 	 * @param {*} message - The message you recieved from the C++ application
@@ -93,8 +105,6 @@ function relayToLocalPort(socket, data, replyCommandName) {
 
 	});
 
-
-
 	client.on("UDP Client: close", function() {
 	    console.log("closed");
 	});
@@ -104,3 +114,20 @@ function relayToLocalPort(socket, data, replyCommandName) {
 	});	
 
 }
+
+
+/**
+ * Sends a message to....??
+ * @param {*} socket 
+ * @param {*} data 
+ * @param {*} replyCommandName 
+ */
+function relayToReact(socket, data, replyCommandName) {
+	console.log("_sending to react data : " + data);
+    socket.emit("react_move", data);
+    console.log();
+    // Success
+}
+
+
+

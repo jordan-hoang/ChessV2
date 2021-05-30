@@ -4,6 +4,7 @@
 // Make connection to server when web page is fully loaded.
 var socket = io.connect();
 
+
 var communicationsTimeout = null;
 $(document).ready(function() {
 	setupServerMessageHandlers(socket);
@@ -47,7 +48,7 @@ function setupServerMessageHandlers(socket) {
 		console.log("Receive MOVE COMMAND: mode-movepiece , message is: " + message);
 		var name = "Unknown!";
 
-		//Update the chess UI here based on the message recieved
+        
 	})
 
 
