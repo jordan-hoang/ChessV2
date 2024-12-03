@@ -1,6 +1,6 @@
 #include <thread>
 #include "ChessController.h"
-#include "Network.h"
+
 
 static pthread_cond_t SHUTDOWN_CONDL = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t SHUTDOWN_MUTEX = PTHREAD_MUTEX_INITIALIZER; //Lock that determines if the loop keeps going
@@ -9,9 +9,7 @@ int main() {
 
 
     ChessController chessGame;
-    Network network;
 
-    network.start();
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     chessGame.run();
 

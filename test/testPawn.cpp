@@ -20,7 +20,7 @@ bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b){
     return true;
 }
 
-/*
+
 TEST(BoardTest, pawnForward){
     bool val;
 
@@ -60,7 +60,7 @@ TEST(BoardTest, pawnForward){
     //board.printChessBoard();
 }
 
-*/
+
 TEST(BoardTest, pawn){
 
     ChessBoard board;
@@ -69,7 +69,7 @@ TEST(BoardTest, pawn){
     bool val = pieceMoved(board,a,b); //Checks to see if the piece moved
     EXPECT_EQ(val, true) << "Error when moving pawn up 1 square";
 
-/*
+
     a.set(1,1);
     b.set(3,1);
     val = pieceMoved(board,a,b); //Checks to see if the piece moved
@@ -89,5 +89,4 @@ TEST(BoardTest, pawn){
     val = pieceMoved(board,a,b);
     EXPECT_EQ(val, false);
 
-*/
 }

@@ -84,7 +84,7 @@ void ChessController::playGame() {
             std::cout << "Invalid move\n";
         }
 
-        std::this_thread::__sleep_for(std::chrono::seconds(0), std::chrono::milliseconds(500));
+
     }
 
 }

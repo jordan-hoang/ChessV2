@@ -2,7 +2,7 @@
 # https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
 
 # 3.1 >= Is the beginning of what is know as modern cmake
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.7)
 project(ChessV2)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,7 +13,6 @@ set(chessPiece "chessPiece")
 set(chessBoard "chessBoard")
 set(chessController "chessController")
 set(chessUtility "chessUtility")
-set(Network "Network")
 
 add_executable(ChessV2 main.cpp)
 
@@ -37,4 +36,3 @@ add_subdirectory(ChessPiece)
 add_subdirectory(ChessBoard)
 add_subdirectory(ChessController)
 add_subdirectory(ChessUtility)
-add_subdirectory(Network)
