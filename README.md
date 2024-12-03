@@ -8,7 +8,7 @@ A Chess game I made for fun, currently working on making a React frontend for th
 
 1. Clone the repository.
 
-        git clone https://csil-git1.cs.surrey.sfu.ca/373-19-1-faworki/adventure2019.git
+        git clone git@github.com:jordan-hoang/ChessV2.git
 
 2. Create a new directory for building.
 
