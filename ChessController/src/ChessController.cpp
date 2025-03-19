@@ -37,10 +37,6 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
         from.row = input[4] - '0';
 
 
-        //std::cout << "from is, " << from << "  to is  " << to << "\n";
-
-
-
         if(to.isValid() && from.isValid()){
             valid = true;
             return std::make_pair(to,from);
@@ -57,21 +53,16 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
 
 
 void ChessController::playGame() {
-
     std::string input;
     bool valid_input = false;
     bool valid_move = false;
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
-
-    while( !chessBoard.isGameOver()  ){
+    while( !chessBoard.isGameOver()  )
+    {
 
         chessBoard.printChessBoard();
-
-
         std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
-
-
         moves = convertChessCoordinate(input, valid_input);
 
         if( valid_input ) {
@@ -79,26 +70,28 @@ void ChessController::playGame() {
         } else{
             std::cout << "Invalid input\n";
         }
-
         if(!valid_move){
             std::cout << "Invalid move\n";
         }
-
 
     }
 
 }
 
 void ChessController::threadMain() {
+    this->playGame();
+}
 
-    while(this->runningThread){
-        this->playGame();
+/**
+ * Wait's untill the thread is "joinable"
+ */
+void ChessController::wait() {
+    if(_chessThread.joinable()) {
+        _chessThread.join();
     }
-
 }
 
 ChessController::~ChessController() {
-    runningThread = false;
     if(_chessThread.joinable()) {
         _chessThread.join();
     }

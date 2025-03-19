@@ -26,7 +26,6 @@ find_package (Threads)
 target_link_libraries(ChessV2
         PRIVATE
             ${chessController}
-            ${Network}
             Threads::Threads
         )
 
