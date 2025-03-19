@@ -8,13 +8,13 @@ add_executable(runAllTests
         testRook.cpp)
 
 target_link_libraries(runAllTests
-        gmock
-        gtest
-        gtest_main
-        ${chessPiece}
-        ${chessBoard}
-        ${chessController}
+        PRIVATE
+                gmock
+                gtest
+                gtest_main
+                chessPiece
+                chessBoard
+                chessController
         )
 
-# What does this do exactly....
 add_test(NAME AllTests COMMAND runAllTests)

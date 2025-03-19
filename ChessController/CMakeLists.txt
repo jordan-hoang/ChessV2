@@ -11,7 +11,7 @@ target_link_libraries(chessController
 )
 
 
-target_include_directories(${chessController}
+target_include_directories(chessController
         PUBLIC
                 ${CMAKE_CURRENT_SOURCE_DIR}/include
         PRIVATE
