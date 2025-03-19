@@ -14,9 +14,9 @@ set(chessBoard "chessBoard")
 set(chessController "chessController")
 set(chessUtility "chessUtility")
 
-add_executable(ChessV2 main.cpp)
+# find_package(Boost REQUIRED COMPONENTS system)
 
-find_package (Threads)
+add_executable(ChessV2 main.cpp)
 
 
 #Link the libraries (moudles) that ChessV2 requires in order to run)
@@ -26,8 +26,11 @@ find_package (Threads)
 target_link_libraries(ChessV2
         PRIVATE
             ${chessController}
-            Threads::Threads
+#            websocketpp
         )
+
+# target_include_directories(ChessV2 PRIVATE third_party/websocketpp)
+
 
 # Cmake then goes into these directories and executes their CMakeList files as well
 add_subdirectory(test)

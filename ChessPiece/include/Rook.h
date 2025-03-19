@@ -13,9 +13,6 @@ public:
     void print() override;
     bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override;
 
-
-
-
 };
 
 

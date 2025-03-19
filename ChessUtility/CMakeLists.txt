@@ -1,16 +1,15 @@
-# Utility headers and code required by all the other modules inside our chess project.
-# Ex. ChessPiece and ChessController both depend on ChessCoordinate
-
-add_library(${chessUtility}
-            src/ChessCoordinate.cpp
-        )
-
-target_include_directories(${chessUtility}
-        PUBLIC
-            $<INSTALL_INTERFACE:include>
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # Gives libraries outside of this folder access to include (Header files)
-        PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/src
+# This is a pretty small library!
+add_library(chessUtility
+        src/ChessCoordinate.cpp
 )
 
+# Define include paths — PUBLIC means that any other target linking to this will inherit these paths
+target_include_directories(chessUtility
+        PUBLIC
+                ${CMAKE_CURRENT_SOURCE_DIR}/include
+        PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
+# We don't depend on anything else so theres no need to use
+# target_link_libaries for ChessUtility.
