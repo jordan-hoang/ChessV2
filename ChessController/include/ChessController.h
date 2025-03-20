@@ -9,6 +9,9 @@
 #include "ChessCoordinate.h"
 #include "ChessBoard.h"
 
+#include "ChessNetwork.h"
+
+
 /* Takes input from the user and passes it to the board. */
 class ChessController {
 
@@ -31,6 +34,9 @@ public:
 private:
     ChessBoard chessBoard;
     std::thread _chessThread;
+    ChessNetwork a;
+
+
 
     void threadMain();
     void playGame();

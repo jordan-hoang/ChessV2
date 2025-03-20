@@ -60,9 +60,10 @@ void ChessController::playGame() {
 
     while( !chessBoard.isGameOver()  )
     {
+        chessBoard.printChessBoard(); // for debug backend.
 
-        chessBoard.printChessBoard();
         std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
+
         moves = convertChessCoordinate(input, valid_input);
 
         if( valid_input ) {
@@ -79,6 +80,10 @@ void ChessController::playGame() {
 }
 
 void ChessController::threadMain() {
+
+    // std::cout << "Boost version: " << BOOST_LIB_VERSION << std::endl;
+    // std::cout << "Boost include path: " << BOOST_INCLUDE_DIRS << std::endl;
+
     this->playGame();
 }
 

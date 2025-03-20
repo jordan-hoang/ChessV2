@@ -11,17 +11,23 @@ set(CMAKE_BUILD_TYPE Debug)
 set(BOOST_ROOT "C:/Boost")
 set(BOOST_INCLUDEDIR "C:/Boost/include/boost-1_87")
 set(BOOST_LIBRARYDIR "C:/Boost/lib") # If you built the binaries
+set(CMAKE_GENERATOR_PLATFORM x64)
 
-find_package(Boost)
+find_package(Boost REQUIRED)
 
 add_executable(ChessV2 main.cpp)
 
-target_include_directories(ChessV2 PRIVATE ${Boost_INCLUDE_DIRS})
+target_include_directories(ChessV2
+        PUBLIC
+            ${Boost_INCLUDE_DIRS} # Include headers.
+            ${CMAKE_CURRENT_SOURCE_DIR}/ChessNetwork/include
+)
+
 
 #Link the libraries (moudles) that ChessV2 requires in order to run)
 # https://stackoverflow.com/questions/26037954/cmake-target-link-libraries-interface-dependencies
 target_link_libraries(ChessV2
-        PRIVATE
+        PUBLIC
             chessController
 )
 
@@ -32,12 +38,9 @@ endif()
 
         # Cmake then goes into these directories and executes their CMakeList files as well
 add_subdirectory(test)
+add_subdirectory(ChessNetwork)
 add_subdirectory(ChessPiece)
 add_subdirectory(ChessBoard)
 add_subdirectory(ChessController)
 add_subdirectory(ChessUtility)
-
-
-
-
 

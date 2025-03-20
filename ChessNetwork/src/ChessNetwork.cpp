@@ -1,17 +1,44 @@
-#include "ChessController.h"
+//
+// Created by jordan on 3/20/2025.
+//
 
 
 
+#include <iostream>
+
+#include "ChessNetwork.h"
+
+void ChessNetwork::dummy() {
+
+    std::cout << "Hello World!!!\n";
+}
 
 
 
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio.hpp>
-
+/*
 using tcp = boost::asio::ip::tcp;
 namespace beast = boost::beast;
 namespace websocket = beast::websocket;
+
+/*
+void Network::run() {
+
+    try {
+        boost::asio::io_context ioc;
+        tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), 9002)); // Uses port 9002
+        std::cout << "WebSocket server started on ws://localhost:9002" << std::endl;
+
+        for (;;) { // Why this for loop?
+            tcp::socket socket(ioc);
+            acceptor.accept(socket);
+            std::thread(&mySession1, std::move(socket)).detach();  // Okay do we need to do this?!
+        }
+
+    }  catch (const std::exception& e) {
+        std::cerr << "Server error: " << e.what() << std::endl;
+    }
+
+}
 
 void mySession1(tcp::socket socket) {
     try {
@@ -38,40 +65,4 @@ void mySession1(tcp::socket socket) {
         std::cerr << "Session error: " << e.what() << std::endl;
     }
 }
-
-void testFunc2() {
-
-    try {
-        boost::asio::io_context ioc;
-        tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), 9002)); // Uses port 9002
-
-        std::cout << "WebSocket server started on ws://localhost:9002" << std::endl;
-
-        for (;;) { // Why this for loop?
-            tcp::socket socket(ioc);
-            acceptor.accept(socket);
-            std::thread(&mySession1, std::move(socket)).detach();
-        }
-
-    }  catch (const std::exception& e) {
-        std::cerr << "Server error: " << e.what() << std::endl;
-    }
-
-
-}
-
-
-
-
-int main() {
-
-    ChessController chessGame;
-    chessGame.run();
-    chessGame.wait();
-    // testFunc();
-
-    return 0;
-}
-
-
-
+*/
