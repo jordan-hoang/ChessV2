@@ -19,6 +19,7 @@ public:
     void run(){
         _chessThread = std::thread(&ChessController::threadMain, this);
     }
+    void wait();
 
     // Technically these 2 functions should be private to avoid exposing them, but we need public for testing.
     // That or you can just mock objects but too much work.
@@ -29,7 +30,6 @@ public:
 
 private:
     ChessBoard chessBoard;
-    bool runningThread = true;
     std::thread _chessThread;
 
     void threadMain();

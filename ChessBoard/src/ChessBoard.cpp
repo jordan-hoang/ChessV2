@@ -2,7 +2,7 @@
 // Created by jordan on 2/4/20.
 //
 
-#include "../include/ChessBoard.h"
+#include "ChessBoard.h"
 #include "Piece.h"
 
 #include "Bishop.h"
