@@ -1,5 +1,6 @@
 #include "ChessController.h"
 
+#include <boost/asio.hpp>
 
 int main() {
 
