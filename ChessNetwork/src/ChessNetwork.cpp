@@ -8,61 +8,98 @@
 
 #include "ChessNetwork.h"
 
-void ChessNetwork::dummy() {
 
-    std::cout << "Hello World!!!\n";
+// NOT DONE
+ChessNetwork::ChessNetwork(unsigned short port)
+    : acceptor_(ctx, tcp::endpoint(tcp::v4(), port))
+{
+
 }
 
 
-
-/*
-using tcp = boost::asio::ip::tcp;
-namespace beast = boost::beast;
-namespace websocket = beast::websocket;
-
-/*
-void Network::run() {
+ChessNetwork::ChessNetwork()
+    : acceptor_(ctx, tcp::endpoint(tcp::v4(), 8080))
+{
 
     try {
-        boost::asio::io_context ioc;
-        tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), 9002)); // Uses port 9002
-        std::cout << "WebSocket server started on ws://localhost:9002" << std::endl;
+        tcp::socket socket(ctx);
 
-        for (;;) { // Why this for loop?
-            tcp::socket socket(ioc);
-            acceptor.accept(socket);
-            std::thread(&mySession1, std::move(socket)).detach();  // Okay do we need to do this?!
+        std::cout << "Waiting for a connection...." << std::endl;
+        acceptor_.accept(socket); // Sync Accept, will hang until it receives one.
+        std::cout << "Connection accepted!" << std::endl;
+
+        websocket_.emplace(std::move(socket)); // This can also be a unique_ptr
+        std::cout << "WebSocket initialized!" << std::endl;
+
+        boost::system::error_code ec;
+        websocket_->accept(ec);
+        if (!ec) {
+            std::cout << "WebSocket handshake successful!" << std::endl;
+            if (websocket_->is_open()) {
+                std::cout << "WebSocket opened!" << std::endl;
+            }
+        } else {
+            std::cout << "WebSocket handshake failed: " << ec.message() << std::endl;
         }
 
-    }  catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << "Server error: " << e.what() << std::endl;
     }
 
 }
 
-void mySession1(tcp::socket socket) {
-    try {
-
-        websocket::stream<tcp::socket> ws(std::move(socket));
-        ws.accept();
-
-        std::cout << "Client connected!" << std::endl;
-
-        for (;;) {
-            beast::flat_buffer buffer;
-            ws.read(buffer); // Read from the websocket.
-
-            std::string message = beast::buffers_to_string(buffer.data());
-            std::cout << "Received: " << message << std::endl;
-
-            // Echo the message back
-            ws.text(ws.got_text());
-            ws.write(boost::asio::buffer(message + " Hello World"));
-
-        }
-
-    } catch (const std::exception& e) {
-        std::cerr << "Session error: " << e.what() << std::endl;
+ChessNetwork::~ChessNetwork() {
+    // This isn't necessary but nice to do....
+    if (websocket_ && websocket_->is_open()) {
+        websocket_->close(boost::beast::websocket::close_code::normal);
     }
 }
-*/
+
+
+// Sends a message through the websocket.
+void ChessNetwork::send(const std::string &message) {
+    if(websocket_ && websocket_->is_open()) {
+        boost::system::error_code ec;
+        websocket_->write(boost::asio::buffer(message), ec);
+        if(!ec) {
+            std::cerr << "Send error: " << ec.message() << std::endl;
+        }
+    }
+}
+
+
+// This function isn't used! We have a blocking send instead, I just left this here in case we want to do one for some reason?
+void ChessNetwork::async_send(const std::string &message) {
+    if(websocket_ && websocket_->is_open()) {
+        websocket_->async_write(boost::asio::buffer(message),
+            [this](boost::system::error_code ec, std::size_t) {
+            if (ec) {
+                std::cerr << "Send error: " << ec.message() << std::endl;
+            }
+        });
+    }
+}
+
+
+// Recieve a message from the websocket / website.
+std::string ChessNetwork::receive() {
+
+    boost::beast::flat_buffer buffer; // No need for shared_ptr, just use flat_buffer
+
+    if(websocket_ && websocket_->is_open()) {
+        boost::system::error_code ec;
+        websocket_->read(buffer, ec);
+        if(!ec) {
+            std::cout << "Received message: " << buffers_to_string(buffer.data()) << std::endl;
+            return buffers_to_string(buffer.data());
+        } else {
+            return "FAILURE";
+        }
+
+    }
+
+    std::cerr << "ChessNetwork::receive(), socket is not OPEN!\n"; // Shouldn't be possible, constructor should do it.
+    exit(-1);
+    return "SOCKET NOT OPEN!!\n";
+}
+

@@ -13,14 +13,15 @@ set(BOOST_INCLUDEDIR "C:/Boost/include/boost-1_87")
 set(BOOST_LIBRARYDIR "C:/Boost/lib") # If you built the binaries
 set(CMAKE_GENERATOR_PLATFORM x64)
 
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
+add_definitions(-D_WIN32_WINNT=0x0601)
 
 add_executable(ChessV2 main.cpp)
 
 target_include_directories(ChessV2
         PUBLIC
             ${Boost_INCLUDE_DIRS} # Include headers.
-            ${CMAKE_CURRENT_SOURCE_DIR}/ChessNetwork/include
+
 )
 
 
@@ -29,6 +30,7 @@ target_include_directories(ChessV2
 target_link_libraries(ChessV2
         PUBLIC
             chessController
+            Boost::system # ✅ Link Boost.System
 )
 
 # Needed for windows boost.

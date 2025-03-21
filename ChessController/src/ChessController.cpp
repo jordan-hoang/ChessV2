@@ -62,7 +62,9 @@ void ChessController::playGame() {
     {
         chessBoard.printChessBoard(); // for debug backend.
 
-        std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
+        //std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
+        input = myNetwork.receive();
+
 
         moves = convertChessCoordinate(input, valid_input);
 
@@ -80,15 +82,11 @@ void ChessController::playGame() {
 }
 
 void ChessController::threadMain() {
-
-    // std::cout << "Boost version: " << BOOST_LIB_VERSION << std::endl;
-    // std::cout << "Boost include path: " << BOOST_INCLUDE_DIRS << std::endl;
-
     this->playGame();
 }
 
 /**
- * Wait's untill the thread is "joinable"
+ * Wait's until the thread is "joinable"
  */
 void ChessController::wait() {
     if(_chessThread.joinable()) {

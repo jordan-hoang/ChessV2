@@ -10,7 +10,7 @@
 <ul id="messages"></ul>
 
 <script>
-    const socket = new WebSocket('ws://localhost:9002');
+    const socket = new WebSocket('ws://localhost:8080');
 
     socket.addEventListener('open', () => {
         console.log('Connected to server');
@@ -24,11 +24,14 @@
 
     function sendMessage() {
         const input = document.getElementById('input');
-        socket.send(input.value);
-        input.value = '';
+        const message = input.value.trim();  // Remove any unnecessary spaces
+
+        if (message) {
+            socket.send(message);  // Only send message if it's not empty
+            input.value = '';  // Clear input field after sending message
+        }
     }
-
-    </script>
-
+</script>
 
 </body>
+</html>

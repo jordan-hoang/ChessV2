@@ -5,20 +5,38 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+
+#include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-#include <boost/asio.hpp>
+
+
+using boost::asio::ip::tcp;
+using namespace boost::beast;
 
 class ChessNetwork {
 
     private:
-        boost::asio::io_context ioc;
+        boost::asio::io_context ctx;         // I/O context for ASIO
+        tcp::acceptor acceptor_;   // Accepts connections from clients.
+        std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket
+
+
+        void session(tcp::socket socket);
+        void do_accept();
+        void do_session(tcp::socket socket);
 
     public:
-        void run();
-        void mySession1(boost::asio::ip::tcp::socket socket);
+        ChessNetwork(unsigned short port);
+        ChessNetwork();
+        ~ChessNetwork();
 
-        void dummy();
+        void send(const std::string &message);
+
+        void async_send(const std::string &message); // Not used.
+
+        std::string receive();
+
 
 };
 
