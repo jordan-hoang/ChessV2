@@ -9,16 +9,23 @@
 #include "ChessCoordinate.h"
 #include "ChessBoard.h"
 
+#include "ChessNetwork.h"
+
+
 /* Takes input from the user and passes it to the board. */
 class ChessController {
 
 
 public:
 
+    ChessController();
+
     // Runs the thread
     void run(){
         _chessThread = std::thread(&ChessController::threadMain, this);
     }
+    void wait();
+
     void wait();
 
     // Technically these 2 functions should be private to avoid exposing them, but we need public for testing.
@@ -31,6 +38,10 @@ public:
 private:
     ChessBoard chessBoard;
     std::thread _chessThread;
+    ChessNetwork chessNetwork_;
+
+    bool onClientMessageReceived(const std::string& chessMove); // A function we pass to chessNetwork
+    void asyncSendToClient();
 
     void threadMain();
     void playGame();

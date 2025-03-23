@@ -26,5 +26,5 @@ target_link_libraries(chessPiece
         PUBLIC
                 chessBoard
         PRIVATE
-                chessUtility  # Makes it so when you include this library you won't get the headers of chessUtility
+                chessUtility  # Makes it so when you include this library you won't get the headers of chessUtility to whoever decides to link to chessPiece
 )

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess WebSocket Test</title>
+</head>
+<body>
+<h1>Chess WebSocket Test</h1>
+<input id="input" type="text" placeholder="Type a message..." value="a6,a4" />
+<button onclick="sendMessage()">Send</button>
+<ul id="messages"></ul>
+
+<script>
+    const socket = new WebSocket('ws://localhost:8080');
+
+    socket.addEventListener('open', () => {
+        console.log('Connected to server');
+    });
+
+    //  Listens for data from the server.
+    socket.addEventListener('message', (event) => {
+        const li = document.createElement('li');
+        li.textContent = `Server: ${event.data}`;
+        document.getElementById('messages').appendChild(li);
+    });
+
+    function sendMessage() {
+        const input = document.getElementById('input');
+        const message = input.value.trim();  // Remove any unnecessary spaces
+        if (message) {
+            socket.send(message);  // Only send message if it's not empty
+            input.value = '';  // Clear input field after sending message
+        }
+    }
+
+</script>
+
+</body>
+</html>

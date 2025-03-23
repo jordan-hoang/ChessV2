@@ -5,6 +5,15 @@
 #include <thread>
 
 
+ChessController::ChessController() {
+    // This so we have access to chessController inside lambda.
+    chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> bool {
+        // We passing in a function for it to assign itself too..... that's inside of here.
+        return this->onClientMessageReceived(message);
+    });
+
+}
+
 //Checks to see if the string is valid in this program.
 bool ChessController::validChessStringInput(std::string &input)  {
     if(input.size() != 5){
@@ -12,7 +21,6 @@ bool ChessController::validChessStringInput(std::string &input)  {
     }
     return (input[2] == ',');
 }
-
 
 inline bool isValidChar(char a){
     return (a < 'z' && a > 'a');
@@ -58,32 +66,55 @@ void ChessController::playGame() {
     bool valid_move = false;
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
+    std::thread networkThread([this] {
+        this->chessNetwork_.startNetworkLoop();
+    });
+
+    networkThread.detach(); // I remember there were other ways of running threads....
+
     while( !chessBoard.isGameOver()  )
     {
-
-        chessBoard.printChessBoard();
-        std::cin >> input; // Read input from the user's keyboard.... need to modify to recieve input from the network.
-        moves = convertChessCoordinate(input, valid_input);
-
-        if( valid_input ) {
-            valid_move = chessBoard.executeMove(moves.first, moves.second);
-        } else{
-            std::cout << "Invalid input\n";
-        }
-        if(!valid_move){
-            std::cout << "Invalid move\n";
-        }
+        chessBoard.printChessBoard(); // for debug backend. Is this even needed?
+        std::this_thread::sleep_for (std::chrono::seconds(5));
 
     }
 
 }
+
+
+// Callback function that is passed to chessNetwork.
+bool ChessController::onClientMessageReceived(const std::string &message) {
+
+    std::cout << "Received network message: " << message << std::endl;  // EMPTY!
+    bool valid_input = false;
+    bool valid_move = false;
+
+    std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
+
+    std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
+
+    if (valid_input) {
+        valid_move = chessBoard.executeMove(moves.first, moves.second);
+    } else {
+        std::cerr << "Invalid input\n";
+    }
+
+    if (!valid_move) {
+        std::cerr << "Invalid move\n";
+    }
+
+
+    return valid_move;
+
+}
+
 
 void ChessController::threadMain() {
     this->playGame();
 }
 
 /**
- * Wait's untill the thread is "joinable"
+ * Wait's until the thread is "joinable"
  */
 void ChessController::wait() {
     if(_chessThread.joinable()) {
