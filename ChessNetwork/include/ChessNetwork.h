@@ -5,38 +5,42 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+#pragma once
 
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 
-
 using boost::asio::ip::tcp;
 using namespace boost::beast;
 
 class ChessNetwork {
-
-    private:
-        boost::asio::io_context ctx;         // I/O context for ASIO
-        tcp::acceptor acceptor_;   // Accepts connections from clients.
-        std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket
-
-
-        void session(tcp::socket socket);
-        void do_accept();
-        void do_session(tcp::socket socket);
-
     public:
-        ChessNetwork(unsigned short port);
+        explicit ChessNetwork(unsigned short port);
         ChessNetwork();
         ~ChessNetwork();
 
-        void send(const std::string &message);
+        // Public Methods
+        void receiveMessageAsync();
 
-        void async_send(const std::string &message); // Not used.
+        // **New Method to Set the Callback for recieving messages? **
+        void setMessageReceivedCallback(std::function<bool(const std::string&)> callback); /// Takes in a function?!
 
-        std::string receive();
+        void startNetworkLoop();
 
+        void sendMessageAsync(const std::string &message); // Not used.
+
+
+    private:
+        boost::asio::io_context ctx;    // I/O context for ASIO
+        tcp::acceptor acceptor_;        // Accepts connections from clients.
+        std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket, can be ptr/smrtptr.
+
+        /// std::vector<std::shared_ptr<websocket::stream<tcp::socket>>> listWebsockets_; Do this later.
+        std::function<bool(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
+
+        void session(tcp::socket socket);
+        void startAcceptConn();
 
 };
 

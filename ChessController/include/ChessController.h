@@ -18,6 +18,8 @@ class ChessController {
 
 public:
 
+    ChessController();
+
     // Runs the thread
     void run(){
         _chessThread = std::thread(&ChessController::threadMain, this);
@@ -35,8 +37,10 @@ public:
 private:
     ChessBoard chessBoard;
     std::thread _chessThread;
-    ChessNetwork myNetwork;
+    ChessNetwork chessNetwork_;
 
+    bool onClientMessageReceived(const std::string& chessMove); // A function we pass to chessNetwork
+    void asyncSendToClient();
 
     void threadMain();
     void playGame();
