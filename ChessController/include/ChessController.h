@@ -26,7 +26,6 @@ public:
     }
     void wait();
 
-    void wait();
 
     // Technically these 2 functions should be private to avoid exposing them, but we need public for testing.
     // That or you can just mock objects but too much work.
