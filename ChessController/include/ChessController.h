@@ -24,6 +24,7 @@ public:
     void run(){
         _chessThread = std::thread(&ChessController::threadMain, this);
     }
+    void wait();
 
     void wait();
 

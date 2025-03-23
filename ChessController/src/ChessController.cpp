@@ -5,7 +5,6 @@
 #include <thread>
 
 
-
 ChessController::ChessController() {
     // This so we have access to chessController inside lambda.
     chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> bool {
@@ -128,5 +127,3 @@ ChessController::~ChessController() {
         _chessThread.join();
     }
 }
-
-

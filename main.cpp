@@ -85,6 +85,7 @@ int dummyMain(int argc, char ** argv) {
 
 int main() {
 
+
     ChessController chessGame;
     chessGame.run();
     chessGame.wait();
