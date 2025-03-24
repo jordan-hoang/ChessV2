@@ -19,12 +19,10 @@ const Game = () => {
         for (let i = 0; i < 2; i++) {
             const row = [];
             for (let j = 0; j < 8; j++) {
-                row.push(i === 1 ? { piece: 'pawn', color: 'white' } : { piece: pieceTypes[j], color: 'white' });
+                row.push(i === 1 ? { name: 'pawn', color: 'white' } : { name: pieceTypes[j], color: 'white' });
             }
             board.push(row);
         }
-
-
 
         // Empty rows (middle part of the board)
         for (let i = 2; i < 6; i++) {
@@ -36,17 +34,18 @@ const Game = () => {
         for (let i = 6; i < 8; i++) {
             const row = [];
             for (let j = 0; j < 8; j++) {
-                row.push(i === 6 ? { piece: 'pawn', color: 'black' } : { piece: pieceTypes[j], color: 'black' });
+                row.push(i === 6 ? { name: 'pawn', color: 'black' } : { name: pieceTypes[j], color: 'black' });
             }
             board.push(row);
         }
+
 
         return board;
     };
 
 
 
-    const [curentTurn, setCurrentTurn] = useState('white');
+    const [currentTurn, setCurrentTurn] = useState('white');
 
     /** These are just some examples, to help you.....
      *
@@ -93,7 +92,7 @@ const Game = () => {
         setBoard(newBoard);
 
         // Toggle the turn.
-        setCurrentTurn( curentTurn === 'white' ? 'black' : 'white' );
+        setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );
         return true;
     }
 

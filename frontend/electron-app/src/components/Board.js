@@ -28,13 +28,8 @@ const Board = ( {board, onMove} ) => {
         }
 
         /// The second square cannot be your own piece as well, must be an enemy!
-
-
-
-
         return false;
     }
-
 
     const handleSquareClick = (row, col) => {
 
@@ -65,11 +60,12 @@ const Board = ( {board, onMove} ) => {
                 This basically is a double for loop
             */}
             {board.map((row, rowIndex) =>
-                row.map((square, colIndex) => (
+                row.map((myPiece, colIndex) => (
                     //  Key is a string and needs to be unique.
                     <Square
                         key={ `${rowIndex} - ${colIndex}`}
-                        piece= {square}
+
+                        piece= {myPiece}
                         onClick={() => handleSquareClick(rowIndex, colIndex)}
                     />
                 ))
