@@ -13,4 +13,5 @@ target_include_directories(chessNetwork
 target_link_libraries(chessNetwork
         PRIVATE
             ws2_32
+            chessUtility
 )

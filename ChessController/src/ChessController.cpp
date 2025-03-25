@@ -2,12 +2,13 @@
 // Created by jordan on 2/12/20.
 //
 #include "ChessController.h"
+#include "json.hpp"
 #include <thread>
 
 
 ChessController::ChessController() {
     // This so we have access to chessController inside lambda.
-    chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> bool {
+    chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> std::string {
         // We passing in a function for it to assign itself too..... that's inside of here.
         return this->onClientMessageReceived(message);
     });
@@ -83,29 +84,35 @@ void ChessController::playGame() {
 
 
 // Callback function that is passed to chessNetwork.
-bool ChessController::onClientMessageReceived(const std::string &message) {
+std::string ChessController::onClientMessageReceived(const std::string &message) {
 
-    std::cout << "Received network message: " << message << std::endl;  // EMPTY!
-    bool valid_input = false;
     bool valid_move = false;
 
-    std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
+    //std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
+    nlohmann::json jsonData = nlohmann::json::parse(message);
+    std::pair<ChessCoordinate, ChessCoordinate> moves;
 
-    std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
+    moves.first = jsonData["from"];
+    moves.second = jsonData["to"];
 
-    if (valid_input) {
-        valid_move = chessBoard.executeMove(moves.first, moves.second);
-    } else {
-        std::cerr << "Invalid input\n";
-    }
+    valid_move = chessBoard.executeMove(moves.first, moves.second);
 
     if (!valid_move) {
         std::cerr << "Invalid move\n";
+        std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
     }
 
+    nlohmann::json jsonResponse;
+    jsonResponse["valid"] = valid_move;
+    jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move";
 
-    return valid_move;
+    jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
+    jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
 
+
+    std::cout << "Sending jsonResponseFrom: " << jsonResponse.dump()  << "\n";
+
+    return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }
 
 

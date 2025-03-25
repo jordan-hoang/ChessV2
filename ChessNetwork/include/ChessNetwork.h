@@ -24,7 +24,7 @@ class ChessNetwork {
         void receiveMessageAsync();
 
         // **New Method to Set the Callback for recieving messages? **
-        void setMessageReceivedCallback(std::function<bool(const std::string&)> callback); /// Takes in a function?!
+        void setMessageReceivedCallback(std::function<std::string(const std::string&)> callback); /// Takes in a function?!
 
         void startNetworkLoop();
 
@@ -37,7 +37,7 @@ class ChessNetwork {
         std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket, can be ptr/smrtptr.
 
         /// std::vector<std::shared_ptr<websocket::stream<tcp::socket>>> listWebsockets_; Do this later.
-        std::function<bool(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
+        std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
         void session(tcp::socket socket);
         void startAcceptConn();

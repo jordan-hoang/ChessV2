@@ -18,3 +18,17 @@ bool ChessCoordinate::isValid() const {
     }
     return !(col < 0 || col >= 8 );
 }
+
+// Deserialize
+void from_json(const nlohmann::json& j, ChessCoordinate& coord) {
+    j.at("row").get_to(coord.row);
+    j.at("col").get_to(coord.col);
+}
+
+// Serialize.......... this is weird.
+void to_json(nlohmann::json& j, const ChessCoordinate& coord) {
+    j = json{
+            {"row", coord.row},
+            {"col", coord.col}
+    };
+}

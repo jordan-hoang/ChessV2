@@ -6,12 +6,11 @@ const Square = ({ piece, onClick }) => {
     // Get the correct coordinates for the piece
     // Function to get the background position for the piece
     const getPieceUrl = () => {
-        if (!piece) return 'none';
+        if (!piece) {
+            return 'none';
+        }
 
-            // piece: 'pawn', color: 'black'
-        console.log(piece.name);
-        console.log(piece.color);
-
+        // piece: 'pawn', color: 'black'
         return `/images/Pieces/${piece.color}/${piece.color}_${piece.name}.png`;
     };
 
@@ -24,7 +23,6 @@ const Square = ({ piece, onClick }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 border: '1px solid black',
-
             }}
             onClick={onClick} // Trigger move function when clicked
         >
@@ -37,7 +35,7 @@ const Square = ({ piece, onClick }) => {
                         backgroundImage: `url('${getPieceUrl()}')`,
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center" // ✅ Center the image
+                        backgroundPosition: "center"
                     }}
                 />
             )}

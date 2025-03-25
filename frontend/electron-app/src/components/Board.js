@@ -6,7 +6,9 @@ import Square from './Square';
 
 
 // The board is passed from Game.js to here.
-const Board = ( {board, onMove} ) => {
+// currentTurn = black || white.
+// onMove is clicklistener.
+const Board = ( {board, onMove, currentTurn} ) => {
 
     //
     const [selectedSquare, setSelectedSquare] = useState(null);
@@ -45,6 +47,7 @@ const Board = ( {board, onMove} ) => {
             return;
         }
 
+        // It's row, col???
         onMove(selectedSquare, { row, col });
         setSelectedSquare(null); // Reset selection after move
 
