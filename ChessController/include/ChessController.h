@@ -39,7 +39,7 @@ private:
     std::thread _chessThread;
     ChessNetwork chessNetwork_;
 
-    bool onClientMessageReceived(const std::string& chessMove); // A function we pass to chessNetwork
+    std::string onClientMessageReceived(const std::string& chessMove); // A function we pass to chessNetwork
     void asyncSendToClient();
 
     void threadMain();

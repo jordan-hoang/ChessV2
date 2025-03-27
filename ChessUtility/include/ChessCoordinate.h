@@ -6,7 +6,9 @@
 #define CHESSV2_CHESSCOORDINATE_H
 
 
+#include <json.hpp>
 #include <ostream>
+using json = nlohmann::json;
 
 struct ChessCoordinate {
         int row;
@@ -60,6 +62,9 @@ struct ChessCoordinate {
         ChessCoordinate(int enteredRow, int enteredCol) : row(enteredRow), col(enteredCol) {}
 
 
+        // Declare the conversion from_json
+        friend void from_json(const nlohmann::json& j, ChessCoordinate& coord);
+        friend void to_json(nlohmann::json& j, const ChessCoordinate& coord);
 };
 
 

@@ -64,7 +64,7 @@ ChessNetwork::~ChessNetwork() {
 }
 
 // Takes in a function as an input, and moves it here!
-void ChessNetwork::setMessageReceivedCallback(std::function<bool(const std::string&)> callback) {
+void ChessNetwork::setMessageReceivedCallback(std::function<std::string(const std::string&)> callback) {
     onMessageReceived_callback = std::move(callback);
 }
 
@@ -83,10 +83,13 @@ void ChessNetwork::receiveMessageAsync() {
 
                 if (buffer->size() > 0) {
                     std::string message = boost::beast::buffers_to_string(buffer->data());
-                    std::cout << "Message received: " << message << std::endl;
+                    std::cout << "Message received from client : " << message << std::endl;
+
                     if (onMessageReceived_callback) {
-                        bool rst = onMessageReceived_callback(message);
-                         if(rst) { sendMessageAsync("True"); }
+                        /// the callback??
+                        std::string rst = onMessageReceived_callback(message);
+                        sendMessageAsync(rst);
+
                     }
                 } else {
                     std::cerr << "Warning: Buffer is empty, but bytes were transferred." << std::endl;
@@ -138,7 +141,6 @@ void ChessNetwork::sendMessageAsync(const std::string &message) {
             }
         });
 }
-
 
 
 
