@@ -1,8 +1,9 @@
 # ChessV2
 
-A Chess game I made for fun, currently working on making a React frontend for this particular application.
+ChessV2 is a fun chess game I developed, now featuring a fully playable React frontend. 
+The game leverages a C++ backend with Boost.Beast for WebSocket communication. 
+(For reference, ChessV1 was text-based only.)
 
-<br />
 
 ## Building with CMake
 
@@ -26,9 +27,11 @@ A Chess game I made for fun, currently working on making a React frontend for th
 
         make
 
-This produces a "ChessV2" executable inside of the directory inside of build and it can be run to played a text-based version of chess where the commands are entered using Chess Algebraic Notation. In the future a React frontend will be created as a GUI instead of having a text based game. If you want to run unit tests they are shuold be inside of ChessV2/build/test/runAllTests executable.
+After building, you’ll have the ChessV2 executable inside the build directory. 
+Running it will start the Server, it can be modified easily to take Text Input.
 
-When running the application you should something that looks like this.....
+
+
 
 ![image](https://user-images.githubusercontent.com/36338184/117098456-60893f00-ad23-11eb-9d73-97e0274c440b.png)
 
@@ -40,12 +43,12 @@ The lower-case characthers such as 'p' means it is a "White Pawn" while "P" corr
 
 
 To make a move specify the initial position of the piece followed by a comma and then the ending position of the piece.
-So for example to move the left-most white pawn 2 squares forward we would type in.
+So for example to move the left-most white pawn 2 squares forward we would type in. ONLY for textbased version.
 
 "a6,a4"   (In chess algebraic notation it is column first than row)
 
-In the future a React frontend would serve as the GUI and clicking will be included instead of having to type out manually the Chess Coordinates.
-
+A React frontend currently serves as the GUI and you would click on pieces to move them. 
+Currently it's left click 2x. But I will probably add a drag and drop feature.
 
 ### Dependencies
 This project requires:
@@ -53,3 +56,23 @@ This project requires:
 1. C++17 or newer
 2. PythonInterp (For googletest)
 3. CMake >= 3.1
+4. Boost.Beast (for WebSocket communication)
+5. npm (for running the React frontend)
+
+### Current Plans 
+
+Frontend Polish: The React frontend will receive more polish for better usability and visual appeal.
+
+EnPassant and castling don't work in the frontend still, they do work in the chessServer, fix that.
+
+Multiplayer Networking: The goal is to add multiplayer functionality to allow two players to play online.
+
+
+### Possible additions I may add.
+
+AI: Implement minmax algorithm, so the server can play against you.
+
+Replay Game: Can save a copy of your game in CAN notation and use it to watch a playthrough of that game, perhaps
+make it so that you can start in the middle of a game at some situation? Maybe make a Chess Snapshot feature.
+
+Spectator feature: Can watch other players games, perhaps even add a takeover feature?
