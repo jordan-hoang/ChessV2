@@ -1,6 +1,7 @@
 import React from 'react';
+import './Square.css';
 
-const Square = ({ piece, onClick }) => {
+const Square = ({ piece, onClick, chessTileColor }) => {
 
 
     // Get the correct coordinates for the piece
@@ -14,28 +15,14 @@ const Square = ({ piece, onClick }) => {
         return `/images/Pieces/${piece.color}/${piece.color}_${piece.name}.png`;
     };
 
+
     return (
-        <div
-            style={{
-                width: '60px',
-                height: '60px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid black',
-            }}
-            onClick={onClick} // Trigger move function when clicked
-        >
+        <div className= {`square ${chessTileColor}`} onClick={onClick}>
             {/* Render image if there's a piece */}
             {piece && (
-                <div
+                <div className={`piece`}
                     style={{
-                        width: '80%',
-                        height: '80%',
                         backgroundImage: `url('${getPieceUrl()}')`,
-                        backgroundSize: "contain",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center"
                     }}
                 />
             )}

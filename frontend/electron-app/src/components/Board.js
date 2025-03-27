@@ -53,10 +53,13 @@ const Board = ( {board, onMove, currentTurn} ) => {
 
     };
 
+    const getSquareClass = (row, col) => {
+        return (row + col) % 2 ? "lightSquare" : "darkSquare";
+    }
 
     return (
         //
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', width: '400px' }}>
+        <div className={"chessBoardWrapper"} style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', width: '400px' }}>
 
             {/* Map is used to titerate or transform arrays, basically another way of doing for loop
                 board.map(element, index, originalArray), it returns a new array.
@@ -66,8 +69,8 @@ const Board = ( {board, onMove, currentTurn} ) => {
                 row.map((myPiece, colIndex) => (
                     //  Key is a string and needs to be unique.
                     <Square
-                        key={ `${rowIndex} - ${colIndex}`}
-
+                        chessTileColor={ getSquareClass(rowIndex, colIndex) }
+                        key={ `${rowIndex} - ${colIndex}` }
                         piece= {myPiece}
                         onClick={() => handleSquareClick(rowIndex, colIndex)}
                     />

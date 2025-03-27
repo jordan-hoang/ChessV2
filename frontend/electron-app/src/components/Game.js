@@ -110,9 +110,7 @@ const Game = () => {
 
 
     const handleServerResponse = (response) => {
-
         console.log("handleServerResponse CALLED!");
-
         // The response.data is just a string that is sent back by the server!!!
         // We sent back True so it's all good. Not sure what response.valid is?!
         // But response data is correct.
@@ -122,11 +120,10 @@ const Game = () => {
 
             const newBoard = board.map(row => row.map(square => {
                 if (square === null) {
-                    return null; // If the square is empty, just return null
+                    return null; // If the square is empty, just return null ?
                 }
-                return { ...square }; // Otherwise, make a copy of the piece object
+                return { ...square }; // Otherwise, make a copy of the piece object This is called a spread operator.
             }));
-
 
             const from = jsonResponse.from;
             const to = jsonResponse.to;
@@ -157,38 +154,43 @@ const Game = () => {
         }
 
 
-
-
         else {
             console.log("Invalid move.");
         }
     };
 
-
     //Returns true if successful false if it isn't. Don't know if it's need however. Maybe just void.
     const handleMove = (from, to) => {
-
         if(!socket){ return; }
-
         // Sends the move down below.
         const moveData = JSON.stringify({
             type: "move",
             from,
             to
         });
-
         socket.send(moveData);
-    }
 
+    }
 
     return (
         <div>
-            <h1>Chess Game Component</h1>
-            <Board
-                board={board}
-                onMove={handleMove}
-                curTurn = {currentTurn}
-            />
+            <div style={{textAlign: "center"}}>
+                <h1> Chess Game </h1>
+                <div style={{marginTop: "20px"}}>
+                    >
+                    <Board
+                        board={board}
+                        onMove={handleMove}
+                        curTurn={currentTurn}
+                    />
+                </div>
+
+            </div>
+
+            <div>
+                <div style={{ marginTop: "10px" }}> It is currently {currentTurn}'s turn  </div>
+            </div>
+
         </div>
     );
 
