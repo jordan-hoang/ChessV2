@@ -14,26 +14,18 @@ using namespace boost::asio;
 class ClientHandler : public std::enable_shared_from_this<ClientHandler> {
     private:
         std::optional<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> websocket_;
-
-
         std::function<std::string(const std::string&)> onMessageReceived_callback; // The call back function
 
-
     public:
-        explicit ClientHandler(ip::tcp::socket);
-
-
-        void setOnMessageReceived_callback(std::function<std::string(const std::string&)> callBackFunc) {
-            onMessageReceived_callback = (callBackFunc);
-        }
-
+        explicit ClientHandler(ip::tcp::socket); // ju
+        ClientHandler(ip::tcp::socket socket, std::function<std::string(const std::string &)> callBack);
+        ~ClientHandler();
 
 
         void start(); // Accept the handshake.
         void handleHandshake(boost::system::error_code ec);
 
         void receiveMessageAsync();
-        void onMessageReceived(boost::system::error_code ec, std::size_t bytes_transferred); // After receiving msg from SERVER.
 
         void sendMessage(const std::string &message); // SEND MESSAGE TO SERVER
 

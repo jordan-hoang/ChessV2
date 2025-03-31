@@ -8,31 +8,34 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/buffers_to_string.hpp>
 
-// Constructor.
-// ClientHandler::ClientHandler(ip::tcp::socket) {
-//
-//     websocket_.emplace(std::move(socket)); // Upgrade this into an array for multiple websockets in future....
-//
-//
-//     //websocket_.emplace(socket);
-//
-//
-//     this->start();
-// }
 
 ClientHandler::ClientHandler(ip::tcp::socket socket) {
     websocket_.emplace(std::move(socket)); // Initialize the websocket here?
 }
 
+ClientHandler::ClientHandler(ip::tcp::socket socket, std::function<std::string(const std::string&)> callBack) {
+    websocket_.emplace(std::move(socket)); // Initialize the websocket here?
+    onMessageReceived_callback = callBack;
+}
+
+// But when will it close?
+ClientHandler::~ClientHandler() {
+    if (websocket_ && websocket_->is_open()) {
+        websocket_->close(boost::beast::websocket::close_code::normal);
+    }
+}
 
 
-// Does the handshake, honestly maybe combine this with handleHandShake.
+
+
+// Does the handshake, honestly maybe combine this with handleHandShake??? It's really short.
 //
 void ClientHandler::start() {
     websocket_->async_accept([self = shared_from_this() ](boost::system::error_code ec) {
         self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
     });
 }
+
 
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
     if (!ec) {
@@ -42,7 +45,6 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
     }
 }
-
 
 void ClientHandler::receiveMessageAsync() {
 
@@ -61,12 +63,18 @@ void ClientHandler::receiveMessageAsync() {
             std::string message = boost::beast::buffers_to_string(buffer->data());
             std::cout << "Received message in ClientHandler: " << message << std::endl;
 
-            //
-            // if (onMessageReceived_callback) {
-            //     /// the callback??
-            //     std::string rst = onMessageReceived_callback(message);
-            //     sendMessageAsync(rst);
-            // }
+
+            if (self->onMessageReceived_callback) {
+
+                try {
+                    std::string rst = self->onMessageReceived_callback(message);
+                    self->sendMessage(rst);
+                } catch (const std::exception& e) {
+                    std::cerr << "Callback execution failed: " << e.what() << std::endl;
+                }
+
+
+            }
 
         } else {
             std::cerr << "Error receiving message: " << ec.message() << std::endl;
@@ -81,13 +89,9 @@ void ClientHandler::receiveMessageAsync() {
 
 }
 
-
-
 void ClientHandler::sendMessage(const std::string& message) {
-    auto self = shared_from_this();
+
     auto buffer = std::make_shared<boost::beast::flat_buffer>();
-
-
     /** This was the old way I did it, you would then have the lambda capture the buffer for it to not go out of scope.
     *   Just leaving it here for knowledge purposes.
     *

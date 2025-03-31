@@ -9,7 +9,6 @@
 ChessController::ChessController() {
     // This so we have access to chessController inside lambda.
     chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> std::string {
-        // We passing in a function for it to assign itself too..... that's inside of here.
         return this->onClientMessageReceived(message);
     });
 
@@ -63,8 +62,6 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
 
 void ChessController::playGame() {
     std::string input;
-    bool valid_input = false;
-    bool valid_move = false;
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
     std::thread networkThread([this] {
@@ -77,7 +74,6 @@ void ChessController::playGame() {
     {
         std::cout << chessBoard.getChessBoardString(); // for debug backend. Is this even needed?
         std::this_thread::sleep_for (std::chrono::seconds(5));
-
     }
 
 }
@@ -103,6 +99,7 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     }
 
     nlohmann::json jsonResponse;
+
     jsonResponse["valid"] = valid_move;
     jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move";
 
@@ -110,7 +107,7 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
     jsonResponse["board"] = { chessBoard.getChessBoardString() };
 
-    std::cout << "Sending jsonResponseFrom: " << jsonResponse.dump()  << "\n";
+    //std::cout << "Dumping jsonResponseFrom(ChessController.cpp): " << jsonResponse.dump()  << "\n";
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }

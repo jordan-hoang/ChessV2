@@ -20,41 +20,27 @@ class ChessNetwork {
         ChessNetwork();
         ~ChessNetwork();
 
-        void startServer();                              // UNIMPLEMENTED
-        void stopServer();                               // UNIMPLEMENTED
         void sendToAll(const std::string &message);      // UNIMPLEMENTED
 
-        void acceptConnection();
 
 
-        // Public Methods
-        void receiveMessageAsync();
+        // Runs the ctx.
+        void startNetworkLoop();
 
         // **New Method to Set the Callback for recieving messages? **
         // You may want to use shared pointer or pass by reference.
         void setMessageReceivedCallback(std::function<std::string(const std::string&)> callback);
 
 
-        void startNetworkLoop();
-        void sendMessageAsync(const std::string &message); // Not used.
-
-
     private:
         boost::asio::io_context ctx;    // I/O context for ASIO
         std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
-
-
-
-
-
-        std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket, can be ptr/smrtptr.
-
-        /// std::vector<std::shared_ptr<websocket::stream<tcp::socket>>> listWebsockets_; Do this later.
         std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
-        void session(tcp::socket socket);
-        void startAcceptConn();
+
+
+        void acceptConnection();
 
 };
 
