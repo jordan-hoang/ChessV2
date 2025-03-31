@@ -35,6 +35,8 @@ public:
     ChessBoard(std::vector<smartRow> chessboard);
 
     void printChessBoard() const;
+    std::string getChessBoardString() const;
+
     bool isGameOver() const;
 
     bool executeMove(ChessCoordinate from, ChessCoordinate to);

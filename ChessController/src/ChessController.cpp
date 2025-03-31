@@ -75,7 +75,7 @@ void ChessController::playGame() {
 
     while( !chessBoard.isGameOver()  )
     {
-        chessBoard.printChessBoard(); // for debug backend. Is this even needed?
+        std::cout << chessBoard.getChessBoardString(); // for debug backend. Is this even needed?
         std::this_thread::sleep_for (std::chrono::seconds(5));
 
     }
@@ -108,7 +108,7 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
 
     jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
-
+    jsonResponse["board"] = { chessBoard.getChessBoardString() };
 
     std::cout << "Sending jsonResponseFrom: " << jsonResponse.dump()  << "\n";
 

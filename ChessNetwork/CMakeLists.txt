@@ -1,5 +1,6 @@
 add_library(chessNetwork
         src/ChessNetwork.cpp
+        src/ClientHandler.cpp
 )
 
 # Include directories

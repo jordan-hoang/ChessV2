@@ -78,14 +78,33 @@ ChessBoard::ChessBoard() : isWhiteTurn{true}, GameOver{false} {
 }
 
 void ChessBoard::printChessBoard() const {
-    for(int i = 0; i < chessboard_.size(); i++){
-        for(int j = 0; j < chessboard_[i].size(); j++){
-            std::cout << static_cast<char>( chessboard_[i][j]->getSymbol() ) << " ";
+    for(const auto & i : chessboard_){
+        for(const auto & j : i){
+            std::cout << static_cast<char>( j->getSymbol() ) << " ";
         }
         std::cout << "\n";
     }
     std::cout << "\n";
 }
+
+/**
+ * Returns the state of the board as a string.
+ * It's used to get the state of the board to return to the players.
+ * @return A string that represents the state of the board
+ */
+std::string ChessBoard::getChessBoardString() const {
+    std::string rst;
+    for(const auto & i : chessboard_){
+        for(const auto & j : i){
+            rst +=  static_cast<char>( j->getSymbol());
+        }
+        rst +=  "\n";
+    }
+    return rst;
+}
+
+
+
 
 const std::vector<smartRow> &ChessBoard::getChessboard() const {
     return chessboard_;

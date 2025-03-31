@@ -6,10 +6,40 @@
 #include "ChessNetwork.h"
 
 
-// NOT DONE, DOESN"T DO ANYTHING.
-ChessNetwork::ChessNetwork(unsigned short port)
-    : acceptor_(ctx, tcp::endpoint(tcp::v4(), port))
-{}
+ChessNetwork::ChessNetwork()
+    : acceptor_(ctx, tcp::endpoint(tcp::v4(), 8080))
+{
+    try {
+        std::cout << "Waiting for a connection...." << std::endl;
+        // Start accepting connections asynchronously
+        acceptConnection();
+    } catch (const std::exception &e) {
+        std::cerr << "Server error: " << e.what() << std::endl;
+    }
+
+}
+
+
+// The new one.
+void ChessNetwork::acceptConnection() {
+    acceptor_.async_accept([this](boost::system::error_code ec, tcp::socket socket) {
+        if (!ec) {
+            // Create the ClientHandler and pass the socket to it
+            auto client = std::make_shared<ClientHandler>(std::move(socket));
+            clientList.push_back(client); // Track the client
+
+            // Start handling WebSocket connection
+            client->start();
+        }
+
+        // Continue accepting new connections
+        acceptConnection();
+    });
+}
+
+
+
+
 
 /**
  * Accepts the connection from client and does handshake.
@@ -24,8 +54,10 @@ void ChessNetwork::startAcceptConn() {
 
             std::cout << "Client connected!" << std::endl;
             // Create the WebSocket session
-            websocket_.emplace(std::move(socket)); // Upgrade this into an array for multiple websockets in future....
-            websocket_->async_accept([this](boost::system::error_code ec) {
+
+
+            websocket_.emplace(std::move(socket));
+            websocket_->async_accept([this](boost::system::error_code ec) { // Handshake is done here?!
                 if (!ec) {
                     std::cout << "WebSocket handshake successful!" << std::endl;
                     if (websocket_->is_open()) {
@@ -43,18 +75,7 @@ void ChessNetwork::startAcceptConn() {
 
 }
 
-ChessNetwork::ChessNetwork()
-    : acceptor_(ctx, tcp::endpoint(tcp::v4(), 8080))
-{
-    try {
-        std::cout << "Waiting for a connection...." << std::endl;
-        // Start accepting connections asynchronously
-        startAcceptConn();
-    } catch (const std::exception &e) {
-        std::cerr << "Server error: " << e.what() << std::endl;
-    }
 
-}
 
 ChessNetwork::~ChessNetwork() {
     // This isn't necessary but nice to do....
@@ -70,7 +91,6 @@ void ChessNetwork::setMessageReceivedCallback(std::function<std::string(const st
 
 // Execute the callback!
 void ChessNetwork::receiveMessageAsync() {
-
     /** Shared buffer to persist!! A BIG bug here was using a flat_buffer allocated on the stack.
      *  Remember things don't go top down, so it would go out of scope instantly and I would get a memory error.
      *  the async_read doesn't wait it just returns immediatley if I"m correct. so you do need to pass a shared ptr in
@@ -89,8 +109,9 @@ void ChessNetwork::receiveMessageAsync() {
                         /// the callback??
                         std::string rst = onMessageReceived_callback(message);
                         sendMessageAsync(rst);
-
                     }
+
+
                 } else {
                     std::cerr << "Warning: Buffer is empty, but bytes were transferred." << std::endl;
                 }
@@ -101,24 +122,8 @@ void ChessNetwork::receiveMessageAsync() {
             }
         });
 
+
 }
-
-
-// Send a specific message to the client.
-// void ChessNetwork::async_send(const std::string &message) {
-//     if (!websocket_ || !websocket_->is_open()) {
-//         std::cerr << "WebSocket is not open. Cannot send message." << std::endl;
-//         return;
-//     }
-//
-//     websocket_->async_write(boost::asio::buffer(message),
-//     [this](boost::system::error_code ec, std::size_t bytes_transferred) {
-//         if (ec) {
-//             std::cerr << "Error from WebSocket, unable to send: " << ec.message() << " bytes " << bytes_transferred << std::endl;
-//         }
-//     });
-//
-// }
 
 // Send a specific message to the client.
 void ChessNetwork::sendMessageAsync(const std::string &message) {
@@ -141,7 +146,6 @@ void ChessNetwork::sendMessageAsync(const std::string &message) {
             }
         });
 }
-
 
 
 void ChessNetwork::startNetworkLoop() {
