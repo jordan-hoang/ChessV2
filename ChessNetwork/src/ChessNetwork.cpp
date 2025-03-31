@@ -7,12 +7,14 @@
 
 
 ChessNetwork::ChessNetwork()
-    : acceptor_(ctx, tcp::endpoint(tcp::v4(), 8080))
+    : acceptor_(ctx, tcp::endpoint(tcp::v4(), 8080)),
+      strand_(ctx.get_executor())
 {
     try {
         std::cout << "Waiting for a connection...." << std::endl;
         // Start accepting connections asynchronously
         acceptConnection();
+
     } catch (const std::exception &e) {
         std::cerr << "Server error: " << e.what() << std::endl;
     }
@@ -29,7 +31,12 @@ void ChessNetwork::acceptConnection() {
     acceptor_.async_accept([this](boost::system::error_code ec, tcp::socket socket) {
         if (!ec) {
             // Create the ClientHandler and pass the socket to it
-            auto client = std::make_shared<ClientHandler>(std::move(socket), onMessageReceived_callback);
+            auto client = std::make_shared<ClientHandler>(
+                    std::move(socket),
+                    onMessageReceived_callback,
+                    this,
+                    strand_
+                );
             clientList.push_back(client); // Track the client
 
             // Start handling WebSocket connection
@@ -41,6 +48,16 @@ void ChessNetwork::acceptConnection() {
     });
 }
 
+
+void ChessNetwork::sendToAll(const std::string &message) {
+
+    post(strand_, [this, message]() {
+        for(const auto& client : clientList) {
+            client->sendMessage(message);
+        }
+    });
+
+}
 
 
 

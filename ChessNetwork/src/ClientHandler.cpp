@@ -3,20 +3,28 @@
 //
 // It's a chess client class. It represents a single connection from somewhere.
 
+#include <ChessNetwork.h>
 #include <ClientHandler.h>
 #include <iostream>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/buffers_to_string.hpp>
 
 
-ClientHandler::ClientHandler(ip::tcp::socket socket) {
-    websocket_.emplace(std::move(socket)); // Initialize the websocket here?
+
+
+
+ClientHandler::ClientHandler  (
+    tcp::socket socket,
+    std::function<std::string(const std::string &)> callBack,
+    ChessNetwork* chessNetwork,
+    strand<io_context::executor_type> &strand
+) : strand_(strand)
+{
+    websocket_.emplace(std::move(socket));
+    onMessageReceived_callback = callBack;
+    chess_network_ = chessNetwork;
 }
 
-ClientHandler::ClientHandler(ip::tcp::socket socket, std::function<std::string(const std::string&)> callBack) {
-    websocket_.emplace(std::move(socket)); // Initialize the websocket here?
-    onMessageReceived_callback = callBack;
-}
 
 // But when will it close?
 ClientHandler::~ClientHandler() {
@@ -31,7 +39,7 @@ ClientHandler::~ClientHandler() {
 // Does the handshake, honestly maybe combine this with handleHandShake??? It's really short.
 //
 void ClientHandler::start() {
-    websocket_->async_accept([self = shared_from_this() ](boost::system::error_code ec) {
+    websocket_->async_accept([self = shared_from_this() ](const boost::system::error_code &ec) {
         self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
     });
 }
@@ -46,6 +54,10 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
     }
 }
 
+
+/**
+ *  This receives the message from the REACT client.
+ */
 void ClientHandler::receiveMessageAsync() {
 
     /** Shared buffer to persist!! A BIG bug here was using a flat_buffer allocated on the stack.
@@ -58,37 +70,38 @@ void ClientHandler::receiveMessageAsync() {
 
     websocket_->async_read(*buffer, [self, buffer](boost::system::error_code ec, std::size_t bytes_transferred) {
 
+
+        // Lambda function occurs after the read is done!
         if (!ec) {
 
             std::string message = boost::beast::buffers_to_string(buffer->data());
             std::cout << "Received message in ClientHandler: " << message << std::endl;
 
-
             if (self->onMessageReceived_callback) {
-
                 try {
                     std::string rst = self->onMessageReceived_callback(message);
-                    self->sendMessage(rst);
+                    //self->sendMessage(rst); // Sends the message to the REACT client.
+
+                    self->chess_network_->sendToAll(rst); // SENDS the message to ALL REACT clients.
+
+
                 } catch (const std::exception& e) {
                     std::cerr << "Callback execution failed: " << e.what() << std::endl;
                 }
-
-
             }
 
         } else {
             std::cerr << "Error receiving message: " << ec.message() << std::endl;
         }
 
-
         self->receiveMessageAsync();  // Continue reading
-
 
     });
 
 
 }
 
+// This sends the message to REACT client.
 void ClientHandler::sendMessage(const std::string& message) {
 
     auto buffer = std::make_shared<boost::beast::flat_buffer>();
@@ -98,12 +111,22 @@ void ClientHandler::sendMessage(const std::string& message) {
     *   auto buffer = std::make_shared<std::string>(message); // Shared string keeps data alive.
     *   websocket_->async_write(boost::asio::buffer(*buffer),
     */
-    websocket_->async_write(boost::asio::buffer(message.data(), message.size()),
-        [this](boost::system::error_code ec, std::size_t bytes_transferred) {
-            if (ec) {
-                std::cerr << "Error from WebSocket, unable to send: "
-                          << ec.message() << " bytes " << bytes_transferred << std::endl;
-            }
-        });
+
+
+
+    boost::asio::post(strand_, [self = shared_from_this(), message]() {
+
+        self->websocket_->async_write(boost::asio::buffer(message.data(), message.size()),
+            [self](boost::system::error_code ec, std::size_t bytes_transferred) {
+                if (ec) {
+                    std::cerr << "Error from WebSocket, unable to send: "
+                              << ec.message() << " bytes " << bytes_transferred << std::endl;
+                }
+            });
+
+    });
+
+
+
 
 }

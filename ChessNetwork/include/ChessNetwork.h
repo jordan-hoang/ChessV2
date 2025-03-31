@@ -22,8 +22,6 @@ class ChessNetwork {
 
         void sendToAll(const std::string &message);      // UNIMPLEMENTED
 
-
-
         // Runs the ctx.
         void startNetworkLoop();
 
@@ -36,10 +34,12 @@ class ChessNetwork {
         boost::asio::io_context ctx;    // I/O context for ASIO
         std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
+
         std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
+        strand<io_context::executor_type> strand_;
 
-
+        // Starts accepting connections. Called by constructor and doesn't stop.
         void acceptConnection();
 
 };
