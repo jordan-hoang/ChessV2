@@ -13,9 +13,9 @@
 ClientHandler::ClientHandler  (
     tcp::socket socket,
     std::function<std::string(const std::string &)> callBack,
-    std::shared_ptr<IClientEvents> event, // Now takes interface
+    std::weak_ptr<IClientEvents> event, // Now takes interface
     strand<io_context::executor_type> &strand
-) : strand_(strand), events_(std::move(event))
+) : strand_(strand), events_(event)
 {
     websocket_.emplace(std::move(socket));
     onMessageReceived_callback = callBack;
@@ -75,7 +75,10 @@ void ClientHandler::receiveMessageAsync() {
                 self->websocket_->close(boost::beast::websocket::close_code::normal);
             }
 
-            self->events_->onDisconnect(self);
+            if(auto events_shared = self->events_.lock()) {
+                 events_shared->onDisconnect(self);
+            }
+
             return;
         }
 
@@ -88,7 +91,11 @@ void ClientHandler::receiveMessageAsync() {
                 try {
                     std::string rst = self->onMessageReceived_callback(message);
                     //self->sendMessage(rst); // Sends the message to the the single REACT client.
-                    self->events_->broadcastToAll(rst); // Send to all clients.
+                    if(auto events_shared = self->events_.lock()) {
+                         events_shared->broadcastToAll(rst);
+                     }
+
+
                 } catch (const std::exception& e) {
                     std::cerr << "Callback execution failed: " << e.what() << std::endl;
                 }

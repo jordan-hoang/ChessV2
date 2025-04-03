@@ -34,7 +34,7 @@ void ChessNetwork::acceptConnection() {
             auto client = std::make_shared<ClientHandler>(
                     std::move(socket),
                     onMessageReceived_callback,
-                    shared_from_this(),
+                    weak_from_this(),
                     strand_
                 );
 
@@ -69,6 +69,7 @@ void ChessNetwork::startNetworkLoop() {
     ctx.run(); // As long as there's async operations it will keep running.
 }
 
+
 // From IClientEvents (client → network)
 void ChessNetwork::onDisconnect(std::shared_ptr<ClientHandler> client) {
     boost::asio::post(strand_, [this, client]() {
@@ -80,14 +81,11 @@ void ChessNetwork::onDisconnect(std::shared_ptr<ClientHandler> client) {
     });
 }
 
-
 // From IClientEvents (network → clients)
 void ChessNetwork::broadcastToAll(const std::string& message) {
-
     post(strand_, [this, message]() {
         for(const auto& client : clientList) {
             client->sendMessage(message);
         }
     });
-
 }
