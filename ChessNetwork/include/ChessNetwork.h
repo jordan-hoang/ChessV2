@@ -11,16 +11,18 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include "ClientHandler.h"
+#include "IClientEvents.h"
+
 
 using boost::asio::ip::tcp;
 using namespace boost::beast;
 
-class ChessNetwork {
+// Observer is an interface more or less.
+// It's the "Subject because it's being observed by the clients.
+class ChessNetwork : public IClientEvents, public std::enable_shared_from_this<ChessNetwork> {
     public:
         ChessNetwork();
         ~ChessNetwork();
-
-        void sendToAll(const std::string &message);      // UNIMPLEMENTED
 
         // Runs the ctx.
         void startNetworkLoop();
@@ -29,19 +31,26 @@ class ChessNetwork {
         // You may want to use shared pointer or pass by reference.
         void setMessageReceivedCallback(std::function<std::string(const std::string&)> callback);
 
+        void removeClient(std::shared_ptr<ClientHandler> client);
+
+    protected:
+        // Client → Network notifications
+        void onDisconnect(std::shared_ptr<ClientHandler> client) override;
+        // Network → Client broadcasting
+        void broadcastToAll(const std::string& message) override;
+
 
     private:
         boost::asio::io_context ctx;    // I/O context for ASIO
         std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
-
         std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
         strand<io_context::executor_type> strand_;
 
+
         // Starts accepting connections. Called by constructor and doesn't stop.
         void acceptConnection();
-
 };
 
 

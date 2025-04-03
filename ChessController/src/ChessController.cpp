@@ -6,9 +6,11 @@
 #include <thread>
 
 
-ChessController::ChessController() {
+ChessController::ChessController()
+    : chessNetwork_(std::make_shared<ChessNetwork>())
+{
     // This so we have access to chessController inside lambda.
-    chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> std::string {
+    chessNetwork_->setMessageReceivedCallback([this](const std::string message) -> std::string {
         return this->onClientMessageReceived(message);
     });
 
@@ -65,7 +67,7 @@ void ChessController::playGame() {
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
     std::thread networkThread([this] {
-        this->chessNetwork_.startNetworkLoop();
+        this->chessNetwork_->startNetworkLoop();
     });
 
     networkThread.detach(); // I remember there were other ways of running threads....

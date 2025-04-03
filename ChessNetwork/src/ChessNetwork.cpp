@@ -34,9 +34,11 @@ void ChessNetwork::acceptConnection() {
             auto client = std::make_shared<ClientHandler>(
                     std::move(socket),
                     onMessageReceived_callback,
-                    this,
+                    shared_from_this(),
                     strand_
                 );
+
+
             clientList.push_back(client); // Track the client
 
             // Start handling WebSocket connection
@@ -49,16 +51,12 @@ void ChessNetwork::acceptConnection() {
 }
 
 
-void ChessNetwork::sendToAll(const std::string &message) {
-
-    post(strand_, [this, message]() {
-        for(const auto& client : clientList) {
-            client->sendMessage(message);
-        }
-    });
-
+void ChessNetwork::removeClient(std::shared_ptr<ClientHandler> client){
+    auto it = std::find(clientList.begin(), clientList.end(), client);
+    if(it != clientList.end()) {
+        clientList.erase(it);  // Remove client from the list
+    }
 }
-
 
 
 // Takes in a function as an input, and moves it here!
@@ -71,3 +69,25 @@ void ChessNetwork::startNetworkLoop() {
     ctx.run(); // As long as there's async operations it will keep running.
 }
 
+// From IClientEvents (client → network)
+void ChessNetwork::onDisconnect(std::shared_ptr<ClientHandler> client) {
+    boost::asio::post(strand_, [this, client]() {
+        auto it = std::find(clientList.begin(), clientList.end(), client);
+        if(it != clientList.end()) {
+            clientList.erase(it);  // Remove client from the list
+        }
+        std::cout << "Client disconnected. Total: " << clientList.size() << "\n";
+    });
+}
+
+
+// From IClientEvents (network → clients)
+void ChessNetwork::broadcastToAll(const std::string& message) {
+
+    post(strand_, [this, message]() {
+        for(const auto& client : clientList) {
+            client->sendMessage(message);
+        }
+    });
+
+}
