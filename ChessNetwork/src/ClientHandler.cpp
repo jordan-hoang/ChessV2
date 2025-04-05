@@ -3,9 +3,11 @@
 //
 // It's a chess client class. It represents a single connection from somewhere.
 
+#include <ChessCoordinate.h>
 #include <ChessNetwork.h>
 #include <ClientHandler.h>
 #include <iostream>
+#include <json.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/buffers_to_string.hpp>
 
@@ -41,7 +43,36 @@ void ClientHandler::start() {
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
     if (!ec) {
         std::cout << "WebSocket handshake successful!" << std::endl;
+        //
+        // I think we need to use strand_ here.
+        post(strand_, [this]() {
+            try {
+
+                nlohmann::json jsonResponse;
+                // This is the move data.
+                // {"type":"move","from":{"row":6,"col":4},"to":{"row":4,"col":4}}
+
+                ChessCoordinate from{0,0};
+                // Send an invalid move so the server responds with board data.
+                jsonResponse["from"] = { {"row", from.row}, {"col", from.col} };
+                jsonResponse["to"] = { {"row", from.row}, {"col", from.col} };
+                std::string rst = onMessageReceived_callback(jsonResponse.dump());
+                this->sendMessage(rst);
+
+            } catch (const std::exception &e) {
+                std::cout << e.what();
+            }
+            //std::cout << rst << std::endl;
+        });
+
+
+
+
+
         receiveMessageAsync();  // Start receiving messages
+
+
+
     } else {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
     }

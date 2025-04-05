@@ -130,7 +130,6 @@ const Game = () => {
 
     }
 
-
     // Parses the boards data and constructs a new ChessBoard to return.
     const parseBoardData = (boardData) => {
         console.log("MY DATA IS : " + boardData); /// It's a string of the board's state.
@@ -152,21 +151,20 @@ const Game = () => {
         return board;
     }
 
-
     const handleServerResponse = (response) => {
         console.log("handleServerResponse called in Game.js");
         // The response.data is just a string that is sent back by the server!!!
         // But response data is correct.
         const jsonResponse = JSON.parse(response.data);
+        let boardData = parseBoardData(jsonResponse.board[0]);
+        setBoard(boardData);
+
         if(!jsonResponse.valid){
             console.log("invalid move!");
             return;
         }
 
-        let boardData = parseBoardData(jsonResponse.board[0]);
-        setBoard(boardData);
         setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );
-
     };
 
     //Returns true if successful false if it isn't. Don't know if it's need however. Maybe just void.
@@ -178,6 +176,9 @@ const Game = () => {
             from,
             to
         });
+
+        console.log(moveData);
+
         socket.send(moveData);
 
     }

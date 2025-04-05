@@ -84,6 +84,7 @@ void ChessController::playGame() {
 // Callback function that is passed to chessNetwork.
 std::string ChessController::onClientMessageReceived(const std::string &message) {
 
+    std::cout << message << std::endl;
     bool valid_move = false;
 
     //std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);

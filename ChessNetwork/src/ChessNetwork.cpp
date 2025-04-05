@@ -38,11 +38,8 @@ void ChessNetwork::acceptConnection() {
                     strand_
                 );
 
-
             clientList.push_back(client); // Track the client
-
-            // Start handling WebSocket connection
-            client->start();
+            client->start();             // Start handling WebSocket connection
         }
 
         // Continue accepting new connections
