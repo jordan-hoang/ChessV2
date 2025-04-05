@@ -15,25 +15,47 @@ void Pawn::print() {
     std::cout << "I am a pawn\n";
 }
 
+// What does this do.... I don't remember anymore
 bool Pawn::diagonalMove(ChessCoordinate start, ChessCoordinate finish, ChessBoard &chess_board_){
 
     Color friendly_color = this->getColor();
     Color enemy_color = chess_board_.getPiece(finish)->getColor();
-    ////////////////////////////////////////////
+
+    // Can't move diagonally onto your pieces or null_pieces. Only enemy pieces are allowed.
+    if(friendly_color == enemy_color || enemy_color == Color::NO_COLOR) {
+        return false;
+    }
+
+
+    /// Array of all possible diagonal moves a pawn can go to.
     std::array<ChessCoordinate, 2> a;
-    if(friendly_color == Color::WHITE) {
+    if(friendly_color == Color::WHITE) {            /// Down the array if white.
         a[0] = {-1, 1};
         a[1] = {-1, -1};
-    } else if (friendly_color == Color::BLACK){
+    } else if (friendly_color == Color::BLACK){    /// Up the array if black.
         a[0] = {1, 1};
         a[1] = {1, -1};
     } else{
         exit(-1);
     }
-    ChessCoordinate rst = finish - start;
-    return ( std::find(a.begin(), a.end(), rst) != a.end() );
+
+    // Can simplify this.
+    if(finish == start + a[0] || finish == start + a[1]) {
+        return true;
+    }
+    return false;
 }
 
+/**
+ * Checks the absolute distance you are moving by, if it's >= 3 than it's not valid for pawns.
+ * At most pawns can only move 2 squares
+ * @param difX
+ * @param difY
+ * @return
+ */
+bool isValidNum(int difX, int difY) {
+    return abs(difX) + abs(difY) < 3;
+}
 
 bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
     //First we gotta grab the color.
@@ -45,8 +67,6 @@ bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_boa
 
 
     Color target = chess_board_.getPiece(b)->getColor();
-
-    //A pawn can travel at most 1 unit diagonally therefore there xPos,yPos must have changed by 1.
     bool result = diagonalMove(a, b, chess_board_);
 
     // Code for double jump.
@@ -54,12 +74,13 @@ bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_boa
         if (a.row + directionTravel == b.row && (difX == 0 || difY == 0 ) ) {
             result =  true; // generic code for both.
         } else if (a.row == 1 && directionTravel == 1 &&
-                   (a.row + directionTravel * 2) == b.row) {
+                   (a.row + directionTravel * 2) == b.row && abs(difX) == 0) {
             result = true;
         } else if (a.row == 6 && directionTravel == -1 &&
-                   (a.row + directionTravel * 2) == b.row) {
+                   (a.row + directionTravel * 2) == b.row && abs(difX) == 0) {
             result = true;
         }
+
     }
 
     return result;

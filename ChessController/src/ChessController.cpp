@@ -74,7 +74,7 @@ void ChessController::playGame() {
 
     while( !chessBoard.isGameOver()  )
     {
-        std::cout << chessBoard.getChessBoardString(); // for debug backend. Is this even needed?
+        chessBoard.printChessBoard();
         std::this_thread::sleep_for (std::chrono::seconds(5));
     }
 

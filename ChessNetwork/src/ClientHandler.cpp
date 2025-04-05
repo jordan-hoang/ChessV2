@@ -89,9 +89,16 @@ void ClientHandler::receiveMessageAsync() {
             std::cout << "Received message in ClientHandler.cpp: " << message << std::endl;
             if (self->onMessageReceived_callback) {
                 try {
+
+
                     std::string rst = self->onMessageReceived_callback(message);
-                    //self->sendMessage(rst); // Sends the message to the the single REACT client.
+                    std::cout << rst << std::endl;
+
+
+
+
                     if(auto events_shared = self->events_.lock()) {
+                        //self->sendMessage(rst); // Sends the message to the the single REACT client.
                          events_shared->broadcastToAll(rst);
                      }
 

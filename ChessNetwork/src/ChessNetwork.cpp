@@ -50,7 +50,6 @@ void ChessNetwork::acceptConnection() {
     });
 }
 
-
 void ChessNetwork::removeClient(std::shared_ptr<ClientHandler> client){
     auto it = std::find(clientList.begin(), clientList.end(), client);
     if(it != clientList.end()) {
@@ -58,17 +57,14 @@ void ChessNetwork::removeClient(std::shared_ptr<ClientHandler> client){
     }
 }
 
-
 // Takes in a function as an input, and moves it here!
 void ChessNetwork::setMessageReceivedCallback(std::function<std::string(const std::string&)> callback) {
     onMessageReceived_callback = std::move(callback);
 }
 
-
 void ChessNetwork::startNetworkLoop() {
     ctx.run(); // As long as there's async operations it will keep running.
 }
-
 
 // From IClientEvents (client → network)
 void ChessNetwork::onDisconnect(std::shared_ptr<ClientHandler> client) {

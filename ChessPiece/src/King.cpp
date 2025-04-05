@@ -35,6 +35,12 @@ bool King::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_boa
             {a.row - 1, a.col},
     };
 
+    // if(can_castle) {
+    //     // PUSH IN THE 2 possible moves!!!!
+    // }
+
+
+
     auto found = std::find(possibleMoves.begin(), possibleMoves.end(), b); 
     if(found != possibleMoves.end()){
         can_castle = false;

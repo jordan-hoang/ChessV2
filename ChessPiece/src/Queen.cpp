@@ -23,7 +23,7 @@ bool Queen::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_bo
 
     if(diffCol == diffRow || a.row == b.row || a.col == b.col){
         return ChessCollision::isPathClear(a,b, chess_board_);
-    }    
+    }
     return false;
 }
 

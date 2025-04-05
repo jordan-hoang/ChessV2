@@ -24,7 +24,6 @@ target_include_directories(ChessV2
 
 )
 
-
 #Link the libraries (moudles) that ChessV2 requires in order to run)
 # https://stackoverflow.com/questions/26037954/cmake-target-link-libraries-interface-dependencies
 target_link_libraries(ChessV2

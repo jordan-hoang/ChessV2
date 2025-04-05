@@ -1,6 +1,7 @@
 add_library(chessBoard
         src/ChessBoard.cpp
         src/ChessCollision.cpp
+        src/MoveRecorder.cpp
         )
 
 

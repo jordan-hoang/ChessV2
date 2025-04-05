@@ -1,3 +1,6 @@
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+
 add_subdirectory(lib)
 
 add_executable(runAllTests

@@ -98,12 +98,9 @@ std::string ChessBoard::getChessBoardString() const {
         for(const auto & j : i){
             rst +=  static_cast<char>( j->getSymbol());
         }
-        rst +=  "\n";
     }
     return rst;
 }
-
-
 
 
 const std::vector<smartRow> &ChessBoard::getChessboard() const {
@@ -118,12 +115,10 @@ bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
     bool result = false;
     
     this->chessboard_[from.row][from.col]->movePiece(from,to, *this);
-
-     if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE){
-         result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-     } else if(!isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
-         result =  this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
-     }
+    if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE ||
+    !isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
+     result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    }
 
      if(result) {
           isWhiteTurn = !isWhiteTurn;
@@ -152,10 +147,16 @@ void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
 }
 
 ChessBoard::ChessBoard( std::vector<smartRow> chessboard) :
-        chessboard_(std::move(chessboard)), isWhiteTurn{true}, GameOver{false} {
+        chessboard_(std::move(chessboard)), isWhiteTurn{true}, GameOver{false} {}
 
+
+void ChessBoard::swapPieces(ChessCoordinate &a, ChessCoordinate &b) {
+    chessboard_[a.row][a.col].swap(chessboard_[b.row][b.col]);
 }
 
+void ChessBoard::setPiece(ChessCoordinate &a, std::unique_ptr<Piece> chessPiece) {
+    chessboard_[a.row][a.col] = std::move(chessPiece);
+}
 
 
 

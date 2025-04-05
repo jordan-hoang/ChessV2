@@ -45,7 +45,6 @@ private:
     void threadMain();
     void playGame();
 
-
 };
 
 

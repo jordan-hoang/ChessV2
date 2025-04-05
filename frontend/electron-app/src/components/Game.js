@@ -109,54 +109,64 @@ const Game = () => {
     }, []);
 
 
+    const createPieceType = (myChar) => {
+        if(myChar === '-'){
+            return null;
+        }
+
+        let pieceColor = (myChar === myChar.toLowerCase()) ? 'white' : 'black';
+        const pieceNames = {
+            'p': 'pawn',
+            'r': 'rook',
+            'n': 'knight',
+            'b': 'bishop',
+            'q': 'queen',
+            'k': 'king'
+        };
+
+        myChar = myChar.toLowerCase();
+        let name = pieceNames[myChar];
+        return { name: name, color: pieceColor };
+
+    }
+
+
+    // Parses the boards data and constructs a new ChessBoard to return.
+    const parseBoardData = (boardData) => {
+        console.log("MY DATA IS : " + boardData); /// It's a string of the board's state.
+        console.log(Array.isArray(boardData));
+        const board = [];
+        const pieceTypes = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
+
+        let counter = 0;
+        for(let i = 0; i < 8; i++){
+            let row = [];
+            for(let j = 0; j < 8; j++){
+                let piece = createPieceType(boardData[counter]);
+                row.push(piece);
+                counter++;
+            }
+            board.push(row);
+        }
+
+        return board;
+    }
+
+
     const handleServerResponse = (response) => {
-        console.log("handleServerResponse CALLED!");
+        console.log("handleServerResponse called in Game.js");
         // The response.data is just a string that is sent back by the server!!!
-        // We sent back True so it's all good. Not sure what response.valid is?!
         // But response data is correct.
-
-        const jsonResponse = JSON.parse(response.data)
-        if (jsonResponse.valid) {
-
-            const newBoard = board.map(row => row.map(square => {
-                if (square === null) {
-                    return null; // If the square is empty, just return null ?
-                }
-                return { ...square }; // Otherwise, make a copy of the piece object This is called a spread operator.
-            }));
-
-            const from = jsonResponse.from;
-            const to = jsonResponse.to;
-
-            newBoard[to.row][to.col] = newBoard[from.row][from.col]; // Move piece to new position
-            newBoard[from.row][from.col] = null; // Clear old position
-
-            setBoard(prevBoard => {
-                // Deep copy using JSON methods
-                const newBoard = JSON.parse(JSON.stringify(prevBoard));  // Deep copy of the board
-
-                const from = jsonResponse.from;
-                const to = jsonResponse.to;
-
-                console.log(from);
-                console.log(to);
-
-                // Move the piece to the new position
-                newBoard[to.row][to.col] = newBoard[from.row][from.col];
-                newBoard[from.row][from.col] = null; // Clear the old position
-
-                return newBoard; // Return the new board to trigger re-render
-            });
-
-
-            setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );
-
+        const jsonResponse = JSON.parse(response.data);
+        if(!jsonResponse.valid){
+            console.log("invalid move!");
+            return;
         }
 
+        let boardData = parseBoardData(jsonResponse.board[0]);
+        setBoard(boardData);
+        setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );
 
-        else {
-            console.log("Invalid move.");
-        }
     };
 
     //Returns true if successful false if it isn't. Don't know if it's need however. Maybe just void.
