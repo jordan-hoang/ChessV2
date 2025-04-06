@@ -45,6 +45,9 @@ public:
     void swapPieces(ChessCoordinate &a, ChessCoordinate &b);
     void setPiece(ChessCoordinate &a,  std::unique_ptr<Piece> chessPiece);
 
+
+    bool isThisWhiteTurn();
+
     Piece *const getPiece(int row, int col) const;
     Piece *const getPiece(ChessCoordinate a) const;
     const std::vector<smartRow> &getChessboard() const;

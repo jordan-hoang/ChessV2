@@ -158,6 +158,10 @@ void ChessBoard::setPiece(ChessCoordinate &a, std::unique_ptr<Piece> chessPiece)
     chessboard_[a.row][a.col] = std::move(chessPiece);
 }
 
+bool ChessBoard::isThisWhiteTurn() {
+    return isWhiteTurn;
+}
+
 
 
 

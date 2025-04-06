@@ -10,8 +10,8 @@ ChessController::ChessController()
     : chessNetwork_(std::make_shared<ChessNetwork>())
 {
     // This so we have access to chessController inside lambda.
-    chessNetwork_->setMessageReceivedCallback([this](const std::string message) -> std::string {
-        return this->onClientMessageReceived(message);
+    chessNetwork_->setMessageReceivedCallback([this](const std::string message, const std::string msg = "") -> std::string {
+        return this->onClientMessageReceived(message, msg);
     });
 
 }
@@ -82,7 +82,9 @@ void ChessController::playGame() {
 
 
 // Callback function that is passed to chessNetwork.
-std::string ChessController::onClientMessageReceived(const std::string &message) {
+// After the client receives this happens.
+std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
+
 
     std::cout << message << std::endl;
     bool valid_move = false;
@@ -94,7 +96,16 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     moves.first = jsonData["from"];
     moves.second = jsonData["to"];
 
-    valid_move = chessBoard.executeMove(moves.first, moves.second);
+    if (client_color != "spectator") {
+        bool canMove = (client_color == "white" && chessBoard.isThisWhiteTurn()) ||
+                       (client_color == "black" && !chessBoard.isThisWhiteTurn()) ||
+                       (client_color != "white" && client_color != "black");
+
+        if (canMove) {
+            valid_move = chessBoard.executeMove(moves.first, moves.second);
+        }
+    }
+
 
     if (!valid_move) {
         std::cerr << "Invalid move\n";
@@ -104,16 +115,16 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     nlohmann::json jsonResponse;
 
     jsonResponse["valid"] = valid_move;
-    jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move";
-
+    //jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move"; Not used so yeah.
     jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
+    jsonResponse["turn"] = chessBoard.isThisWhiteTurn();
     jsonResponse["board"] = { chessBoard.getChessBoardString() };
-
-    //std::cout << "Dumping jsonResponseFrom(ChessController.cpp): " << jsonResponse.dump()  << "\n";
+    
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }
+
 
 
 void ChessController::threadMain() {

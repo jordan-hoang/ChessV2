@@ -75,6 +75,7 @@ const Game = () => {
     // Determines whose turn it is, is either black or white. Probably can use boolean here but w/e.
     const [board, setBoard] = useState(createInitialBoard); // This will call createInitialBoard only once
     const [currentTurn, setCurrentTurn] = useState('white');
+    const [playerColor, setPlayerColor] = useState('');
     const [socket, setSocket] = useState(null);
     const [moveHistory, setMoveHistory] = useState([]); // Track the history of moves
 
@@ -156,15 +157,28 @@ const Game = () => {
         // The response.data is just a string that is sent back by the server!!!
         // But response data is correct.
         const jsonResponse = JSON.parse(response.data);
+
+        if(jsonResponse.client_role !== undefined){
+            console.log("ASSIGN CLIENT ROLE HERE!" + jsonResponse.client_role);
+            setPlayerColor(jsonResponse.client_role);
+            return;
+        }
+
+
+
         let boardData = parseBoardData(jsonResponse.board[0]);
         setBoard(boardData);
+
+        // setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );  for visual.
+        console.log("TURN IS ::::::: " + jsonResponse.turn);
+
+        setCurrentTurn( jsonResponse.turn ? 'white' : 'black' ); /// DO SOMETHING HERE
 
         if(!jsonResponse.valid){
             console.log("invalid move!");
             return;
         }
 
-        setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );
     };
 
     //Returns true if successful false if it isn't. Don't know if it's need however. Maybe just void.
@@ -199,7 +213,8 @@ const Game = () => {
             </div>
 
             <div>
-                <div style={{ marginTop: "10px" }}> It is currently {currentTurn}'s turn  </div>
+                <div style={{marginTop: "10px"}}> It is currently {currentTurn}'s turn</div>
+                <div style={{marginTop: "10px"}}> You control the  {playerColor}'s pieces</div>
             </div>
 
         </div>

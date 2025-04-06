@@ -29,9 +29,12 @@ class ChessNetwork : public IClientEvents, public std::enable_shared_from_this<C
 
         // **New Method to Set the Callback for recieving messages? **
         // You may want to use shared pointer or pass by reference.
-        void setMessageReceivedCallback(std::function<std::string(const std::string&)> callback);
+        void setMessageReceivedCallback(std::function<std::string(const std::string&, const std::string&)> callback);
 
         void removeClient(std::shared_ptr<ClientHandler> client);
+
+        std::string determineClientRole(); // Checks the clients colors. Returns 1 if they need to be white, returns 2 if black, return 3 for no color.
+
 
     protected:
         // Client → Network notifications
@@ -44,7 +47,7 @@ class ChessNetwork : public IClientEvents, public std::enable_shared_from_this<C
         boost::asio::io_context ctx;    // I/O context for ASIO
         std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
-        std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
+        std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
         strand<io_context::executor_type> strand_;
 

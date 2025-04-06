@@ -14,7 +14,7 @@
 
 ClientHandler::ClientHandler  (
     tcp::socket socket,
-    std::function<std::string(const std::string &)> callBack,
+    std::function<std::string(const std::string&, const std::string& b)> callBack,
     std::weak_ptr<IClientEvents> event, // Now takes interface
     strand<io_context::executor_type> &strand
 ) : strand_(strand), events_(event)
@@ -31,13 +31,23 @@ ClientHandler::~ClientHandler() {
     }
 }
 
-
 // Does the handshake, maybe combine this with handleHandShake??? It's really short.
-void ClientHandler::start() {
-    websocket_->async_accept([self = shared_from_this() ](const boost::system::error_code &ec) {
-        self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
+
+
+
+void ClientHandler::start(std::function<void()> onHandshakeComplete) {
+        websocket_->async_accept([self = shared_from_this(), onHandshakeComplete ](const boost::system::error_code &ec) {
+            self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
+            if(!ec && onHandshakeComplete) {
+                onHandshakeComplete();
+            }
+
     });
 }
+
+
+
+
 
 
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
@@ -56,22 +66,14 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
                 // Send an invalid move so the server responds with board data.
                 jsonResponse["from"] = { {"row", from.row}, {"col", from.col} };
                 jsonResponse["to"] = { {"row", from.row}, {"col", from.col} };
-                std::string rst = onMessageReceived_callback(jsonResponse.dump());
-                this->sendMessage(rst);
+                std::string rst = onMessageReceived_callback(jsonResponse.dump(), "spectator");
 
             } catch (const std::exception &e) {
                 std::cout << e.what();
             }
-            //std::cout << rst << std::endl;
         });
 
-
-
-
-
         receiveMessageAsync();  // Start receiving messages
-
-
 
     } else {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
@@ -120,19 +122,13 @@ void ClientHandler::receiveMessageAsync() {
             std::cout << "Received message in ClientHandler.cpp: " << message << std::endl;
             if (self->onMessageReceived_callback) {
                 try {
-
-
-                    std::string rst = self->onMessageReceived_callback(message);
+                    std::string rst = self->onMessageReceived_callback(message, self->client_info.color);
                     std::cout << rst << std::endl;
-
-
-
 
                     if(auto events_shared = self->events_.lock()) {
                         //self->sendMessage(rst); // Sends the message to the the single REACT client.
                          events_shared->broadcastToAll(rst);
                      }
-
 
                 } catch (const std::exception& e) {
                     std::cerr << "Callback execution failed: " << e.what() << std::endl;
