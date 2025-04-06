@@ -10,38 +10,50 @@
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
+#include "ClientHandler.h"
+#include "IClientEvents.h"
+
 
 using boost::asio::ip::tcp;
 using namespace boost::beast;
 
-class ChessNetwork {
+// Observer is an interface more or less.
+// It's the "Subject because it's being observed by the clients.
+class ChessNetwork : public IClientEvents, public std::enable_shared_from_this<ChessNetwork> {
     public:
-        explicit ChessNetwork(unsigned short port);
         ChessNetwork();
         ~ChessNetwork();
 
-        // Public Methods
-        void receiveMessageAsync();
-
-        // **New Method to Set the Callback for recieving messages? **
-        void setMessageReceivedCallback(std::function<std::string(const std::string&)> callback); /// Takes in a function?!
-
+        // Runs the ctx.
         void startNetworkLoop();
 
-        void sendMessageAsync(const std::string &message); // Not used.
+        // **New Method to Set the Callback for recieving messages? **
+        // You may want to use shared pointer or pass by reference.
+        void setMessageReceivedCallback(std::function<std::string(const std::string&, const std::string&)> callback);
+
+        void removeClient(std::shared_ptr<ClientHandler> client);
+
+        std::string determineClientRole(); // Checks the clients colors. Returns 1 if they need to be white, returns 2 if black, return 3 for no color.
+
+
+    protected:
+        // Client → Network notifications
+        void onDisconnect(std::shared_ptr<ClientHandler> client) override;
+        // Network → Client broadcasting
+        void broadcastToAll(const std::string& message) override;
 
 
     private:
         boost::asio::io_context ctx;    // I/O context for ASIO
+        std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
-        std::optional<boost::beast::websocket::stream<tcp::socket>> websocket_;  // Optional WebSocket, can be ptr/smrtptr.
+        std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
 
-        /// std::vector<std::shared_ptr<websocket::stream<tcp::socket>>> listWebsockets_; Do this later.
-        std::function<std::string(const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
+        strand<io_context::executor_type> strand_;
 
-        void session(tcp::socket socket);
-        void startAcceptConn();
 
+        // Starts accepting connections. Called by constructor and doesn't stop.
+        void acceptConnection();
 };
 
 

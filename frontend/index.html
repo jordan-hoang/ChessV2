@@ -30,6 +30,11 @@
         const input = document.getElementById('input');
         const message = input.value.trim();  // Remove any unnecessary spaces
         if (message) {
+
+
+
+
+
             socket.send(message);  // Only send message if it's not empty
             input.value = '';  // Clear input field after sending message
         }

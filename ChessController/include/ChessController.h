@@ -37,14 +37,13 @@ public:
 private:
     ChessBoard chessBoard;
     std::thread _chessThread;
-    ChessNetwork chessNetwork_;
+    std::shared_ptr<ChessNetwork> chessNetwork_;
 
-    std::string onClientMessageReceived(const std::string& chessMove); // A function we pass to chessNetwork
+    std::string onClientMessageReceived(const std::string& chessMove, const std::string &client_color = ""); // A function we pass to chessNetwork
     void asyncSendToClient();
 
     void threadMain();
     void playGame();
-
 
 };
 

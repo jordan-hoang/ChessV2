@@ -6,11 +6,12 @@
 #include <thread>
 
 
-ChessController::ChessController() {
+ChessController::ChessController()
+    : chessNetwork_(std::make_shared<ChessNetwork>())
+{
     // This so we have access to chessController inside lambda.
-    chessNetwork_.setMessageReceivedCallback([this](const std::string message) -> std::string {
-        // We passing in a function for it to assign itself too..... that's inside of here.
-        return this->onClientMessageReceived(message);
+    chessNetwork_->setMessageReceivedCallback([this](const std::string message, const std::string msg = "") -> std::string {
+        return this->onClientMessageReceived(message, msg);
     });
 
 }
@@ -63,29 +64,29 @@ ChessController::convertChessCoordinate(std::string input, bool &valid) {
 
 void ChessController::playGame() {
     std::string input;
-    bool valid_input = false;
-    bool valid_move = false;
     std::pair<ChessCoordinate, ChessCoordinate> moves;
 
     std::thread networkThread([this] {
-        this->chessNetwork_.startNetworkLoop();
+        this->chessNetwork_->startNetworkLoop();
     });
 
     networkThread.detach(); // I remember there were other ways of running threads....
 
     while( !chessBoard.isGameOver()  )
     {
-        chessBoard.printChessBoard(); // for debug backend. Is this even needed?
+        chessBoard.printChessBoard();
         std::this_thread::sleep_for (std::chrono::seconds(5));
-
     }
 
 }
 
 
 // Callback function that is passed to chessNetwork.
-std::string ChessController::onClientMessageReceived(const std::string &message) {
+// After the client receives this happens.
+std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
 
+
+    std::cout << message << std::endl;
     bool valid_move = false;
 
     //std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
@@ -95,7 +96,16 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     moves.first = jsonData["from"];
     moves.second = jsonData["to"];
 
-    valid_move = chessBoard.executeMove(moves.first, moves.second);
+    if (client_color != "spectator") {
+        bool canMove = (client_color == "white" && chessBoard.isThisWhiteTurn()) ||
+                       (client_color == "black" && !chessBoard.isThisWhiteTurn()) ||
+                       (client_color != "white" && client_color != "black");
+
+        if (canMove) {
+            valid_move = chessBoard.executeMove(moves.first, moves.second);
+        }
+    }
+
 
     if (!valid_move) {
         std::cerr << "Invalid move\n";
@@ -103,17 +113,18 @@ std::string ChessController::onClientMessageReceived(const std::string &message)
     }
 
     nlohmann::json jsonResponse;
-    jsonResponse["valid"] = valid_move;
-    jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move";
 
+    jsonResponse["valid"] = valid_move;
+    //jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move"; Not used so yeah.
     jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
-
-
-    std::cout << "Sending jsonResponseFrom: " << jsonResponse.dump()  << "\n";
+    jsonResponse["turn"] = chessBoard.isThisWhiteTurn();
+    jsonResponse["board"] = { chessBoard.getChessBoardString() };
+    
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }
+
 
 
 void ChessController::threadMain() {

@@ -15,6 +15,7 @@ enum class Color;
 
 #include "Piece.h"
 #include "ChessCoordinate.h"
+#include "MoveRecorder.h"
 
 typedef std::unique_ptr<Piece> smart_piece;
 typedef std::vector<std::unique_ptr<Piece>> smartRow;
@@ -22,6 +23,7 @@ typedef std::vector<std::unique_ptr<Piece>> smartRow;
 class ChessBoard {
 private:
     std::vector<smartRow> chessboard_;
+
     ChessCoordinate whiteKing;   // White king in this case refers to the king that would go first.
     ChessCoordinate blackKing;   // Black king in this case refers to the king that would go second.
     bool isWhiteTurn;            // Checks to see whose turn it is.
@@ -35,9 +37,16 @@ public:
     ChessBoard(std::vector<smartRow> chessboard);
 
     void printChessBoard() const;
-    bool isGameOver() const;
+    std::string getChessBoardString() const;
 
+    bool isGameOver() const;
     bool executeMove(ChessCoordinate from, ChessCoordinate to);
+
+    void swapPieces(ChessCoordinate &a, ChessCoordinate &b);
+    void setPiece(ChessCoordinate &a,  std::unique_ptr<Piece> chessPiece);
+
+
+    bool isThisWhiteTurn();
 
     Piece *const getPiece(int row, int col) const;
     Piece *const getPiece(ChessCoordinate a) const;
