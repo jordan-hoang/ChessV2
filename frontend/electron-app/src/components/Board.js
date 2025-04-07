@@ -48,6 +48,8 @@ const Board = ( {board, onMove, currentTurn} ) => {
         }
 
         // It's row, col???
+        console.log("handleSquareClick - board.js move is : " + selectedSquare);
+
         onMove(selectedSquare, { row, col });
         setSelectedSquare(null); // Reset selection after move
 

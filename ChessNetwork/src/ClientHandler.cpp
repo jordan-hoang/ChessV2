@@ -46,10 +46,6 @@ void ClientHandler::start(std::function<void()> onHandshakeComplete) {
 }
 
 
-
-
-
-
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
     if (!ec) {
         std::cout << "WebSocket handshake successful!" << std::endl;
@@ -57,16 +53,20 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
         // I think we need to use strand_ here.
         post(strand_, [this]() {
             try {
-
                 nlohmann::json jsonResponse;
                 // This is the move data.
                 // {"type":"move","from":{"row":6,"col":4},"to":{"row":4,"col":4}}
 
                 ChessCoordinate from{0,0};
                 // Send an invalid move so the server responds with board data.
+
+                jsonResponse["valid"] = true;
                 jsonResponse["from"] = { {"row", from.row}, {"col", from.col} };
                 jsonResponse["to"] = { {"row", from.row}, {"col", from.col} };
+
+                // This however doesn't sent anything to the client hmm..
                 std::string rst = onMessageReceived_callback(jsonResponse.dump(), "spectator");
+                //this->sendMessage(rst);
 
             } catch (const std::exception &e) {
                 std::cout << e.what();
@@ -140,8 +140,6 @@ void ClientHandler::receiveMessageAsync() {
 
         self->receiveMessageAsync();
     });
-
-
 }
 
 // This sends the message to REACT client that corresponds the single Client you have somewhere.

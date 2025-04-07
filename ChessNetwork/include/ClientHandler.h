@@ -31,7 +31,7 @@ class ClientHandler : public std::enable_shared_from_this<ClientHandler>
         std::optional<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> websocket_;
         std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // The call back function
         std::weak_ptr<IClientEvents> events_; // Changed to interface pointer?!!!
-        strand<io_context::executor_type> &strand_;
+        strand<io_context::executor_type> strand_;
 
     public:
         ClientInfo client_info;

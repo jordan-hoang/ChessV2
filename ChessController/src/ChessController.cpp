@@ -86,7 +86,7 @@ void ChessController::playGame() {
 std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
 
 
-    std::cout << message << std::endl;
+    std::cout << "ChessController::onClientMessageReceived : " << message << std::endl;
     bool valid_move = false;
 
     //std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
@@ -120,7 +120,6 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
     jsonResponse["turn"] = chessBoard.isThisWhiteTurn();
     jsonResponse["board"] = { chessBoard.getChessBoardString() };
-    
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }

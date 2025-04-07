@@ -2,8 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 
+import '../hooks/useChessSounds';
+import useChessSounds from "../hooks/useChessSounds";
 
 ///// Initial Board state is not defined.
+
 
 
 const Game = () => {
@@ -78,6 +81,7 @@ const Game = () => {
     const [playerColor, setPlayerColor] = useState('');
     const [socket, setSocket] = useState(null);
     const [moveHistory, setMoveHistory] = useState([]); // Track the history of moves
+    const {playMove, playCapture} = useChessSounds();
 
     // Establish WebSocket connection on mount,..??
     useEffect(() => {
@@ -108,6 +112,9 @@ const Game = () => {
             ws.close(); // Cleanup when the component unmounts
         };
     }, []);
+
+
+
 
 
     const createPieceType = (myChar) => {
@@ -156,24 +163,33 @@ const Game = () => {
         console.log("handleServerResponse called in Game.js");
         // The response.data is just a string that is sent back by the server!!!
         // But response data is correct.
+
+        console.log("Response is : " + response.data);
+
         const jsonResponse = JSON.parse(response.data);
 
         if(jsonResponse.client_role !== undefined){
-            console.log("ASSIGN CLIENT ROLE HERE!" + jsonResponse.client_role);
             setPlayerColor(jsonResponse.client_role);
+            let from = { row: 0, col: 0 };
+            let to = { row: 0, col: 0 };
+            //handleMove(from, to);
+
             return;
         }
 
-
-
         let boardData = parseBoardData(jsonResponse.board[0]);
+
+
+
         setBoard(boardData);
 
-        // setCurrentTurn( currentTurn === 'white' ? 'black' : 'white' );  for visual.
-        console.log("TURN IS ::::::: " + jsonResponse.turn);
+
 
         setCurrentTurn( jsonResponse.turn ? 'white' : 'black' ); /// DO SOMETHING HERE
 
+        if(jsonResponse.valid){
+            playMove();
+        }
         if(!jsonResponse.valid){
             console.log("invalid move!");
             return;
@@ -190,12 +206,20 @@ const Game = () => {
             from,
             to
         });
-
-        console.log(moveData);
+        //
+        // console.log(from);
+        // console.log(to);
+        // console.log(JSON.stringify(moveData, null, 2));
 
         socket.send(moveData);
-
     }
+
+    const testSound = () => {
+        const audio = new Audio('/sound/move-self.mp3');
+        audio.volume = 1.0;
+        audio.play().catch(e => console.log("Manual test error:", e));
+    };
+
 
     return (
         <div>
@@ -214,7 +238,7 @@ const Game = () => {
 
             <div>
                 <div style={{marginTop: "10px"}}> It is currently {currentTurn}'s turn</div>
-                <div style={{marginTop: "10px"}}> You control the  {playerColor}'s pieces</div>
+                <div style={{marginTop: "10px"}}> You control the {playerColor} pieces</div>
             </div>
 
         </div>
