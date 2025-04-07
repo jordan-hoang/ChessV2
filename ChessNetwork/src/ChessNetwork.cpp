@@ -43,7 +43,7 @@ void ChessNetwork::acceptConnection() {
                         std::move(socket),
                         onMessageReceived_callback,
                         weak_from_this(),
-                        strand_
+                        boost::asio::make_strand(socket.get_executor())
                 );
 
                 client->client_info.id = new_id;
