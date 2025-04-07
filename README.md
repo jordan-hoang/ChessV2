@@ -2,7 +2,13 @@
 
 ChessV2 is a fun chess game I developed, now featuring a fully playable React frontend. 
 The game leverages a C++ backend with Boost.Beast for WebSocket communication. 
-(For reference, ChessV1 was text-based only.)
+
+It's missing some features such as castling and en passant implementation and having a stack to rewind moves.
+Also not as many test as ChessV1. Mostly focused on trying to do new / different things over implementing old things that
+I have already done.
+
+ChessV1 has all these but is text only. You can find ChessV1/Chess here: 
+https://github.com/jordan-hoang/Chess
 
 
 ## Building with CMake
@@ -63,11 +69,6 @@ This project requires:
 
 Frontend Polish: The React frontend will receive more polish for better usability and visual appeal.
 
-EnPassant and castling don't work in the frontend still, they do work in the chessServer, fix that.
-
-Multiplayer Networking: The goal is to add multiplayer functionality to allow two players to play online.
-
-
 ### Possible additions I may add.
 
 AI: Implement minmax algorithm, so the server can play against you.
@@ -76,3 +77,8 @@ Replay Game: Can save a copy of your game in CAN notation and use it to watch a 
 make it so that you can start in the middle of a game at some situation? Maybe make a Chess Snapshot feature.
 
 Spectator feature: Can watch other players games, perhaps even add a takeover feature?
+
+EnPassant and castling don't work and the check for the king cannot move isn't in from chessV1 yet.
+Also all the tests haven't been ported.
+
+Multiplayer Networking: The goal is to add multiplayer functionality to allow two players to play online.

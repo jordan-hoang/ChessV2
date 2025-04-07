@@ -177,14 +177,15 @@ const Game = () => {
             return;
         }
 
-        let boardData = parseBoardData(jsonResponse.board[0]);
+        // We should somehow standardize the output of JSON in the future.
+        let inputStr = jsonResponse.board;
+        if(Array.isArray(inputStr)){
+            inputStr = jsonResponse.board[0];
+        }
 
-
+        let boardData = parseBoardData(inputStr);
 
         setBoard(boardData);
-
-
-
         setCurrentTurn( jsonResponse.turn ? 'white' : 'black' ); /// DO SOMETHING HERE
 
         if(jsonResponse.valid){

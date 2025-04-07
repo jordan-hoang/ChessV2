@@ -50,7 +50,7 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
         std::cout << "WebSocket handshake successful!" << std::endl;
         //
         // I think we need to use strand_ here.
-        post(strand_, [this]() {
+        //post(strand_, [this]() {
             try {
                 nlohmann::json jsonResponse;
                 // This is the move data.
@@ -70,7 +70,7 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
             } catch (const std::exception &e) {
                 std::cout << e.what();
             }
-        });
+        //});
 
         receiveMessageAsync();  // Start receiving messages
 
@@ -78,7 +78,6 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
     }
 }
-
 
 /**
  *  This receives the message from the REACT client.
@@ -146,14 +145,11 @@ void ClientHandler::sendMessage(const std::string& message) {
 
     boost::asio::post(strand_, [self = shared_from_this(), message]() {
         self->websocket_->async_write(boost::asio::buffer(message.data(), message.size()),
-
-
             [self](boost::system::error_code ec, std::size_t bytes_transferred) {
                 if (ec) {
                     std::cerr << "Error from WebSocket, unable to send: " << ec.message() << " bytes " << bytes_transferred << std::endl;
                 }
             });
-
     });
 
 }
