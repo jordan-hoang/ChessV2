@@ -6,9 +6,9 @@
 
 
 
-ChessCoordinate ChessCoordinate::set(int row, int col) {
-    this->row = row;
-    this->col = col;
+ChessCoordinate ChessCoordinate::set(int row_, int col_) {
+    this->row = row_;
+    this->col = col_;
     return *this;
 }
 
