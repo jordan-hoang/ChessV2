@@ -43,23 +43,25 @@ void ChessNetwork::acceptConnection() {
                         std::move(socket),
                         onMessageReceived_callback,
                         weak_from_this(),
-                        strand_
+                        boost::asio::make_strand(socket.get_executor())
                 );
 
                 client->client_info.id = new_id;
                 client->client_info.color = determineClientRole();
                 nlohmann::json jsonResponse;
+
                 jsonResponse["client_role"] = client->client_info.color;
 
 
                 clientList.push_back(client); // Track the client
                 client->start(
-                    [client, jsonResponse]() {
-                        client->sendMessage(jsonResponse.dump());
+                    [client, this,jsonResponse]() {
+                        client->sendMessage(jsonResponse.dump());   // Send the message to react client.
+                        std::string boardData = this->onMessageReceived_callback(jsonResponse.dump(), "");
+                        client->sendMessage(boardData); // Update the client with the current state of the board.
                     }
-                );             // Start handling WebSocket connection
+                );
 
-                //client->sendMessage(jsonResponse.dump()); // Send the role out to the client.
             }
 
         // Continue accepting new connections

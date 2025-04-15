@@ -47,10 +47,8 @@ class ChessNetwork : public IClientEvents, public std::enable_shared_from_this<C
         boost::asio::io_context ctx;    // I/O context for ASIO
         std::vector<std::shared_ptr<ClientHandler>> clientList; // A list of all the clients we have "accepted"
         tcp::acceptor acceptor_;        // Accepts connections from clients.
-        std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // Callback function!!! First time seeing this.
-
+        std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // Callback function!!!
         strand<io_context::executor_type> strand_;
-
 
         // Starts accepting connections. Called by constructor and doesn't stop.
         void acceptConnection();

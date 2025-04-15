@@ -16,12 +16,11 @@ ClientHandler::ClientHandler  (
     tcp::socket socket,
     std::function<std::string(const std::string&, const std::string& b)> callBack,
     std::weak_ptr<IClientEvents> event, // Now takes interface
-    strand<io_context::executor_type> &strand
-) : strand_(strand), events_(event)
+    strand<boost::asio::any_io_executor> strand
+) : events_(std::move(event)), strand_(std::move(strand))
 {
     websocket_.emplace(std::move(socket));
     onMessageReceived_callback = callBack;
-
 }
 
 // But when will it close?
@@ -46,32 +45,32 @@ void ClientHandler::start(std::function<void()> onHandshakeComplete) {
 }
 
 
-
-
-
-
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
     if (!ec) {
         std::cout << "WebSocket handshake successful!" << std::endl;
         //
         // I think we need to use strand_ here.
-        post(strand_, [this]() {
+        //post(strand_, [this]() {
             try {
-
                 nlohmann::json jsonResponse;
                 // This is the move data.
                 // {"type":"move","from":{"row":6,"col":4},"to":{"row":4,"col":4}}
 
                 ChessCoordinate from{0,0};
                 // Send an invalid move so the server responds with board data.
+
+                jsonResponse["valid"] = true;
                 jsonResponse["from"] = { {"row", from.row}, {"col", from.col} };
                 jsonResponse["to"] = { {"row", from.row}, {"col", from.col} };
+
+                // This however doesn't sent anything to the client hmm..
                 std::string rst = onMessageReceived_callback(jsonResponse.dump(), "spectator");
+                //this->sendMessage(rst);
 
             } catch (const std::exception &e) {
                 std::cout << e.what();
             }
-        });
+        //});
 
         receiveMessageAsync();  // Start receiving messages
 
@@ -79,7 +78,6 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
     }
 }
-
 
 /**
  *  This receives the message from the REACT client.
@@ -140,29 +138,18 @@ void ClientHandler::receiveMessageAsync() {
 
         self->receiveMessageAsync();
     });
-
-
 }
 
 // This sends the message to REACT client that corresponds the single Client you have somewhere.
 void ClientHandler::sendMessage(const std::string& message) {
-    auto buffer = std::make_shared<boost::beast::flat_buffer>();
-    /** This was the old way I did it, you would then have the lambda capture the buffer for it to not go out of scope.
-    *   Just leaving it here for knowledge purposes.
-    *
-    *   auto buffer = std::make_shared<std::string>(message); // Shared string keeps data alive.
-    *   websocket_->async_write(boost::asio::buffer(*buffer),
-    */
 
     boost::asio::post(strand_, [self = shared_from_this(), message]() {
         self->websocket_->async_write(boost::asio::buffer(message.data(), message.size()),
             [self](boost::system::error_code ec, std::size_t bytes_transferred) {
                 if (ec) {
-                    std::cerr << "Error from WebSocket, unable to send: "
-                              << ec.message() << " bytes " << bytes_transferred << std::endl;
+                    std::cerr << "Error from WebSocket, unable to send: " << ec.message() << " bytes " << bytes_transferred << std::endl;
                 }
             });
-
     });
 
 }

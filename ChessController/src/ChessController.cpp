@@ -85,14 +85,19 @@ void ChessController::playGame() {
 // After the client receives this happens.
 std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
 
-
-    std::cout << message << std::endl;
+    nlohmann::json jsonResponse;
     bool valid_move = false;
 
-    //std::pair<ChessCoordinate, ChessCoordinate> moves = convertChessCoordinate(message, valid_input);
+    std::cout << "ChessController::onClientMessageReceived : " << message << std::endl;
     nlohmann::json jsonData = nlohmann::json::parse(message);
-    std::pair<ChessCoordinate, ChessCoordinate> moves;
 
+    if(jsonData.contains("client_role")) {
+        jsonResponse["board"] = chessBoard.getChessBoardString();
+        std::cout << "HELLO!!!\n";
+        return jsonResponse.dump();
+    }
+
+    std::pair<ChessCoordinate, ChessCoordinate> moves;
     moves.first = jsonData["from"];
     moves.second = jsonData["to"];
 
@@ -112,7 +117,6 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
         std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
     }
 
-    nlohmann::json jsonResponse;
 
     jsonResponse["valid"] = valid_move;
     //jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move"; Not used so yeah.
@@ -120,7 +124,6 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
     jsonResponse["turn"] = chessBoard.isThisWhiteTurn();
     jsonResponse["board"] = { chessBoard.getChessBoardString() };
-    
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }
