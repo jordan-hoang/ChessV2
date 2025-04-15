@@ -227,21 +227,19 @@ const Game = () => {
             <div style={{textAlign: "center"}}>
                 <h1> Chess Game </h1>
                 <div style={{marginTop: "20px"}}>
-                    >
                     <Board
                         board={board}
                         onMove={handleMove}
                         curTurn={currentTurn}
+                        playColor={playerColor}
                     />
                 </div>
-
             </div>
 
             <div>
-                <div style={{marginTop: "10px"}}> It is currently {currentTurn}'s turn</div>
-                <div style={{marginTop: "10px"}}> You control the {playerColor} pieces</div>
+                <div style={{marginTop: "16px", marginLeft: "32px"}}> It is currently {currentTurn}'s turn </div>
+                <div style={{marginTop: "8px", marginLeft: "40px"}}> You control the {playerColor} pieces  </div>
             </div>
-
         </div>
     );
 

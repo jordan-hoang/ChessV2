@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import Square from './Square';
-
-
+import './Board.css';
 
 
 
 // The board is passed from Game.js to here.
 // currentTurn = black || white.
 // onMove is clicklistener.
-const Board = ( {board, onMove, currentTurn} ) => {
+const Board = ( {board, onMove, currentTurn, playColor} ) => {
 
     //
     const [selectedSquare, setSelectedSquare] = useState(null);
@@ -60,8 +59,8 @@ const Board = ( {board, onMove, currentTurn} ) => {
     }
 
     return (
-        //
-        <div className={"chessBoardWrapper"} style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', width: '400px' }}>
+
+        <div className={`chessBoardWrapper ${playColor === 'black' ? 'blackPerspective' : ''}`}>
 
             {/* Map is used to titerate or transform arrays, basically another way of doing for loop
                 board.map(element, index, originalArray), it returns a new array.

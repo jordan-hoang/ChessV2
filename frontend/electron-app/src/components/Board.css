@@ -1,0 +1,23 @@
+
+
+
+
+.chessBoardWrapper {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    aspect-ratio: 1;
+    width: clamp(600px, 35vw, 1200px);
+    margin-left: 32px;
+    margin-top: 32px;
+}
+
+/* Black's perspective (flipped vertically) */
+/* This however flips the pieces as well! */
+.chessBoardWrapper.blackPerspective {
+    transform: rotate(180deg);
+}
+
+/* Counter-rotate pieces to keep them upright */
+.chessBoardWrapper.blackPerspective .piece {
+    transform: rotate(180deg);
+}
