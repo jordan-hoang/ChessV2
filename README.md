@@ -1,13 +1,17 @@
 # ChessV2
 
-ChessV2 is a fun chess game I developed, now featuring a fully playable React frontend. 
+ChessV2 is another iteration of the first Chess Game I made, now featuring a fully playable React frontend. 
 The game leverages a C++ backend with Boost.Beast for WebSocket communication. 
 
 It's missing some features such as castling and en passant implementation and having a stack to rewind moves.
 Also not as many test as ChessV1. Mostly focused on trying to do new / different things over implementing old things that
 I have already done.
 
-ChessV1 has all these but is text only. You can find ChessV1/Chess here: 
+The client is already included in the codebase, inside the frontend folder.
+You can run it with the commands inside, the C++ code creates a server you can run which the client will attempt
+to connect to on boot.
+
+ChessV1 has all these but is text only, with no online capability. You can find ChessV1/Chess here: 
 https://github.com/jordan-hoang/Chess
 
 
@@ -48,13 +52,13 @@ The lower-case characthers such as 'p' means it is a "White Pawn" while "P" corr
 ![image](https://user-images.githubusercontent.com/36338184/117097523-c1634800-ad20-11eb-890a-065a2ac8cc13.png)
 
 
-To make a move specify the initial position of the piece followed by a comma and then the ending position of the piece.
-So for example to move the left-most white pawn 2 squares forward we would type in. ONLY for textbased version.
-
-"a6,a4"   (In chess algebraic notation it is column first than row)
-
 A React frontend currently serves as the GUI and you would click on pieces to move them. 
-Currently it's left click 2x. But I will probably add a drag and drop feature.
+Currently it's left click 2x. But I will probably add a drag and drop feature. You'll need to launch 2 clients,
+the server won't let you control the opposing piece from the same client.
+
+
+![img.png](img.png)
+
 
 ### Dependencies
 This project requires:
