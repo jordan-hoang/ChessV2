@@ -52,10 +52,10 @@ target_include_directories(ChessV2
 
 target_link_libraries(ChessV2
         PUBLIC
-        chessController
-        $<$<BOOL:${Boost_SYSTEM_FOUND}>:Boost::system>
+                chessController
+                $<$<BOOL:${Boost_SYSTEM_FOUND}>:Boost::system>
         PRIVATE
-        $<$<PLATFORM_ID:Windows>:ws2_32 mswsock>  # All Windows-specific libs
+                $<$<PLATFORM_ID:Windows>:ws2_32 mswsock>  # All Windows-specific libs
 )
 
 # ====================== Subdirectories ======================
