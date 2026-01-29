@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <functional>
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>

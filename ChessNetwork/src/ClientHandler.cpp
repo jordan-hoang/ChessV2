@@ -98,18 +98,19 @@ void ClientHandler::receiveMessageAsync() {
     auto self = shared_from_this();
     auto buffer = std::make_shared<boost::beast::flat_buffer>();
 
-    websocket_->async_read(*buffer, [self, buffer](boost::system::error_code ec, std::size_t bytes_transferred) {
+    websocket_->async_read(*buffer, [self, buffer](boost::system::error_code ec, std::size_t /*bytes_transferred*/) {
         // Connection aborted is when you close the client.
-        if(ec == boost::asio::error::eof || ec == boost::asio::error::connection_aborted ) {
+        if(ec == boost::beast::websocket::error::closed ||
+           ec == boost::asio::error::eof ||
+           ec == boost::asio::error::connection_aborted) {
+
             std::cout << "Client disconnected!!!!!!!!!" << std::endl;
             if (self->websocket_ && self->websocket_->is_open()) {
                 self->websocket_->close(boost::beast::websocket::close_code::normal);
             }
-
             if(auto events_shared = self->events_.lock()) {
                  events_shared->onDisconnect(self);
             }
-
             return;
         }
 
@@ -124,7 +125,6 @@ void ClientHandler::receiveMessageAsync() {
                     std::cout << rst << std::endl;
 
                     if(auto events_shared = self->events_.lock()) {
-                        //self->sendMessage(rst); // Sends the message to the the single REACT client.
                          events_shared->broadcastToAll(rst);
                      }
 
@@ -132,6 +132,7 @@ void ClientHandler::receiveMessageAsync() {
                     std::cerr << "Callback execution failed: " << e.what() << std::endl;
                 }
             }
+
         } else {
             std::cerr << "Error receiving message: " << ec.message() << std::endl;
         }
