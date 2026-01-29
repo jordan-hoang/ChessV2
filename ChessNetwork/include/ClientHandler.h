@@ -7,6 +7,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/websocket/stream.hpp>
 #include "IClientEvents.h"
+#include "INetworkMessageListener.h"
 
 using namespace boost::asio;
 
@@ -29,17 +30,17 @@ class ClientHandler : public std::enable_shared_from_this<ClientHandler>
 {
     private:
         std::optional<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> websocket_;
-        std::function<std::string(const std::string&, const std::string&)> onMessageReceived_callback; // The call back function
+        std::weak_ptr<INetworkMessageListener> networkMessageListener_;
         std::weak_ptr<IClientEvents> events_; // Changed to interface pointer?!!!
         boost::asio::strand<any_io_executor> strand_;
 
     public:
         ClientInfo client_info;
+
         ClientHandler(ip::tcp::socket socket,
-                      std::function<std::string(const std::string&, const std::string&)> callBack,
+                      std::weak_ptr<INetworkMessageListener> networkMessageListener,
                       std::weak_ptr<IClientEvents> events,
-                      strand<boost::asio::any_io_executor> strand
-                      );
+                      strand<boost::asio::any_io_executor> strand);
 
 
         ~ClientHandler();

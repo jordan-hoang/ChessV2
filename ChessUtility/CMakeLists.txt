@@ -1,6 +1,7 @@
 # This is a pretty small library!
 add_library(chessUtility
         src/ChessCoordinate.cpp
+        include/INetworkMessageListener.h
 )
 
 # Define include paths — PUBLIC means that any other target linking to this will inherit these paths

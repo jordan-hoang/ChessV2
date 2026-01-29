@@ -9,10 +9,7 @@
 ChessController::ChessController()
     : chessNetwork_(std::make_shared<ChessNetwork>())
 {
-    // This so we have access to chessController inside lambda.
-    chessNetwork_->setMessageReceivedCallback([this](const std::string message, const std::string msg = "") -> std::string {
-        return this->onClientMessageReceived(message, msg);
-    });
+
 
 }
 
@@ -127,7 +124,6 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
 
     return jsonResponse.dump(); // Dump returns it as a string you can then send to the server
 }
-
 
 
 void ChessController::threadMain() {

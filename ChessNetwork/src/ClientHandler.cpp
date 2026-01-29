@@ -12,16 +12,16 @@
 #include <boost/beast/core/buffers_to_string.hpp>
 
 
-ClientHandler::ClientHandler  (
-    tcp::socket socket,
-    std::function<std::string(const std::string&, const std::string& b)> callBack,
-    std::weak_ptr<IClientEvents> event, // Now takes interface
+ClientHandler::ClientHandler(
+    ip::tcp::socket socket,
+    std::weak_ptr<INetworkMessageListener> networkMessageListener,
+    std::weak_ptr<IClientEvents> events,
     strand<boost::asio::any_io_executor> strand
-) : events_(std::move(event)), strand_(std::move(strand))
-{
-    websocket_.emplace(std::move(socket));
-    onMessageReceived_callback = callBack;
+    ) : networkMessageListener_(std::move(networkMessageListener)), events_(std::move(events)), strand_(std::move(strand)) {
+        websocket_.emplace(std::move(socket));
+
 }
+
 
 // But when will it close?
 ClientHandler::~ClientHandler() {
@@ -31,9 +31,6 @@ ClientHandler::~ClientHandler() {
 }
 
 // Does the handshake, maybe combine this with handleHandShake??? It's really short.
-
-
-
 void ClientHandler::start(std::function<void()> onHandshakeComplete) {
         websocket_->async_accept([self = shared_from_this(), onHandshakeComplete ](const boost::system::error_code &ec) {
             self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
@@ -48,24 +45,17 @@ void ClientHandler::start(std::function<void()> onHandshakeComplete) {
 void ClientHandler::handleHandshake(boost::system::error_code ec) {
     if (!ec) {
         std::cout << "WebSocket handshake successful!" << std::endl;
-        //
-        // I think we need to use strand_ here.
-        //post(strand_, [this]() {
             try {
                 nlohmann::json jsonResponse;
-                // This is the move data.
                 // {"type":"move","from":{"row":6,"col":4},"to":{"row":4,"col":4}}
-
                 ChessCoordinate from{0,0};
                 // Send an invalid move so the server responds with board data.
-
                 jsonResponse["valid"] = true;
                 jsonResponse["from"] = { {"row", from.row}, {"col", from.col} };
                 jsonResponse["to"] = { {"row", from.row}, {"col", from.col} };
-
-                // This however doesn't sent anything to the client hmm..
-                std::string rst = onMessageReceived_callback(jsonResponse.dump(), "spectator");
-                //this->sendMessage(rst);
+                if(auto a = this->networkMessageListener_.lock()) {
+                    a->onClientMessageReceived(jsonResponse.dump(), "spectator");
+                }
 
             } catch (const std::exception &e) {
                 std::cout << e.what();
@@ -119,9 +109,9 @@ void ClientHandler::receiveMessageAsync() {
         if (!ec) {
             std::string message = boost::beast::buffers_to_string(buffer->data());
             std::cout << "Received message in ClientHandler.cpp: " << message << std::endl;
-            if (self->onMessageReceived_callback) {
+            if (auto networkListener = self->networkMessageListener_.lock()) {
                 try {
-                    std::string rst = self->onMessageReceived_callback(message, self->client_info.color);
+                    std::string rst = networkListener->onClientMessageReceived(message, self->client_info.color);
                     std::cout << rst << std::endl;
 
                     if(auto events_shared = self->events_.lock()) {

@@ -84,12 +84,9 @@ int dummyMain(int argc, char ** argv) {
 }
 
 int main() {
-
-
-    ChessController chessGame;
-    chessGame.run();
-    chessGame.wait();
-
+    auto controller = std::make_shared<ChessController>();
+    controller->run();
+    controller->wait();
 }
 
 

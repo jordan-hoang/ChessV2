@@ -6,6 +6,7 @@
 #include "ChessNetwork.h"
 
 #include <json.hpp>
+#include <utility>
 
 
 ChessNetwork::ChessNetwork()
@@ -21,6 +22,13 @@ ChessNetwork::ChessNetwork()
         std::cerr << "Server error: " << e.what() << std::endl;
     }
 
+}
+
+void ChessNetwork::initNetworkListener(std::weak_ptr<INetworkMessageListener> myptr) {
+    if (myptr.expired()) {
+        std::cout << "CRITICAL ERROR: Passed listener is EXPIRED on arrival!, ChessNetwork::initNetworkListener" << std::endl;
+    }
+    this->networkListener_ = std::move(myptr);
 }
 
 
@@ -41,23 +49,29 @@ void ChessNetwork::acceptConnection() {
 
                 auto client = std::make_shared<ClientHandler>(
                         std::move(socket),
-                        onMessageReceived_callback,
+                        this->networkListener_,
                         weak_from_this(),
                         boost::asio::make_strand(socket.get_executor())
                 );
 
+
                 client->client_info.id = new_id;
                 client->client_info.color = determineClientRole();
+
                 nlohmann::json jsonResponse;
-
                 jsonResponse["client_role"] = client->client_info.color;
-
 
                 clientList.push_back(client); // Track the client
                 client->start(
                     [client, this,jsonResponse]() {
                         client->sendMessage(jsonResponse.dump());   // Send the message to react client.
-                        std::string boardData = this->onMessageReceived_callback(jsonResponse.dump(), "");
+                        std::string boardData; // = this->onMessageReceived_callback(jsonResponse.dump(), "");
+                        if(auto listener = networkListener_.lock()) {
+                            boardData = listener->onClientMessageReceived(jsonResponse.dump(), "");
+                        }
+
+                        std::cout << "JH: <<<< "  <<    boardData << std::endl;
+
                         client->sendMessage(boardData); // Update the client with the current state of the board.
                     }
                 );
@@ -70,7 +84,6 @@ void ChessNetwork::acceptConnection() {
 }
 
 /**
- * This definatley can be simplified, maybe using bits.
  * @return Returns the string of the clients role
  */
 std::string ChessNetwork::determineClientRole() {
@@ -99,10 +112,6 @@ void ChessNetwork::removeClient(std::shared_ptr<ClientHandler> client){
     }
 }
 
-// Takes in a function as an input, and moves it here!
-void ChessNetwork::setMessageReceivedCallback(std::function<std::string(const std::string&, const std::string&)> callback) {
-    onMessageReceived_callback = std::move(callback);
-}
 
 void ChessNetwork::startNetworkLoop() {
     ctx.run(); // As long as there's async operations it will keep running.

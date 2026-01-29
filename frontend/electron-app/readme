@@ -9,3 +9,5 @@
 
 npm run start, npm run dev, npm run <define>
 Those are the standard way you can run/boot your client!
+
+"npm run dev" is what you want to run.
