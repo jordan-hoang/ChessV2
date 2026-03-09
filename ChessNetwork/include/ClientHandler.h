@@ -32,7 +32,7 @@ class ClientHandler : public std::enable_shared_from_this<ClientHandler>
         std::optional<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> websocket_;
         std::weak_ptr<INetworkMessageListener> networkMessageListener_;
         std::weak_ptr<IClientEvents> events_; // Changed to interface pointer?!!!
-        boost::asio::strand<any_io_executor> strand_;
+        boost::asio::strand<boost::asio::io_context::executor_type> strand_;
 
     public:
         ClientInfo client_info;
@@ -40,19 +40,15 @@ class ClientHandler : public std::enable_shared_from_this<ClientHandler>
         ClientHandler(ip::tcp::socket socket,
                       std::weak_ptr<INetworkMessageListener> networkMessageListener,
                       std::weak_ptr<IClientEvents> events,
-                      strand<boost::asio::any_io_executor> strand);
+                      boost::asio::strand<boost::asio::io_context::executor_type> strand);
 
 
         ~ClientHandler();
 
         void start(std::function<void()> onHandshakeComplete = nullptr);
-
-
         void handleHandshake(boost::system::error_code ec);
         void receiveMessageAsync();
         void sendMessage(const std::string &message); // SEND MESSAGE TO SERVER
-
-
 
 };
 

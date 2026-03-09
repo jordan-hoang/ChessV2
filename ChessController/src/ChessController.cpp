@@ -9,8 +9,6 @@
 ChessController::ChessController()
     : chessNetwork_(std::make_shared<ChessNetwork>())
 {
-
-
 }
 
 //Checks to see if the string is valid in this program.
@@ -67,13 +65,8 @@ void ChessController::playGame() {
         this->chessNetwork_->startNetworkLoop();
     });
 
-    networkThread.detach(); // I remember there were other ways of running threads....
 
-    while( !chessBoard.isGameOver()  )
-    {
-        chessBoard.printChessBoard();
-        std::this_thread::sleep_for (std::chrono::seconds(5));
-    }
+    networkThread.join();
 
 }
 
@@ -112,6 +105,8 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     if (!valid_move) {
         std::cerr << "Invalid move\n";
         std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
+    } else {
+        chessBoard.printChessBoard();
     }
 
 

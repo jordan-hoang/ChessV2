@@ -16,7 +16,7 @@ ClientHandler::ClientHandler(
     ip::tcp::socket socket,
     std::weak_ptr<INetworkMessageListener> networkMessageListener,
     std::weak_ptr<IClientEvents> events,
-    strand<boost::asio::any_io_executor> strand
+    boost::asio::strand<boost::asio::io_context::executor_type> strand
     ) : networkMessageListener_(std::move(networkMessageListener)), events_(std::move(events)), strand_(std::move(strand)) {
         websocket_.emplace(std::move(socket));
 
@@ -32,13 +32,24 @@ ClientHandler::~ClientHandler() {
 
 // Does the handshake, maybe combine this with handleHandShake??? It's really short.
 void ClientHandler::start(std::function<void()> onHandshakeComplete) {
-        websocket_->async_accept([self = shared_from_this(), onHandshakeComplete ](const boost::system::error_code &ec) {
-            self->handleHandshake(ec);   // shared_from_this() returns a shared pointer, which we use to avoid scoping issues.
+    // Bind the callback to the client's specific strand_
+    websocket_->async_accept(
+          bind_executor(strand_,
+        [self = shared_from_this(), onHandshakeComplete](const boost::system::error_code &ec) {
+
+            self->handleHandshake(ec);
+
             if(!ec && onHandshakeComplete) {
                 onHandshakeComplete();
             }
 
-    });
+            // Start the reading loop after handshake
+            if(!ec) {
+                self->receiveMessageAsync();
+            }
+        })
+    );
+
 }
 
 
@@ -61,8 +72,6 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
                 std::cout << e.what();
             }
         //});
-
-        receiveMessageAsync();  // Start receiving messages
 
     } else {
         std::cerr << "WebSocket handshake failed: " << ec.message() << std::endl;
@@ -88,7 +97,8 @@ void ClientHandler::receiveMessageAsync() {
     auto self = shared_from_this();
     auto buffer = std::make_shared<boost::beast::flat_buffer>();
 
-    websocket_->async_read(*buffer, [self, buffer](boost::system::error_code ec, std::size_t /*bytes_transferred*/) {
+    websocket_->async_read
+        (*buffer, boost::asio::bind_executor(strand_, [self, buffer](boost::system::error_code ec, std::size_t ) {
         // Connection aborted is when you close the client.
         if(ec == boost::beast::websocket::error::closed ||
            ec == boost::asio::error::eof ||
@@ -128,8 +138,11 @@ void ClientHandler::receiveMessageAsync() {
         }
 
         self->receiveMessageAsync();
-    });
+            })
+    );
 }
+
+
 
 // This sends the message to REACT client that corresponds the single Client you have somewhere.
 void ClientHandler::sendMessage(const std::string& message) {

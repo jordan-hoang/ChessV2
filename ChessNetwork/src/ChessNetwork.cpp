@@ -51,7 +51,7 @@ void ChessNetwork::acceptConnection() {
                         std::move(socket),
                         this->networkListener_,
                         weak_from_this(),
-                        boost::asio::make_strand(socket.get_executor())
+                        boost::asio::make_strand(ctx.get_executor())
                 );
 
 
@@ -114,7 +114,25 @@ void ChessNetwork::removeClient(std::shared_ptr<ClientHandler> client){
 
 
 void ChessNetwork::startNetworkLoop() {
-    ctx.run(); // As long as there's async operations it will keep running.
+    unsigned int thread_count = std::thread::hardware_concurrency();
+    if (thread_count == 0) {
+        thread_count = 2;
+    }
+
+    std::vector<std::thread> thread_pool;
+    for(unsigned int i = 0; i < thread_count - 1; ++i) {
+        thread_pool.emplace_back([this]() { ctx.run(); });
+    }
+
+
+    std::cout << "Chess Server running on " << thread_count << " threads." << std::endl;
+    ctx.run(); // Main thread joins the pool
+
+    for(auto& t : thread_pool) {
+        if(t.joinable()) t.join();
+    }
+
+    ctx.run(); // As long as there's async operations it will keep running. It can stop when async are too much.
 }
 
 // From IClientEvents (client → network)
@@ -130,9 +148,11 @@ void ChessNetwork::onDisconnect(std::shared_ptr<ClientHandler> client) {
 
 // From IClientEvents (network → clients)
 void ChessNetwork::broadcastToAll(const std::string& message) {
+
     post(strand_, [this, message]() {
         for(const auto& client : clientList) {
             client->sendMessage(message);
         }
     });
+
 }

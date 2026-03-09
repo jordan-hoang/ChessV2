@@ -42,7 +42,6 @@ private:
     std::shared_ptr<ChessNetwork> chessNetwork_;
 
     void asyncSendToClient();
-
     void threadMain();
     void playGame();
 
