@@ -71,12 +71,11 @@ void ChessController::playGame() {
 }
 
 
-// Callback function that is passed to chessNetwork.
 // After the client receives this happens.
 std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
 
     nlohmann::json jsonResponse;
-    bool valid_move = false;
+    std::unique_ptr<ChessMove> valid_move = nullptr;
 
     std::cout << "ChessController::onClientMessageReceived : " << message << std::endl;
     nlohmann::json jsonData = nlohmann::json::parse(message);
@@ -110,7 +109,7 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     }
 
 
-    jsonResponse["valid"] = valid_move;
+    jsonResponse["valid"] = (valid_move) ? true : false ;
     //jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move"; Not used so yeah.
     jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };

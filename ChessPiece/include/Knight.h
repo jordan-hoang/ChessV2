@@ -6,13 +6,15 @@
 #define CHESSV2_KNIGHT_H
 
 #include "Piece.h"
+#include "ChessBoard.h"
+
 
 //Overload its move
 class Knight : public Piece {
 
 public:
     Knight(Color color, char16_t symbol);
-    bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override;
+    bool validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override;
     void print() override;
 };
 

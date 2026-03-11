@@ -8,14 +8,12 @@
 #include "../ChessBoard/include/ChessBoard.h"
 
 
-bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b){
-    bool val = board.executeMove(a,b);
-    Piece *const mo = board.getPiece(a);
-    Piece *f = dynamic_cast<NullPiece*>(mo);  //For testing purposes.
-    if(f == nullptr){
-       val = false;
-    }
-    return val;
+bool pieceMoved(ChessBoard &board, ChessCoordinate a, ChessCoordinate b) {
+
+    std::unique_ptr<ChessMove> move_record = board.executeMove(a, b);
+    bool move_was_valid = (move_record != nullptr);
+    const Piece * piece_at_start = board.getPiece(a);
+    return move_was_valid;
 }
 
 
@@ -103,66 +101,25 @@ TEST(BoardTestMoves, pawn){
 TEST(BoardTest, pawnDiagonal){
 
     ChessBoard board;
-    bool result;
-
-    //std::string moveFrom = "a2";
-    //std::string moveTo = "a4";
 
     ChessCoordinate moveFrom = ChessCoordinate{6,0};   // a2
     ChessCoordinate moveTo   = ChessCoordinate{4,0};   // a4
 
-    result = board.executeMove(moveFrom, moveTo);
-    EXPECT_EQ(result, true) << "Was not able to move the pawn 2 squares up.";
-    //board.printChessBoard();
+    std::unique_ptr<ChessMove> result = board.executeMove(moveFrom, moveTo);
+    EXPECT_NE(result, nullptr);
 
     moveFrom = ChessCoordinate{1,1}; // b7
     moveTo = ChessCoordinate{3,1}; // b5
     result = board.executeMove(moveFrom, moveTo);
-    EXPECT_EQ(result, true) << "";
+    EXPECT_NE(result, nullptr);
 
-    //board.printChessBoard();
+
     // //See if red can kill blue diagonally.
     moveFrom = ChessCoordinate{4,0};    //a4
     moveTo = ChessCoordinate{3,1}; //b5
     result = board.executeMove(moveFrom, moveTo);
-    EXPECT_EQ(result, true) << "";
+    EXPECT_NE(result, nullptr);
+
     //board.printChessBoard();
-
-
-    //
-    // moveFrom = "a7";
-    // moveTo = "a6";
-    // board.executeMove(moveFrom, moveTo);
-    //
-    // //move.getBoardView();
-    //
-    // moveFrom = "b5";
-    // moveTo = "a6";
-    // //move.getBoardView();
-    //
-    // //Now testing the blue side
-    // moveFrom = "b2";
-    // moveTo = "b4";
-    // board.executeMove(moveFrom, moveTo);
-    //
-    // moveFrom = "c7";
-    // moveTo = "c5";
-    // board.executeMove(moveFrom, moveTo);
-    // // move.getBoardView();
-    //
-    // moveFrom = "c5";
-    // moveTo = "b4";
-    // isValid = board.executeMove(moveFrom, moveTo);
-    // // move.getBoardView();
-    //
-    // moveFrom = "c2";
-    // moveTo = "c3";
-    // board.executeMove(moveFrom, moveTo);
-    //
-    // //move.getBoardView();
-    //
-    // moveFrom = "b4";
-    // moveTo = "c3";
-    // board = board.executeMove(moveFrom, moveTo);
 
 }

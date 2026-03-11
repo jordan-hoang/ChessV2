@@ -11,7 +11,7 @@ King::King(Color color, char16_t symbol) :
  * Moves a King to coordinate b given that the spot is not occupied with friendly. 
  * Checks, and castling not implemented yet
  */
-bool King::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool King::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
     Color friendly_color = chess_board_.getPiece(a)->getColor();    
     Color enemyColor = chess_board_.getPiece(b)->getColor();

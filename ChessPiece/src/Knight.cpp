@@ -9,7 +9,7 @@ Knight::Knight(Color color, char16_t symbol) : Piece{color, symbol}{
 
 }
 
-bool Knight::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool Knight::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
     Color friendly_color = chess_board_.getPiece(a)->getColor();    
     Color enemyColor = chess_board_.getPiece(b)->getColor();

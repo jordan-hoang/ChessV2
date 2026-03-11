@@ -2,20 +2,20 @@
 // Created by jordan on 2/4/20.
 //
 
-#ifndef CHESSV2_CHESSBOARD_H
-#define CHESSV2_CHESSBOARD_H
-
-
-
 #include <memory>
 #include <vector>
-
-class Piece; //
-enum class Color;
-
 #include "Piece.h"
 #include "ChessCoordinate.h"
 #include "MoveRecorder.h"
+
+#pragma once
+
+
+struct ChessMove;
+class Piece; //
+enum class Color;
+
+
 
 typedef std::unique_ptr<Piece> smart_piece;
 typedef std::vector<std::unique_ptr<Piece>> smartRow;
@@ -40,7 +40,7 @@ public:
     std::string getChessBoardString() const;
 
     bool isGameOver() const;
-    bool executeMove(ChessCoordinate from, ChessCoordinate to);
+    std::unique_ptr<ChessMove> executeMove(ChessCoordinate from, ChessCoordinate to);
 
     void swapPieces(ChessCoordinate &a, ChessCoordinate &b);
     void setPiece(ChessCoordinate &a,  std::unique_ptr<Piece> chessPiece);
@@ -49,11 +49,13 @@ public:
     bool isThisWhiteTurn();
 
     Piece *const getPiece(int row, int col) const;
-    Piece *const getPiece(ChessCoordinate a) const;
+    const Piece * getPiece(ChessCoordinate a) const;
+    std::unique_ptr<Piece> takePiece(ChessCoordinate a);
+
+
     const std::vector<smartRow> &getChessboard() const;
 
 
 };
 
 
-#endif //CHESSV2_CHESSBOARD_H

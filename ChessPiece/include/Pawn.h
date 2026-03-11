@@ -16,7 +16,7 @@ private:
 public:
     Pawn(Color color, char16_t symbol);
     void print() override ;
-    bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override;
+    bool validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override;
 
 };
 

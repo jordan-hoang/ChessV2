@@ -5,12 +5,7 @@
 #ifndef CHESSV2_PIECE_H
 #define CHESSV2_PIECE_H
 
-
-#include <cwctype>
-#include <iostream>
-#include "ChessBoard.h"
 #include "ChessCoordinate.h"
-
 class ChessBoard;
 
 
@@ -18,7 +13,6 @@ class ChessBoard;
 enum class Color {
     WHITE, BLACK, NO_COLOR
 };
-
 
 inline std::ostream& operator<<(std::ostream& os, Color color) {
     switch (color) {
@@ -30,21 +24,21 @@ inline std::ostream& operator<<(std::ostream& os, Color color) {
 }
 
 
-
-
 class Piece {
 private:
     char16_t chara_;
     Color  chessColor;
 protected:
     Piece(Color color, char16_t symbol);
+    bool hasMoved_ = false;
 public:
     virtual ~Piece() = default;
-
-    virtual bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) = 0;
+    virtual bool validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) = 0;
     virtual void print() = 0;
     wchar_t getSymbol();
-    Color getColor();
+    Color getColor() const;
+    void setHasMoved(){hasMoved_ = true;}
+    bool getHasMoved() const { return hasMoved_;};
 };
 
 

@@ -14,8 +14,6 @@
 #include "ChessBoard.h"
 
 
-
-
 void ChessMove::undoMove(ChessBoard &myChessBoard) {
 
         ChessCoordinate start = move.first;
@@ -23,6 +21,7 @@ void ChessMove::undoMove(ChessBoard &myChessBoard) {
 
         myChessBoard.swapPieces(start,end);
         myChessBoard.setPiece(start, std::move(pieceKilled) );
+
 
         //Handling special king case,
         // This undos the flag that stops you from castling. Needs to be updated to chessV2 design.
@@ -57,8 +56,9 @@ void MoveRecorder::addMove(ChessCoordinate startPos,  ChessCoordinate finishPos,
     // tmp->move = std::make_pair(startPos,finishPos);
     // tmp->pieceKilled = killed;
     std::unique_ptr<ChessMove> tmp = std::make_unique<ChessMove>(
-                                        std::make_pair(startPos,finishPos),
-                                        std::move(killed));
+                                            std::make_pair(startPos,finishPos),
+                                            std::move(killed)
+                                        );
 
     m_listOfGameMoves.emplace_back( std::move(tmp) ); //You need to use std::move to transfer ownership.
 }
@@ -76,6 +76,7 @@ void MoveRecorder::removeLastMove() {
     m_listOfGameMoves.pop_back();
 }
 
+
 // Maybe get a weak pointer instead of a raw pointer?
 ChessMove * MoveRecorder::getLastMove() {
     if(hasMove()){
@@ -84,6 +85,7 @@ ChessMove * MoveRecorder::getLastMove() {
     ChessMove * tmp = nullptr;
     return tmp;
 }
+
 
 bool MoveRecorder::hasMove() const {
     return !m_listOfGameMoves.empty();

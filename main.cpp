@@ -12,7 +12,7 @@ using tcp = boost::asio::ip::tcp;
 boost::asio::ip::address ip_address_v4 = boost::asio::ip::make_address("127.0.0.1");
 const boost::asio::ip::udp::endpoint SERVER_ENDPOINT(ip_address_v4, 9001);
 
-// Simple server client model, not used for anything just for learning.
+// Simple server client model, not used for anything just for learning, left the function here.
 void Server() {
     using namespace boost::asio;
     // async i/o
@@ -37,7 +37,7 @@ void Server() {
     ctx.run(); // Keeps running until the queue is empty. Will always need this, can run on threads.
 
 }
-
+// Unused function
 void Client() {
     using namespace boost::asio;
     io_context ctx;
