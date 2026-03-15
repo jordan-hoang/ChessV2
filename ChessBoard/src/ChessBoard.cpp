@@ -131,7 +131,6 @@ std::unique_ptr<ChessMove> ChessBoard::executeMove(ChessCoordinate from, ChessCo
              std::make_unique<ChessMove>(std::make_pair(from,to), std::move(killedPiece));
          chess_move->wasFirstMoved = this->getPiece(from)->getHasMoved();
 
-
          this->movePiece(from, to); // this will set the spot to null.
          return std::move(chess_move);
      }

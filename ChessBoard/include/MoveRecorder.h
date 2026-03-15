@@ -30,8 +30,7 @@ struct ChessMove {
     pair<ChessCoordinate,ChessCoordinate> move;
     std::unique_ptr<Piece> pieceKilled = nullptr;
     bool wasFirstMoved = false;
-
-
+    
     // Tests the ability to undo moves.
     virtual void undoMove(ChessBoard &myChessBoard);
 

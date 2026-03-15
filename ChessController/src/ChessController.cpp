@@ -105,7 +105,13 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
         std::cerr << "Invalid move\n";
         std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
     } else {
+        move_recorder_.addMove(std::move(valid_move));
         chessBoard.printChessBoard();
+
+
+        // if(auto a = move_recorder_.getLastMove()) {
+        //     std::cout << a->move.first << " : " << a->move.second << "\n";
+        // }
     }
 
 

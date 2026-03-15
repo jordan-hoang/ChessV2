@@ -38,6 +38,9 @@ public:
 
 private:
     ChessBoard chessBoard;
+    MoveRecorder move_recorder_;
+
+
     std::thread _chessThread;
     std::shared_ptr<ChessNetwork> chessNetwork_;
 
