@@ -115,8 +115,6 @@ const Game = () => {
 
 
 
-
-
     const createPieceType = (myChar) => {
         if(myChar === '-'){
             return null;
@@ -221,25 +219,51 @@ const Game = () => {
         audio.play().catch(e => console.log("Manual test error:", e));
     };
 
+    const handleUndo = () => {
+
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            console.warn("WebSocket not connected");
+            return;
+        }
+
+
+        const undoRequest = JSON.stringify({
+            type:"undo"
+        });
+
+        socket.send(undoRequest);
+    }
 
     return (
         <div>
             <div style={{textAlign: "center"}}>
                 <h1> Chess Game </h1>
-                <div style={{marginTop: "20px"}}>
+                <div style={{display: "inline-block"}}>
                     <Board
                         board={board}
                         onMove={handleMove}
                         curTurn={currentTurn}
                         playColor={playerColor}
                     />
+                    {/* This container ensures the button aligns with the right edge of the Board */}
+                    <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px"}}>
+                        <button
+                            type="button"
+                            onClick={handleUndo}
+                            style={{padding: "8px 16px", cursor: "pointer"}}
+                        >
+                            Undo Move
+                        </button>
+                    </div>
                 </div>
+
+                <div>
+                    <div style={{marginTop: "16px", marginLeft: "32px"}}> It is currently {currentTurn}'s turn</div>
+                    <div style={{marginTop: "8px", marginLeft: "40px"}}> You control the {playerColor} pieces</div>
+                </div>
+
             </div>
 
-            <div>
-                <div style={{marginTop: "16px", marginLeft: "32px"}}> It is currently {currentTurn}'s turn </div>
-                <div style={{marginTop: "8px", marginLeft: "40px"}}> You control the {playerColor} pieces  </div>
-            </div>
         </div>
     );
 

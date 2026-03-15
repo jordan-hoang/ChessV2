@@ -1,12 +1,13 @@
 //
-// Created by jorda on 1/28/2026.
-//
 
-#ifndef INETWORKMESSAGELISTENER_H
-#define INETWORKMESSAGELISTENER_H
+
+#pragma once
 #include <string>
 
-
+/**
+ * Interface class, instead of directly passing down ChessController to ChessNetwork, we make ChessController implement this interface,
+ * and then have ChessNetwork accept this interface.
+ */
 class INetworkMessageListener {
 public:
 
@@ -17,4 +18,3 @@ public:
 
 
 
-#endif //INETWORKMESSAGELISTENER_H

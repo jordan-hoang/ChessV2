@@ -10,6 +10,6 @@ NullPiece::NullPiece(Color color, char16_t symbol) : Piece{color, symbol}{}
 void NullPiece::print() {
 }
 
-bool NullPiece::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool NullPiece::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
     return false;
 }

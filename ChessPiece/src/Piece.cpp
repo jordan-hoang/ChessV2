@@ -3,7 +3,8 @@
 //
 
 #include "Piece.h"
-#include <memory>
+
+#include <iostream>
 
 
 wchar_t Piece::getSymbol(){
@@ -17,7 +18,7 @@ void Piece::print(){
 Piece::Piece(Color color, char16_t symbol) : chessColor{color}, chara_{symbol} {
 }
 
-Color Piece::getColor() {
+Color Piece::getColor() const {
     return chessColor;
 }
 

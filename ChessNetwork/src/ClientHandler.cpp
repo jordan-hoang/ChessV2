@@ -78,6 +78,10 @@ void ClientHandler::handleHandshake(boost::system::error_code ec) {
     }
 }
 
+
+
+
+
 /**
  *  This receives the message from the REACT client.
  */
@@ -121,6 +125,8 @@ void ClientHandler::receiveMessageAsync() {
             std::cout << "Received message in ClientHandler.cpp: " << message << std::endl;
             if (auto networkListener = self->networkMessageListener_.lock()) {
                 try {
+
+
                     std::string rst = networkListener->onClientMessageReceived(message, self->client_info.color);
                     std::cout << rst << std::endl;
 

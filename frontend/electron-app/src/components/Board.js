@@ -78,6 +78,7 @@ const Board = ( {board, onMove, currentTurn, playColor} ) => {
                 ))
             )}
 
+
         </div>
 
     );

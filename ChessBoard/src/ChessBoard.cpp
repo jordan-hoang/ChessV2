@@ -111,20 +111,31 @@ bool ChessBoard::isGameOver() const {
     return GameOver;
 }
 
-bool ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
+std::unique_ptr<ChessMove> ChessBoard::executeMove(ChessCoordinate from, ChessCoordinate to) {
+
+    //this->chessboard_[from.row][from.col]->validateMove(from,to, *this);
+
     bool result = false;
-    
-    this->chessboard_[from.row][from.col]->movePiece(from,to, *this);
-    if(this->isWhiteTurn && this->getPiece(from)->getColor() == Color::WHITE ||
-    !isWhiteTurn && this->getPiece(from)->getColor() == Color::BLACK){
-     result = this->chessboard_[from.row][from.col]->movePiece(from, to, *this);
+    const Piece * fromPiece = getPiece(from);
+    if(this->isWhiteTurn && fromPiece->getColor() == Color::WHITE ||
+            !isWhiteTurn && fromPiece->getColor() == Color::BLACK)
+    {
+        result = this->chessboard_[from.row][from.col]->validateMove(from, to, *this);
     }
 
      if(result) {
           isWhiteTurn = !isWhiteTurn;
-          movePiece(from, to);
+
+         std::unique_ptr<Piece> killedPiece = takePiece(to);
+         std::unique_ptr<ChessMove> chess_move =
+             std::make_unique<ChessMove>(std::make_pair(from,to), std::move(killedPiece));
+         chess_move->wasFirstMoved = this->getPiece(from)->getHasMoved();
+
+         this->movePiece(from, to); // this will set the spot to null.
+         return std::move(chess_move);
      }
-    return result;
+
+    return nullptr;  // For now.
 }
 
 
@@ -132,12 +143,21 @@ Piece *const ChessBoard::getPiece(int row, int col) const {
     return chessboard_[row][col].get();
 }
 
-Piece *const ChessBoard::getPiece(ChessCoordinate a) const {
+const Piece *ChessBoard::getPiece(ChessCoordinate a) const {
     return chessboard_[a.row][a.col].get();
 }
 
+std::unique_ptr<Piece> ChessBoard::takePiece(ChessCoordinate a) {
+    return std::move(chessboard_[a.row][a.col]);
+}
+
+
+
+
 //Moves a piece from A to B, given 2 coordinates, private function.
 void ChessBoard::movePiece(ChessCoordinate from, ChessCoordinate to) {
+    chessboard_[from.row][from.col]->setHasMoved();
+
 
     chessboard_[to.row][to.col].swap(chessboard_[from.row][from.col]);
     //This calls reset as said from here
@@ -162,6 +182,9 @@ bool ChessBoard::isThisWhiteTurn() {
     return isWhiteTurn;
 }
 
+void ChessBoard::flipTurn() {
+    this->isWhiteTurn = !(this->isWhiteTurn);
+}
 
 
 

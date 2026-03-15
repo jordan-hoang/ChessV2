@@ -13,7 +13,7 @@ class NullPiece : public Piece{
 public:
     explicit NullPiece(Color color = Color::NO_COLOR, char16_t symbol='-');
     void print() override ;
-    bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override ;
+    bool validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override ;
 };
 
 

@@ -9,7 +9,7 @@ Bishop::Bishop(Color color, char16_t symbol) :
         Piece{color, symbol} {};
 
 
-bool Bishop::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool Bishop::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
     auto friend_color = chess_board_.getPiece(a)->getColor();
     auto enemy_colr = chess_board_.getPiece(b)->getColor();

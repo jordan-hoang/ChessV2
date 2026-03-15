@@ -5,6 +5,9 @@
 #include "Pawn.h"
 #include <algorithm>
 #include <array>
+#include <iostream>
+
+#include "ChessBoard.h"
 
 Pawn::Pawn(Color color, char16_t symbol) : Piece{color, symbol}, canDoubleJump{true}{
 
@@ -57,7 +60,7 @@ bool isValidNum(int difX, int difY) {
     return abs(difX) + abs(difY) < 3;
 }
 
-bool Pawn::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool Pawn::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
     //First we gotta grab the color.
     //+ means goes up -1 means goes down the chess board
 

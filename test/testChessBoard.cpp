@@ -9,10 +9,13 @@ TEST(testRook, testCollision){
 
     ChessBoard my_board;
 
-    ChessCoordinate a{0,1};
-    ChessCoordinate b{0,3};
+    // Typically {0,1} is a Pawn in standard setup.
+    // If you're testing a Rook jumping over it:
+    ChessCoordinate a{0,0}; // Rook
+    ChessCoordinate b{0,2}; // Target square behind the pawn at {0,1}
 
-    bool is_valid = my_board.executeMove(a,b);
-    ASSERT_EQ(is_valid, false);
+    // executeMove now returns nullptr on failure
+    auto move_result = my_board.executeMove(a, b);
 
+    ASSERT_EQ(move_result, nullptr) << "Rook should not be able to jump over the pawn!";
 }

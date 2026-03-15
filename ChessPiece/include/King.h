@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include "Piece.h"
+#include "ChessBoard.h"
 
 class King : public Piece {
 private:
@@ -15,7 +16,7 @@ public:
     bool canCastle();
     King(Color color, char16_t symbol);
 
-    bool movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override ;
+    bool validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) override ;
     void print() override ;
 
 

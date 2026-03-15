@@ -9,7 +9,7 @@ Queen::Queen(Color color, char16_t symbol) : Piece{color, symbol}{
 
 }
 
-bool Queen::movePiece(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
+bool Queen::validateMove(ChessCoordinate a, ChessCoordinate b, ChessBoard &chess_board_) {
 
     int diffRow = abs( b.row - a.row);
     int diffCol = abs( b.col - a.col);

@@ -6,7 +6,7 @@
 #define CHESS_MOVERECORDER_H
 #pragma once
 
-
+#include "ChessCoordinate.h"
 #include <utility>
 #include "Piece.h"
 #include <vector>
@@ -14,7 +14,6 @@
 #include <memory>
 #include <iostream>
 
-class ChessBoard;
 
 using std::pair;
 using std::vector;
@@ -29,8 +28,9 @@ using std::vector;
 // Old chessRecorder class from V1, that was modified... doesn't work fully.
 struct ChessMove {
     pair<ChessCoordinate,ChessCoordinate> move;
-    std::unique_ptr<Piece> pieceKilled;
-
+    std::unique_ptr<Piece> pieceKilled = nullptr;
+    bool wasFirstMoved = false;
+    
     // Tests the ability to undo moves.
     virtual void undoMove(ChessBoard &myChessBoard);
 

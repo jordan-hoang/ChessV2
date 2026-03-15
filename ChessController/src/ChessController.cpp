@@ -71,15 +71,31 @@ void ChessController::playGame() {
 }
 
 
-// Callback function that is passed to chessNetwork.
 // After the client receives this happens.
 std::string ChessController::onClientMessageReceived(const std::string &message, const std::string &client_color) {
 
     nlohmann::json jsonResponse;
-    bool valid_move = false;
+    std::unique_ptr<ChessMove> valid_move = nullptr;
 
     std::cout << "ChessController::onClientMessageReceived : " << message << std::endl;
+
     nlohmann::json jsonData = nlohmann::json::parse(message);
+
+    if (jsonData.contains("type") && jsonData["type"] == "undo") {
+        ///// Do my stuff here.....
+        ChessMove * myMove = move_recorder_.getLastMove();
+        chessBoard.swapPieces(myMove->move.second, myMove->move.first);
+        chessBoard.setPiece(myMove->move.second, std::move(myMove->pieceKilled));
+        chessBoard.flipTurn();
+        jsonResponse["board"] = { chessBoard.getChessBoardString() };
+        jsonResponse["turn"] = !(chessBoard.isThisWhiteTurn());
+        jsonResponse["valid"] = true;
+
+
+        move_recorder_.removeLastMove();
+        return jsonResponse.dump();
+    }
+
 
     if(jsonData.contains("client_role")) {
         jsonResponse["board"] = chessBoard.getChessBoardString();
@@ -106,11 +122,12 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
         std::cerr << "Invalid move\n";
         std::cerr << "DEBUG: " << moves.first << moves.second << std::endl << "\n"; // For debugging.
     } else {
+        move_recorder_.addMove(std::move(valid_move));
         chessBoard.printChessBoard();
     }
 
 
-    jsonResponse["valid"] = valid_move;
+    jsonResponse["valid"] = (valid_move) ? true : false ;
     //jsonResponse["message"] = valid_move ? "Move accepted" : "Invalid move"; Not used so yeah.
     jsonResponse["from"] = { {"row", moves.first.row}, {"col", moves.first.col} };
     jsonResponse["to"] = { {"row", moves.second.row}, {"col", moves.second.col} };
