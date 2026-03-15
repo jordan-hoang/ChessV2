@@ -78,7 +78,24 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     std::unique_ptr<ChessMove> valid_move = nullptr;
 
     std::cout << "ChessController::onClientMessageReceived : " << message << std::endl;
+
     nlohmann::json jsonData = nlohmann::json::parse(message);
+
+    if (jsonData.contains("type") && jsonData["type"] == "undo") {
+        ///// Do my stuff here.....
+        ChessMove * myMove = move_recorder_.getLastMove();
+        chessBoard.swapPieces(myMove->move.second, myMove->move.first);
+        chessBoard.setPiece(myMove->move.second, std::move(myMove->pieceKilled));
+        chessBoard.flipTurn();
+        jsonResponse["board"] = { chessBoard.getChessBoardString() };
+        jsonResponse["turn"] = !(chessBoard.isThisWhiteTurn());
+        jsonResponse["valid"] = true;
+
+
+        move_recorder_.removeLastMove();
+        return jsonResponse.dump();
+    }
+
 
     if(jsonData.contains("client_role")) {
         jsonResponse["board"] = chessBoard.getChessBoardString();
@@ -107,11 +124,6 @@ std::string ChessController::onClientMessageReceived(const std::string &message,
     } else {
         move_recorder_.addMove(std::move(valid_move));
         chessBoard.printChessBoard();
-
-
-        // if(auto a = move_recorder_.getLastMove()) {
-        //     std::cout << a->move.first << " : " << a->move.second << "\n";
-        // }
     }
 
 

@@ -42,6 +42,8 @@ public:
     bool isGameOver() const;
     std::unique_ptr<ChessMove> executeMove(ChessCoordinate from, ChessCoordinate to);
 
+
+    void flipTurn();
     void swapPieces(ChessCoordinate &a, ChessCoordinate &b);
     void setPiece(ChessCoordinate &a,  std::unique_ptr<Piece> chessPiece);
 

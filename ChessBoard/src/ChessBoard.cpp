@@ -182,6 +182,9 @@ bool ChessBoard::isThisWhiteTurn() {
     return isWhiteTurn;
 }
 
+void ChessBoard::flipTurn() {
+    this->isWhiteTurn = !(this->isWhiteTurn);
+}
 
 
 
